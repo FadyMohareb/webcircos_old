@@ -16,8 +16,8 @@ var FilesList = React.createClass({className: "filesList",
   
     render: function () {
         return (React.createElement('div', {className: "panel panel-primary"},
-                React.createElement('div', {className: "panel-heading"}, "Files", 
-                                React.createElement('button', {type: 'button', className: 'btn btn-primary', onClick: this.handleShowUploadModal, style: { float: 'right' } },
+                React.createElement('div', {className: "panel-heading"}, "Files  ", 
+                                React.createElement('button', {type: 'button', className: 'btn btn-primary btn-sm', onClick: this.handleShowUploadModal},
                                         React.createElement('span', {className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true' }))),
                 React.createElement('div', {className: "panel-body"},
                         React.createElement('div', {className: "panel panel-success"},
