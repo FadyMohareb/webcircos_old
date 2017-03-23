@@ -30,8 +30,7 @@ var ViewBox = React.createClass({className: "viewBox",
 //                        React.createElement("form", {action: "/api/upload", className: "dropzone", id: "dropzone"},
 //                                React.createElement("div", {className: "dz-default dz-message text-center"},
 //                                        React.createElement("i", {className: "fa fa-cloud-upload fa-4x"})))
-                            React.createElement('input', { type: 'file', ref: 'fileUpload'}),
-                            React.createElement('button', { onClick: this.handleSubmit })
+                            React.createElement("h5", null, 'This panel will contain view settings soon')
                 )));
     }
 })

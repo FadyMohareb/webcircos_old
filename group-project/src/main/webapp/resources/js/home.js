@@ -9,7 +9,7 @@ var converter = new Showdown.converter();
 var App = React.createClass({
   displayName: "App",
   getInitialState: function getInitialState() {
-    return { view: { showModal: false, showRegModal: false, showResetModal: false, showchangeModal: false } };
+    return { view: { showModal: false, showRegModal: false, showResetModal: false, showChangeModal: false, showUploadModal: false } };
   },
   handleHideModal: function handleHideModal() {
     this.setState({ view: { showModal: false } });
@@ -33,10 +33,18 @@ var App = React.createClass({
     $( ".modal-backdrop.in" ).remove();
   },
     handleShowChangeModal: function handleShowChangeModal() {
-    this.setState({ view: { showchangeModal: true } });
+    this.setState({ view: { showChangeModal: true } });
   },
   handleHideChangeModal: function handleHideChangeModal() {
-    this.setState({ view: { showchangeModal: false } });
+    this.setState({ view: { showChangeModal: false } });
+    $( ".modal-backdrop.in" ).remove();
+  },
+  
+  handleShowUploadModal: function handleShowUploadModal() {
+    this.setState({ view: { showUploadModal: true } });
+  },
+  handleHideUploadModal: function handleHideUploadModal() {
+    this.setState({ view: { showUploadModal: false } });
     $( ".modal-backdrop.in" ).remove();
   },
   
@@ -44,10 +52,12 @@ var App = React.createClass({
     return (
                 React.createElement("div", {className: "pull-left"},
                     React.createElement("button", { className: 'btn btn-primary', onClick: this.handleShowModal}, "Sign in"),
+                    React.createElement("button", { className: 'btn btn-primary', onClick: this.handleShowUploadModal}, "Upload file"),
                       this.state.view.showModal ? React.createElement(SigninForm, { handleHideModal: this.handleHideModal,
                           handleShowRegModal: this.handleShowRegModal, handleShowResetModal: this.handleShowResetModal}) : null,
                       this.state.view.showRegModal ? React.createElement(SignupForm, { handleHideRegModal: this.handleHideRegModal }) : null,
-                      this.state.view.showResetModal ? React.createElement(ResetPswdForm, { handleHideResetModal: this.handleHideResetModal }) : null)
+                      this.state.view.showResetModal ? React.createElement(ResetPswdForm, { handleHideResetModal: this.handleHideResetModal }) : null,
+                      this.state.view.showUploadModal ? React.createElement(UploadModal, { handleHideUploadModal: this.handleHideUploadModal }) : null)
     );
   }
 });

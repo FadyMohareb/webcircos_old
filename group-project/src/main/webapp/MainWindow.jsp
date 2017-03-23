@@ -25,6 +25,7 @@
         <script src="${contextPath}/resources/js/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/changePassword.js"></script>
         <script src="${contextPath}/resources/js/viewBox.js"></script>
+        <script src="${contextPath}/resources/js/uploadModal.js"></script>
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     </head>
