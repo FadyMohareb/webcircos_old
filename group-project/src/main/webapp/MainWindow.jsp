@@ -24,7 +24,9 @@
         <script src="${contextPath}/resources/js/plotSpace.js"></script>
         <script src="${contextPath}/resources/js/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/changePassword.js"></script>
-        <script src="${contextPath}/resources/js/uploadBox.js"></script>
+        <script src="${contextPath}/resources/js/viewBox.js"></script>
+        <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+        <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     </head>
     <body>
         <div class="row">  
@@ -91,7 +93,7 @@
                 <div id="rightContainer" class="col-lg-2" style="float:left;margin:0px 20px 0px 20px">${rightContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderUploadBox();
+                        renderViewBox();
                     });
                 </script>
             </div>
