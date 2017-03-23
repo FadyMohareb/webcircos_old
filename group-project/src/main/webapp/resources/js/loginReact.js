@@ -100,11 +100,3 @@ var SigninForm = React.createClass({displayName: "LoginForm",
         handleHideModal: React.PropTypes.func.isRequired
       }
 });
-
-
-//var renderSignin = function () {
-//    React.render(
-//        React.createElement(SigninForm),
-//        document.getElementById("signIn")
-//    );
-//};

@@ -40,24 +40,14 @@ var App = React.createClass({
     $( ".modal-backdrop.in" ).remove();
   },
   
-  handleShowUploadModal: function handleShowUploadModal() {
-    this.setState({ view: { showUploadModal: true } });
-  },
-  handleHideUploadModal: function handleHideUploadModal() {
-    this.setState({ view: { showUploadModal: false } });
-    $( ".modal-backdrop.in" ).remove();
-  },
-  
   render: function render() {
     return (
                 React.createElement("div", {className: "pull-left"},
                     React.createElement("button", { className: 'btn btn-primary', onClick: this.handleShowModal}, "Sign in"),
-                    React.createElement("button", { className: 'btn btn-primary', onClick: this.handleShowUploadModal}, "Upload file"),
                       this.state.view.showModal ? React.createElement(SigninForm, { handleHideModal: this.handleHideModal,
                           handleShowRegModal: this.handleShowRegModal, handleShowResetModal: this.handleShowResetModal}) : null,
                       this.state.view.showRegModal ? React.createElement(SignupForm, { handleHideRegModal: this.handleHideRegModal }) : null,
-                      this.state.view.showResetModal ? React.createElement(ResetPswdForm, { handleHideResetModal: this.handleHideResetModal }) : null,
-                      this.state.view.showUploadModal ? React.createElement(UploadModal, { handleHideUploadModal: this.handleHideUploadModal }) : null)
+                      this.state.view.showResetModal ? React.createElement(ResetPswdForm, { handleHideResetModal: this.handleHideResetModal }) : null)
     );
   }
 });
