@@ -1,0 +1,76 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package uk.ac.cranfield.bix.controllers.rest;
+
+import java.util.List;
+
+/**
+ * This class will contain all the object to draw a circos 
+ * @author s262012
+ */
+public class CircosOutput {
+
+    private List<Object[]> genomes;
+    
+    private Snp snp;
+    
+    private Histogram histo;
+    
+    private DisplayText text;
+    
+    private BackgroundDisplay background;
+    
+    private IndGff arc;
+
+    public List<Object[]> getGenomes() {
+        return genomes;
+    }
+
+    public void setGenomes(List<Object[]> genomes) {
+        this.genomes = genomes;
+    } 
+
+    public Snp getSnp() {
+        return snp;
+    }
+
+    public void setSnp(Snp snp) {
+        this.snp = snp;
+    }
+
+    public DisplayText getText() {
+        return text;
+    }
+
+    public void setText(DisplayText text) {
+        this.text = text;
+    }
+
+    public BackgroundDisplay getBackground() {
+        return background;
+    }
+
+    public void setBackground(BackgroundDisplay background) {
+        this.background = background;
+    }
+
+    public Histogram getHisto() {
+        return histo;
+    }
+
+    public void setHisto(Histogram histo) {
+        this.histo = histo;
+    }
+
+    public IndGff getArc() {
+        return arc;
+    }
+
+    public void setArc(IndGff arc) {
+        this.arc = arc;
+    }
+  
+}
