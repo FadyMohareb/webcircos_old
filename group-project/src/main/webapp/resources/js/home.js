@@ -9,7 +9,8 @@ var converter = new Showdown.converter();
 var App = React.createClass({
   displayName: "App",
   getInitialState: function getInitialState() {
-    return { view: { showModal: false, showRegModal: false, showResetModal: false, showChangeModal: false, showUploadModal: false } };
+    return { view: { showModal: false, showRegModal: false, showResetModal: false,
+            showChangeModal: false, showUploadModal: false }};
   },
   handleHideModal: function handleHideModal() {
     this.setState({ view: { showModal: false } });

@@ -7,7 +7,7 @@
 
 var converter = new Showdown.converter();
 
-var PasswordCard = React.createClass({displayName: "PasswordCard",
+var ChangePswdModal = React.createClass({displayName: "ChangePswdModal",
     
     componentDidMount: function componentDidMount(){
         $(this.getDOMNode()).modal('show');
@@ -66,10 +66,3 @@ var PasswordCard = React.createClass({displayName: "PasswordCard",
         handleHideModal: React.PropTypes.func.isRequired
       }
 });
-//
-//var renderPasswordSetting = function () {
-//    React.render(
-//        React.createElement(PasswordCard),
-//        document.getElementById("passwordCard")
-//    );
-//};

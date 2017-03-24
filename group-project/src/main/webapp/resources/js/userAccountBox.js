@@ -55,7 +55,7 @@ var AccountCard = React.createClass({displayName: "AccountCard",
                 React.createElement("li", null,
                         React.createElement("a", {href: '#', onClick: this.handleSubmit },  "Log out "))
                  ),
-                this.state.view.showModal ? React.createElement(PasswordCard, { handleHideModal: this.handleHideModal }) : null
+                this.state.view.showModal ? React.createElement(ChangePswdModal, { handleHideModal: this.handleHideModal }) : null
                 )
         );
     }

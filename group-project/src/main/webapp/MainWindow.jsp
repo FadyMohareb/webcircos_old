@@ -31,6 +31,9 @@
     </head>
     <body>
         <div class="row">  
+            <security:authorize acess="isAuthenticated">
+                
+            </security>
             <c:if test="${pageContext.request.userPrincipal.name != null}">
                 <div id="upperLeftContainer" class="col-lg-3 page-header" style="float:left;margin:0px 20px 0px 30px">${upperLeftContainer} 
                     <h2>Welcome ${pageContext.request.userPrincipal.name}!</h2>
