@@ -21,24 +21,23 @@
         <script src="${contextPath}/resources/js/modals/resetPswdModal.js"></script>
         <script src="${contextPath}/resources/js/dynamic/accountDropdown.js"></script>
         <script src="${contextPath}/resources/js/panels/filesPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/projectsPanel.js"></script>
         <script src="${contextPath}/resources/js/panels/circosPanel.js"></script>
         <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>
-        <script src="${contextPath}/resources/js/panels/viewPanel.js"></script>
         <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
+        <script src="${contextPath}/resources/js/panels/viewPanel.js"></script>
+        <script src="${contextPath}/resources/js/modals/newProjectModal.js"></script>
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     </head>
     <body>
         <div class="row">  
-            <security:authorize acess="isAuthenticated">
-                
-            </security>
+            <security:authorize acess="isAuthenticated"></security>
             <c:if test="${pageContext.request.userPrincipal.name != null}">
                 <div id="upperLeftContainer" class="col-lg-3 page-header" style="float:left;margin:0px 20px 0px 30px">${upperLeftContainer} 
                     <h2>Welcome ${pageContext.request.userPrincipal.name}!</h2>
                 </div>
-
                 <div id="upperRightContainer" class="col-lg-3" style="float:right;margin:0px 40px 0px 40px">${upperRightContainer}</div>
                 <script type="text/javascript">
                     $(function () {
@@ -50,7 +49,7 @@
                 <div id="upperLeftContainer" class="col-lg-3" style="float:left;margin:0px 40px 20px 40px">${upperLeftContainer}
                     <script type="text/javascript">
                         $(function () {
-                            renderJoinUS();
+                            renderHomePage();
                         });
                     </script>
                 </div>
@@ -59,35 +58,19 @@
         <div class="row" style="margin:0px 20px 0px 20px">
             <div class="row">
                 <div class="col-lg-3" style="float:left">
-<!--                    <div id="uploadContainer" class="row" style="margin:0px 20px 0px 20px">${uploadContainer}</div>
+                    <div id="projectsContainer" class="row" style="margin:0px 20px 0px 20px">${projectsContainer}</div>
                     <script type="text/javascript">
                         $(function () {
-                            renderUploadBox();
+                            renderProjectsPanel();
                         });
-                    </script>-->
-                    <div id="leftContainer" class="row" style="margin:0px 20px 0px 20px">${leftContainer}</div>
+                    </script>
+                    <div id="filesContainer" class="row" style="margin:0px 20px 0px 20px">${filesContainer}</div>
                     <script type="text/javascript">
                         $(function () {
                             renderFilesPanel();
                         });
                     </script>
-                    <div class = "row" style="margin:0px 20px 0px 20px">
-                        <h2>Add a file</h2>
-                        <input type="file" id="files" name="file"/>
-                        <div id="drop_zone">Drop files here</div>
-                        <output id="list"></output>
-                        <div id="byte_range"></div>
-                        <div id="byte_content"></div>
-                    </div>
-                    <script src="${contextPath}/resources/js/fileHandler.js"></script>
-                    <div id="projAnContainer" class="row" style="margin:0px 20px 0px 20px">${projAnContainer}</div>
-                    <script type="text/javascript">
-                        $(function () {
-                            renderProjAn();
-                        });
-                    </script>
                 </div>
-
                 <div id="centerContainer" class="col-lg-6">${centerContainer}</div>
                 <script type="text/javascript">
                     $(function () {

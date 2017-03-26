@@ -138,6 +138,6 @@ public class CustomController {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         map.put("userName", name);
 //        String sessionID = RequestContextHolder.currentRequestAttributes().getSessionId();
-        return new ModelAndView("MainWindow", map);
+        return new ModelAndView("homepage", map);
     }
 }

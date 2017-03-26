@@ -19,18 +19,30 @@ var UploadModal = React.createClass({className: "uploadModal",
                                 React.createElement('div', {className: 'modal-header'},
                                         React.createElement('button', {type: 'button', className: 'close',
                                             'data-dismiss': 'modal', 'aria-label': 'Close'},
-                                            React.createElement('span',{ 'aria-hidden': 'true' },'\xD7')),
+                                                React.createElement('span', {'aria-hidden': 'true'}, '\xD7')),
                                         React.createElement('h3', {className: 'modal-title'}, 'Upload file')),
                                 React.createElement('div', {className: 'modal-body'},
-                                        React.createElement('input', {type: 'file', ref: 'fileUpload'})),
-                                React.createElement('div',{ className: 'modal-footer' },
-                                React.createElement('button', {className: 'btn btn-primary', onClick: this.handleSubmit},
-                                'Upload file')))
-                ))
+                                        React.createElement('h4', {className: 'modal-title'}, 'Choose file: '),
+                                        React.createElement('input', {type: 'file', ref: 'fileUpload'}),
+                                        React.createElement("hr"),
+                                        React.createElement('h4', {className: 'modal-title'}, 'What is file content? '),
+                                        React.createElement('br'),
+                                        React.createElement('input', {type: "checkbox", ref: 'isSeq'}, " Sequence"),
+                                        React.createElement('br'),
+                                        React.createElement('input', {type: "checkbox", ref: 'isAlign'}, " Alignment"),
+                                        React.createElement('br'),
+                                        React.createElement('input', {type: "checkbox", ref: 'isVar'}, " Variants"),
+                                        React.createElement('br'),
+                                        React.createElement('input', {type: "checkbox", ref: 'isExpr'}, " Expression"),
+                                        React.createElement('br'),
+                                        React.createElement('input', {type: "checkbox", ref: 'isDiffExpr'}, " Differential expression")),
+                                React.createElement('div', {className: 'modal-footer', 'float': 'left'},
+                                        React.createElement('button', {className: 'btn btn-primary', onClick: this.handleSubmit},
+                                                'Upload file')))
+                        ))
                 );
     },
-    
     propTypes: {
         handleHideUploadModal: React.PropTypes.func.isRequired
-      }
+    }
 })

@@ -51,7 +51,6 @@ var AccountDropdown = React.createClass({displayName: "accountDropdown",
                     React.createElement("li", null, 
                         React.createElement("a", {href: "#", onClick: this.handleShowModal }, "Change password")),
                     React.createElement("li", { role: 'separator', className: 'divider'}),
-                            
                 React.createElement("li", null,
                         React.createElement("a", {href: '#', onClick: this.handleSubmit },  "Log out "))
                  ),

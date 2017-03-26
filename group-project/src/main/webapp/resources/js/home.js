@@ -6,8 +6,8 @@
 
 var converter = new Showdown.converter();
 
-var App = React.createClass({
-  displayName: "App",
+var HomePage = React.createClass({
+  displayName: "HomePage",
   getInitialState: function getInitialState() {
     return { view: { showModal: false, showRegModal: false, showResetModal: false,
             showChangeModal: false, showUploadModal: false }};
@@ -53,21 +53,6 @@ var App = React.createClass({
   }
 });
 
-var renderJoinUS = function () {
-    React.render(React.createElement(App, null), document.getElementById('upperLeftContainer'));
-};
-
-var ProjectsAnonym = React.createClass({
-  displayName: "projAn",
-  render: function () {
-        return (React.createElement('div', {className: "panel panel-info"},
-                    React.createElement('div', {className: "panel-heading"}, "Projects"),
-                    React.createElement('div', {className: "panel-body"}, "Sign in to access your projects")
-            )
-          );
-    }
-});
-
-var renderProjAn = function () {
-    React.render(React.createElement(ProjectsAnonym), document.getElementById('projAnContainer'));
+var renderHomePage = function () {
+    React.render(React.createElement(HomePage, null), document.getElementById('upperLeftContainer'));
 };
