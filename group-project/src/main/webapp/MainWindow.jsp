@@ -16,16 +16,16 @@
         <script src="${contextPath}/resources/js/vendor/react.js"></script>
         <script src="${contextPath}/resources/js/vendor/showdown.min.js"></script>
         <script src="${contextPath}/resources/js/home.js"></script>
-        <script src="${contextPath}/resources/js/loginReact.js"></script>
-        <script src="${contextPath}/resources/js/registrationReact.js"></script>
-        <script src="${contextPath}/resources/js/forgottenPassword.js"></script>
-        <script src="${contextPath}/resources/js/userAccountBox.js"></script>
-        <script src="${contextPath}/resources/js/fileBox.js"></script>
-        <script src="${contextPath}/resources/js/plotSpace.js"></script>
-        <script src="${contextPath}/resources/js/welcomeHeader.js"></script>
-        <script src="${contextPath}/resources/js/changePassword.js"></script>
-        <script src="${contextPath}/resources/js/viewBox.js"></script>
-        <script src="${contextPath}/resources/js/uploadModal.js"></script>
+        <script src="${contextPath}/resources/js/modals/loginModal.js"></script>
+        <script src="${contextPath}/resources/js/modals/registrationModal.js"></script>
+        <script src="${contextPath}/resources/js/modals/resetPswdModal.js"></script>
+        <script src="${contextPath}/resources/js/dynamic/accountDropdown.js"></script>
+        <script src="${contextPath}/resources/js/panels/filesPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/circosPanel.js"></script>
+        <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
+        <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>
+        <script src="${contextPath}/resources/js/panels/viewPanel.js"></script>
+        <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     </head>
@@ -42,7 +42,7 @@
                 <div id="upperRightContainer" class="col-lg-3" style="float:right;margin:0px 40px 0px 40px">${upperRightContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderUserAccount();
+                        renderAccountDropdown();
                     });
                 </script>
             </c:if>
@@ -68,7 +68,7 @@
                     <div id="leftContainer" class="row" style="margin:0px 20px 0px 20px">${leftContainer}</div>
                     <script type="text/javascript">
                         $(function () {
-                            renderFiles();
+                            renderFilesPanel();
                         });
                     </script>
                     <div class = "row" style="margin:0px 20px 0px 20px">
@@ -91,13 +91,13 @@
                 <div id="centerContainer" class="col-lg-6">${centerContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderPlotSpace();
+                        renderCircosPanel();
                     });
                 </script>
                 <div id="rightContainer" class="col-lg-2" style="float:left;margin:0px 20px 0px 20px">${rightContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderViewBox();
+                        renderViewPanel();
                     });
                 </script>
             </div>

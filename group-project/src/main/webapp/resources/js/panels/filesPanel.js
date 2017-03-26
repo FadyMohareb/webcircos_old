@@ -1,6 +1,6 @@
 var converter = new Showdown.converter();
 
-var FilesList = React.createClass({className: "filesList",
+var FilesPanel = React.createClass({className: "filesPanel",
     
     getInitialState: function getInitialState() {
         return { view: { showUploadModal: false } };
@@ -38,7 +38,7 @@ var FilesList = React.createClass({className: "filesList",
     }
 })
 
-var renderFiles = function () {
-    React.render(React.createElement(FilesList), document.getElementById('leftContainer'));
+var renderFilesPanel = function () {
+    React.render(React.createElement(FilesPanel), document.getElementById('leftContainer'));
 };
 

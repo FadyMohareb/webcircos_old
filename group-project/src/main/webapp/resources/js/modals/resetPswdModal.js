@@ -1,6 +1,6 @@
 var converter = new Showdown.converter();
 
-var ResetPswdForm = React.createClass({displayName: "resetPswdForm",
+var ResetPswdModal = React.createClass({displayName: "resetPswdModal",
 
     componentDidMount: function componentDidMount(){
         $(this.getDOMNode()).modal('show');

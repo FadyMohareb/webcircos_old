@@ -45,10 +45,10 @@ var App = React.createClass({
     return (
                 React.createElement("div", {className: "pull-left"},
                     React.createElement("button", { className: 'btn btn-primary', onClick: this.handleShowModal}, "Sign in"),
-                      this.state.view.showModal ? React.createElement(SigninForm, { handleHideModal: this.handleHideModal,
+                      this.state.view.showModal ? React.createElement(LoginModal, { handleHideModal: this.handleHideModal,
                           handleShowRegModal: this.handleShowRegModal, handleShowResetModal: this.handleShowResetModal}) : null,
-                      this.state.view.showRegModal ? React.createElement(SignupForm, { handleHideRegModal: this.handleHideRegModal }) : null,
-                      this.state.view.showResetModal ? React.createElement(ResetPswdForm, { handleHideResetModal: this.handleHideResetModal }) : null)
+                      this.state.view.showRegModal ? React.createElement(RegistrationModal, { handleHideRegModal: this.handleHideRegModal }) : null,
+                      this.state.view.showResetModal ? React.createElement(ResetPswdModal, { handleHideResetModal: this.handleHideResetModal }) : null)
     );
   }
 });

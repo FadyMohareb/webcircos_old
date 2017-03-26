@@ -1,6 +1,6 @@
 var converter = new Showdown.converter();
 
-var ViewBox = React.createClass({className: "viewBox",
+var ViewPanel = React.createClass({className: "viewPanel",
     
     handleSubmit: function (e) {
          e.preventDefault();
@@ -35,7 +35,7 @@ var ViewBox = React.createClass({className: "viewBox",
     }
 })
 
-var renderViewBox = function () {
-    React.render(React.createElement(ViewBox), document.getElementById('rightContainer'));
+var renderViewPanel = function () {
+    React.render(React.createElement(ViewPanel), document.getElementById('rightContainer'));
 };
 

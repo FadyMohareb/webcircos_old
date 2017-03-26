@@ -5,7 +5,7 @@
  */
 var converter = new Showdown.converter();
 
-var AccountCard = React.createClass({displayName: "AccountCard",
+var AccountDropdown = React.createClass({displayName: "accountDropdown",
      handleSubmit: function (e) {
         e.preventDefault();
         $.ajax({
@@ -61,9 +61,9 @@ var AccountCard = React.createClass({displayName: "AccountCard",
     }
 });
 
-var renderUserAccount = function () {
+var renderAccountDropdown = function () {
     React.render(
-        React.createElement(AccountCard),
+        React.createElement(AccountDropdown),
         document.getElementById("upperRightContainer")
     );
 };

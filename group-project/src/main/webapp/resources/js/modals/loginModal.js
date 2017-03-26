@@ -1,6 +1,6 @@
 var converter = new Showdown.converter();
 
-var SigninForm = React.createClass({displayName: "LoginForm",
+var LoginModal = React.createClass({displayName: "LoginModal",
     
     componentDidMount: function componentDidMount(){
         $(this.getDOMNode()).modal('show');

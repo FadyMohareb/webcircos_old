@@ -18,7 +18,8 @@ var UploadModal = React.createClass({className: "uploadModal",
                         React.createElement('div', {className: 'modal-content'},
                                 React.createElement('div', {className: 'modal-header'},
                                         React.createElement('button', {type: 'button', className: 'close',
-                                            'data-dismiss': 'modal', 'aria-label': 'Close'}),
+                                            'data-dismiss': 'modal', 'aria-label': 'Close'},
+                                            React.createElement('span',{ 'aria-hidden': 'true' },'\xD7')),
                                         React.createElement('h3', {className: 'modal-title'}, 'Upload file')),
                                 React.createElement('div', {className: 'modal-body'},
                                         React.createElement('input', {type: 'file', ref: 'fileUpload'})),
@@ -27,5 +28,9 @@ var UploadModal = React.createClass({className: "uploadModal",
                                 'Upload file')))
                 ))
                 );
-    }
+    },
+    
+    propTypes: {
+        handleHideUploadModal: React.PropTypes.func.isRequired
+      }
 })

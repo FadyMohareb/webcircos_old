@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 import uk.ac.cranfield.bix.controllers.rest.LoginCredentials;
 import uk.ac.cranfield.bix.controllers.rest.RestResponse;
@@ -78,6 +79,7 @@ public class CustomController {
         try {
             Authentication auth = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
+            
             return new RestResponse(null, null);
         } catch (BadCredentialsException e) {
             return new RestResponse(e.getMessage(), null);
@@ -135,6 +137,7 @@ public class CustomController {
         Map<String, Object> map = new HashMap<>();
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         map.put("userName", name);
+//        String sessionID = RequestContextHolder.currentRequestAttributes().getSessionId();
         return new ModelAndView("MainWindow", map);
     }
 }
