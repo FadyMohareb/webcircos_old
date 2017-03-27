@@ -4,7 +4,7 @@ var FilesList = React.createClass({className: "filesList",
     render: function () {
         return (React.createElement('div', {className: "panel panel-primary"},
                     React.createElement('div', {className: "panel-heading"}, "Files"),
-                    React.createElement('div', {className: "panel-body"}, 
+                    React.createElement('div', {className: "panel-body"},
                         React.createElement('div', {className: "panel panel-success"},
                             React.createElement('div', {className: "panel-heading"}, "Sequence"),
                             React.createElement('div', {className: "panel-body"}, "sequencefile1")),

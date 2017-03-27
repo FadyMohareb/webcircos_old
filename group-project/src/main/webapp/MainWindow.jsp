@@ -24,7 +24,10 @@
         <script src="${contextPath}/resources/js/plotSpace.js"></script>
         <script src="${contextPath}/resources/js/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/changePassword.js"></script>
-        <script src="${contextPath}/resources/js/uploadBox.js"></script>
+        <script src="${contextPath}/resources/js/viewBox.js"></script>
+        <script src="${contextPath}/resources/js/uploadModal.js"></script>
+        <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+        <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     </head>
     <body>
         <div class="row">  
@@ -65,15 +68,6 @@
                             renderFiles();
                         });
                     </script>
-                    <div class = "row" style="margin:0px 20px 0px 20px">
-                        <h2>Add a file</h2>
-                        <input type="file" id="files" name="file"/>
-                        <div id="drop_zone">Drop files here</div>
-                        <output id="list"></output>
-                        <div id="byte_range"></div>
-                        <div id="byte_content"></div>
-                    </div>
-                    <script src="${contextPath}/resources/js/fileHandler.js"></script>
                     <div id="projAnContainer" class="row" style="margin:0px 20px 0px 20px">${projAnContainer}</div>
                     <script type="text/javascript">
                         $(function () {
@@ -91,7 +85,7 @@
                 <div id="rightContainer" class="col-lg-2" style="float:left;margin:0px 20px 0px 20px">${rightContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderUploadBox();
+                        renderViewBox();
                     });
                 </script>
             </div>

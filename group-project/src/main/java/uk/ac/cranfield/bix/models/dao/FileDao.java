@@ -11,7 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import uk.ac.cranfield.bix.models.File;
+import uk.ac.cranfield.bix.models.FileInput;
 
 /**
  *
@@ -28,26 +28,26 @@ public class FileDao {
     return _sessionFactory.getCurrentSession();
   }
   
-  public void save(File file) {
+  public void save(FileInput file) {
     getSession().save(file);
     return;
   }
   
-  public void delete(File file) {
+  public void delete(FileInput file) {
     getSession().delete(file);
     return;
   }
   
   @SuppressWarnings("unchecked")
-  public List<File> getAll() {
+  public List<FileInput> getAll() {
     return getSession().createQuery("from File").list();
   }
   
-  public File getById(long id) {
-    return (File) getSession().load(File.class, id);
+  public FileInput getById(long id) {
+    return (FileInput) getSession().load(FileInput.class, id);
   }
   
-  public void update(File file) {
+  public void update(FileInput file) {
     getSession().update(file);
     return;
   }

@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.cranfield.bix.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,13 +13,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/**
- *
- * @author s262012
- */
 @Entity
 @Table(name = "Files")
-public class File {
+@JsonIgnoreProperties({"bytes"})
+public class FileInput {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,26 +26,28 @@ public class File {
     @NotNull
     @Size(min = 3, max = 45)
     @Column(name = "file_name")
-    private Integer f_name;
+    private String f_name;
     
     @NotNull
     @Size(min = 3, max = 45)
     @Column(name = "file_path")
-    private Integer f_path;
+    private String f_path;
     
     @NotNull
     @Size(min = 3, max = 45)
     @Column(name = "file_type")
-    private Integer f_type;
+    private String f_type;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
-    public File() {
+    private byte[] bytes;
+    private String f_size;
+    
+    public FileInput() {
     }
     
-
     public Integer getId() {
         return id;
     }
@@ -61,27 +56,27 @@ public class File {
         this.id = id;
     }
 
-    public Integer getF_name() {
+    public String getF_name() {
         return f_name;
     }
 
-    public void setF_name(Integer f_name) {
+    public void setF_name(String f_name) {
         this.f_name = f_name;
     }
 
-    public Integer getF_path() {
+    public String getF_path() {
         return f_path;
     }
 
-    public void setF_path(Integer f_path) {
+    public void setF_path(String f_path) {
         this.f_path = f_path;
     }
 
-    public Integer getF_type() {
+    public String getF_type() {
         return f_type;
     }
 
-    public void setF_type(Integer f_type) {
+    public void setF_type(String f_type) {
         this.f_type = f_type;
     }
 
@@ -93,6 +88,19 @@ public class File {
         this.project = project;
     }
     
-    
-    
+    public byte[] getBytes() {
+        return bytes;
+    }
+
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
+    }
+
+    public String getF_size() {
+        return f_size;
+    }
+
+    public void setF_size(String f_size) {
+        this.f_size = f_size;
+    }
 }
