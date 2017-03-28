@@ -1,6 +1,6 @@
 var converter = new Showdown.converter();
 
-var SignupForm = React.createClass({displayName: "RegistrationForm",
+var RegistrationModal = React.createClass({displayName: "RegistrationModal",
 
     componentDidMount: function componentDidMount(){
         $(this.getDOMNode()).modal('show');
@@ -93,10 +93,3 @@ var SignupForm = React.createClass({displayName: "RegistrationForm",
       }
     
 });
-
-//var renderSignup = function () {
-//    React.render(
-//        React.createElement(SignupForm),
-//        document.getElementById("signUp")
-//    );
-//};

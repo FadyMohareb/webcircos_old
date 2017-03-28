@@ -6,10 +6,11 @@
 
 var converter = new Showdown.converter();
 
-var App = React.createClass({
-  displayName: "App",
+var HomePage = React.createClass({
+  displayName: "HomePage",
   getInitialState: function getInitialState() {
-    return { view: { showModal: false, showRegModal: false, showResetModal: false, showChangeModal: false, showUploadModal: false } };
+    return { view: { showModal: false, showRegModal: false, showResetModal: false,
+            showChangeModal: false, showUploadModal: false }};
   },
   handleHideModal: function handleHideModal() {
     this.setState({ view: { showModal: false } });
@@ -40,43 +41,18 @@ var App = React.createClass({
     $( ".modal-backdrop.in" ).remove();
   },
   
-  handleShowUploadModal: function handleShowUploadModal() {
-    this.setState({ view: { showUploadModal: true } });
-  },
-  handleHideUploadModal: function handleHideUploadModal() {
-    this.setState({ view: { showUploadModal: false } });
-    $( ".modal-backdrop.in" ).remove();
-  },
-  
   render: function render() {
     return (
                 React.createElement("div", {className: "pull-left"},
                     React.createElement("button", { className: 'btn btn-primary', onClick: this.handleShowModal}, "Sign in"),
-                    React.createElement("button", { className: 'btn btn-primary', onClick: this.handleShowUploadModal}, "Upload file"),
-                      this.state.view.showModal ? React.createElement(SigninForm, { handleHideModal: this.handleHideModal,
+                      this.state.view.showModal ? React.createElement(LoginModal, { handleHideModal: this.handleHideModal,
                           handleShowRegModal: this.handleShowRegModal, handleShowResetModal: this.handleShowResetModal}) : null,
-                      this.state.view.showRegModal ? React.createElement(SignupForm, { handleHideRegModal: this.handleHideRegModal }) : null,
-                      this.state.view.showResetModal ? React.createElement(ResetPswdForm, { handleHideResetModal: this.handleHideResetModal }) : null,
-                      this.state.view.showUploadModal ? React.createElement(UploadModal, { handleHideUploadModal: this.handleHideUploadModal }) : null)
+                      this.state.view.showRegModal ? React.createElement(RegistrationModal, { handleHideRegModal: this.handleHideRegModal }) : null,
+                      this.state.view.showResetModal ? React.createElement(ResetPswdModal, { handleHideResetModal: this.handleHideResetModal }) : null)
     );
   }
 });
 
-var renderJoinUS = function () {
-    React.render(React.createElement(App, null), document.getElementById('upperLeftContainer'));
-};
-
-var ProjectsAnonym = React.createClass({
-  displayName: "projAn",
-  render: function () {
-        return (React.createElement('div', {className: "panel panel-info"},
-                    React.createElement('div', {className: "panel-heading"}, "Projects"),
-                    React.createElement('div', {className: "panel-body"}, "Sign in to access your projects")
-            )
-          );
-    }
-});
-
-var renderProjAn = function () {
-    React.render(React.createElement(ProjectsAnonym), document.getElementById('projAnContainer'));
+var renderHomePage = function () {
+    React.render(React.createElement(HomePage, null), document.getElementById('upperLeftContainer'));
 };

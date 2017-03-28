@@ -1,6 +1,6 @@
 var converter = new Showdown.converter();
 
-var SigninForm = React.createClass({displayName: "LoginForm",
+var LoginModal = React.createClass({displayName: "LoginModal",
     
     componentDidMount: function componentDidMount(){
         $(this.getDOMNode()).modal('show');
@@ -44,7 +44,7 @@ var SigninForm = React.createClass({displayName: "LoginForm",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(loginCredentials),
                 success: function (data) {
-                    console.log(data)
+    //                console.log(data)
                     if(data.errors == null) {
                         location = '/home';
                     }else
@@ -100,11 +100,3 @@ var SigninForm = React.createClass({displayName: "LoginForm",
         handleHideModal: React.PropTypes.func.isRequired
       }
 });
-
-
-//var renderSignin = function () {
-//    React.render(
-//        React.createElement(SigninForm),
-//        document.getElementById("signIn")
-//    );
-//};

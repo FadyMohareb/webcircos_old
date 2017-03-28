@@ -5,9 +5,9 @@
  */
 
 
-var PlotSpace = React.createClass({
+var CircosPanel = React.createClass({ className: "circosPanel" ,
     handleSaving: function () {
-        alert("This button will log in the user soon :)")
+        alert("This button will save the Circos soon :)")
     },
         render: function () {
         
@@ -22,9 +22,9 @@ var PlotSpace = React.createClass({
     }
 })
 
-var renderPlotSpace = function () {
+var renderCircosPanel = function () {
     React.render(
-        React.createElement(PlotSpace),
+        React.createElement(CircosPanel),
         document.getElementById("centerContainer")
     );
 };

@@ -5,7 +5,7 @@
  */
 var converter = new Showdown.converter();
 
-var AccountCard = React.createClass({displayName: "AccountCard",
+var AccountDropdown = React.createClass({displayName: "accountDropdown",
      handleSubmit: function (e) {
         e.preventDefault();
         $.ajax({
@@ -51,19 +51,18 @@ var AccountCard = React.createClass({displayName: "AccountCard",
                     React.createElement("li", null, 
                         React.createElement("a", {href: "#", onClick: this.handleShowModal }, "Change password")),
                     React.createElement("li", { role: 'separator', className: 'divider'}),
-                            
                 React.createElement("li", null,
                         React.createElement("a", {href: '#', onClick: this.handleSubmit },  "Log out "))
                  ),
-                this.state.view.showModal ? React.createElement(PasswordCard, { handleHideModal: this.handleHideModal }) : null
+                this.state.view.showModal ? React.createElement(ChangePswdModal, { handleHideModal: this.handleHideModal }) : null
                 )
         );
     }
 });
 
-var renderUserAccount = function () {
+var renderAccountDropdown = function () {
     React.render(
-        React.createElement(AccountCard),
+        React.createElement(AccountDropdown),
         document.getElementById("upperRightContainer")
     );
 };

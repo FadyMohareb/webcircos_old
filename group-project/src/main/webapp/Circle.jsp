@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8">
         <title>BioCircos.js</title>
-        <script src="${contextPath}/resources/js/jquery.js"></script>
-        <script src="${contextPath}/resources/js/d3.js"></script>
-        <script src="${contextPath}/resources/js/biocircos-1.1.1.js"></script>   
+        <script src="${contextPath}/resources/js/tools/jquery.js"></script>
+        <script src="${contextPath}/resources/js/tools/d3.js"></script>
+        <script src="${contextPath}/resources/js//tools/biocircos-1.1.1.js"></script>   
         <script src="${contextPath}/resources/js/simpleCircos.js"></script>
     </head>
     <body>

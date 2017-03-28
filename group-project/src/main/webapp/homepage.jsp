@@ -16,30 +16,32 @@
         <script src="${contextPath}/resources/js/vendor/react.js"></script>
         <script src="${contextPath}/resources/js/vendor/showdown.min.js"></script>
         <script src="${contextPath}/resources/js/home.js"></script>
-        <script src="${contextPath}/resources/js/loginReact.js"></script>
-        <script src="${contextPath}/resources/js/registrationReact.js"></script>
-        <script src="${contextPath}/resources/js/forgottenPassword.js"></script>
-        <script src="${contextPath}/resources/js/userAccountBox.js"></script>
-        <script src="${contextPath}/resources/js/fileBox.js"></script>
-        <script src="${contextPath}/resources/js/plotSpace.js"></script>
-        <script src="${contextPath}/resources/js/welcomeHeader.js"></script>
-        <script src="${contextPath}/resources/js/changePassword.js"></script>
-        <script src="${contextPath}/resources/js/viewBox.js"></script>
-        <script src="${contextPath}/resources/js/uploadModal.js"></script>
+        <script src="${contextPath}/resources/js/modals/loginModal.js"></script>
+        <script src="${contextPath}/resources/js/modals/registrationModal.js"></script>
+        <script src="${contextPath}/resources/js/modals/resetPswdModal.js"></script>
+        <script src="${contextPath}/resources/js/dynamic/accountDropdown.js"></script>
+        <script src="${contextPath}/resources/js/panels/filesPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/projectsPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/circosPanel.js"></script>
+        <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
+        <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>
+        <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
+        <script src="${contextPath}/resources/js/panels/viewPanel.js"></script>
+        <script src="${contextPath}/resources/js/modals/newProjectModal.js"></script>
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     </head>
     <body>
         <div class="row">  
+            <security:authorize acess="isAuthenticated"></security>
             <c:if test="${pageContext.request.userPrincipal.name != null}">
                 <div id="upperLeftContainer" class="col-lg-3 page-header" style="float:left;margin:0px 20px 0px 30px">${upperLeftContainer} 
                     <h2>Welcome ${pageContext.request.userPrincipal.name}!</h2>
                 </div>
-
                 <div id="upperRightContainer" class="col-lg-3" style="float:right;margin:0px 40px 0px 40px">${upperRightContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderUserAccount();
+                        renderAccountDropdown();
                     });
                 </script>
             </c:if>
@@ -47,7 +49,7 @@
                 <div id="upperLeftContainer" class="col-lg-3" style="float:left;margin:0px 40px 20px 40px">${upperLeftContainer}
                     <script type="text/javascript">
                         $(function () {
-                            renderJoinUS();
+                            renderHomePage();
                         });
                     </script>
                 </div>
@@ -56,36 +58,29 @@
         <div class="row" style="margin:0px 20px 0px 20px">
             <div class="row">
                 <div class="col-lg-3" style="float:left">
-<!--                    <div id="uploadContainer" class="row" style="margin:0px 20px 0px 20px">${uploadContainer}</div>
+                    <div id="projectsContainer" class="row" style="margin:0px 20px 0px 20px">${projectsContainer}</div>
                     <script type="text/javascript">
                         $(function () {
-                            renderUploadBox();
-                        });
-                    </script>-->
-                    <div id="leftContainer" class="row" style="margin:0px 20px 0px 20px">${leftContainer}</div>
-                    <script type="text/javascript">
-                        $(function () {
-                            renderFiles();
+                            renderProjectsPanel();
                         });
                     </script>
-                    <div id="projAnContainer" class="row" style="margin:0px 20px 0px 20px">${projAnContainer}</div>
+                    <div id="filesContainer" class="row" style="margin:0px 20px 0px 20px">${filesContainer}</div>
                     <script type="text/javascript">
                         $(function () {
-                            renderProjAn();
+                            renderFilesPanel();
                         });
                     </script>
                 </div>
-
                 <div id="centerContainer" class="col-lg-6">${centerContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderPlotSpace();
+                        renderCircosPanel();
                     });
                 </script>
                 <div id="rightContainer" class="col-lg-2" style="float:left;margin:0px 20px 0px 20px">${rightContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderViewBox();
+                        renderViewPanel();
                     });
                 </script>
             </div>
