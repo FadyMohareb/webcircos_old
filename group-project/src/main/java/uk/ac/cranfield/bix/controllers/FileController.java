@@ -35,7 +35,7 @@ public class FileController {
             //creating object file from path
             oldFile = new File(filePath);
             //current path THE ONE TO CHANGE AT DIFFERENT COMPUTERS
-            currentPath = ("Z:/ProfileData/s260533/Desktop/temp/");
+            currentPath = ("Z:/ProfileData/s260592/Desktop/temp/");
             //user id from SpringSecurity
             userID = SecurityContextHolder.getContext().getAuthentication().getName();
             //temporary solution

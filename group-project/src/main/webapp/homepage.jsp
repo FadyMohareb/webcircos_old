@@ -31,59 +31,43 @@
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     </head>
-    <body>
-        <div class="row">  
-            <security:authorize acess="isAuthenticated"></security>
-            <c:if test="${pageContext.request.userPrincipal.name != null}">
-                <div id="upperLeftContainer" class="col-lg-3 page-header" style="float:left;margin:0px 20px 0px 30px">${upperLeftContainer} 
-                    <h2>Welcome ${pageContext.request.userPrincipal.name}!</h2>
-                </div>
-                <div id="upperRightContainer" class="col-lg-3" style="float:right;margin:0px 40px 0px 40px">${upperRightContainer}</div>
+    <body> 
+            <div id="upperLeftContainer" >${upperLeftContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderAccountDropdown();
+                        renderHomePage();
                     });
                 </script>
-            </c:if>
-            <c:if test="${pageContext.request.userPrincipal.name == null}">
-                <div id="upperLeftContainer" class="col-lg-3" style="float:left;margin:0px 40px 20px 40px">${upperLeftContainer}
-                    <script type="text/javascript">
-                        $(function () {
-                            renderHomePage();
-                        });
-                    </script>
-                </div>
-            </c:if>
-        </div>
-        <div class="row" style="margin:0px 20px 0px 20px">
-            <div class="row">
-                <div class="col-lg-3" style="float:left">
-                    <div id="projectsContainer" class="row" style="margin:0px 20px 0px 20px">${projectsContainer}</div>
-                    <script type="text/javascript">
-                        $(function () {
-                            renderProjectsPanel();
-                        });
-                    </script>
-                    <div id="filesContainer" class="row" style="margin:0px 20px 0px 20px">${filesContainer}</div>
-                    <script type="text/javascript">
-                        $(function () {
-                            renderFilesPanel();
-                        });
-                    </script>
-                </div>
-                <div id="centerContainer" class="col-lg-6">${centerContainer}</div>
-                <script type="text/javascript">
-                    $(function () {
-                        renderCircosPanel();
-                    });
-                </script>
-                <div id="rightContainer" class="col-lg-2" style="float:left;margin:0px 20px 0px 20px">${rightContainer}</div>
-                <script type="text/javascript">
-                    $(function () {
-                        renderViewPanel();
-                    });
-                </script>
-            </div>
-        </div>    
+        
+        <!--        <div class="row" style="margin:0px 20px 0px 20px">
+                    <div class="row">
+                        <div class="col-lg-3" style="float:left">
+                            <div id="projectsContainer" class="row" style="margin:0px 20px 0px 20px">${projectsContainer}</div>
+                            <script type="text/javascript">
+                                $(function () {
+                                    renderProjectsPanel();
+                                });
+                            </script>
+                            <div id="filesContainer" class="row" style="margin:0px 20px 0px 20px">${filesContainer}</div>
+                            <script type="text/javascript">
+                                $(function () {
+                                    renderFilesPanel();
+                                });
+                            </script>
+                        </div>
+                        <div id="centerContainer" class="col-lg-6">${centerContainer}</div>
+                        <script type="text/javascript">
+                            $(function () {
+                                renderCircosPanel();
+                            });
+                        </script>
+                        <div id="rightContainer" class="col-lg-2" style="float:left;margin:0px 20px 0px 20px">${rightContainer}</div>
+                        <script type="text/javascript">
+                            $(function () {
+                                renderViewPanel();
+                            });
+                        </script>
+                    </div>-->
+        <!--</div>-->    
     </body>
 </html>

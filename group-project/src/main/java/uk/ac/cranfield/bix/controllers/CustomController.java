@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,9 +59,10 @@ public class CustomController {
         if (Utilities.emailValidator(user.getEmail())){
             userService.save(user);
         }else{
-            System.out.println("Bad email");
+            System.out.println("Incorrect email format");
         }
         securityService.autologin(user.getLogin(), password);
+        
         return new RestResponse(null, null);   
     }
 
@@ -117,7 +119,7 @@ public class CustomController {
         }   
     }
     
-     @RequestMapping(value = "/logOutAction", method = RequestMethod.GET)
+    @RequestMapping(value = "/logOutAction", method = RequestMethod.GET)
     public
     @ResponseBody
     RestResponse logOut(HttpServletRequest request, HttpServletResponse response) {
@@ -134,8 +136,31 @@ public class CustomController {
     public ModelAndView join() {
         Map<String, Object> map = new HashMap<>();
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        
         map.put("userName", name);
+        
+        if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
+            System.out.println("User is ANONYMOUS");
+                    else
+            System.out.println("User is LOGGED");
+            
 //        String sessionID = RequestContextHolder.currentRequestAttributes().getSessionId();
         return new ModelAndView("homepage", map);
     }
+//    
+//    @RequestMapping(value = "/isLogged", method = RequestMethod.GET)
+//    public
+//    @ResponseBody
+//    RestResponse checkUser(HttpServletRequest request, HttpServletResponse response) {
+//        try {
+//            if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
+//            System.out.println("User is ANONYMOUS");
+//                    else
+//            System.out.println("User is LOGGED");
+//            
+//            return new RestResponse(null, null);
+//        }catch(Exception e){
+//            return new RestResponse(e.getMessage(), null);
+//        }   
+//    }
 }
