@@ -22,11 +22,10 @@ import uk.ac.cranfield.bix.controllers.rest.finalObjects.IndGff;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.Deserialize;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffDataPoints;
-import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffParser;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.fastaParsers.createBiocircosGenomeObject;
-import static uk.ac.cranfield.bix.utilities.fileParser.fastaParsers.fastaParser;
+
 
 /**
  *
@@ -50,19 +49,17 @@ public class CircosController {
         List<Object[]> obj = createBiocircosGenomeObject(seq);
         
         //Create Histogram
-        List<HistogramDataPoint> HistData = new ArrayList();
-        HistogramDataPoint d1 = new HistogramDataPoint("SL2.50ch00", 1, 1000000, "brt_raw_10pHist", 0.839);
-        HistogramDataPoint d2 = new HistogramDataPoint("SL2.50ch00", 1000004, 2000000, "brt_raw_10pHist", 0.791);
-        HistData.add(d1);
-        HistData.add(d2);
-
-        Histogram h = HistWriter(HistData);
-
+        List<HistogramDataPoint> vcf = (List<HistogramDataPoint>) Deserialize("C:/Users/solene/Documents/temp/vcf2.txt");
+        Histogram h = HistWriter(vcf);
+        
         //Create ARC_01
-
+        List<GffDataPoint> gff = (List<GffDataPoint>) Deserialize("C:/Users/solene/Documents/temp/gff2.txt");
+        IndGff GffWriter = GffWriter(gff);
+        
         CircosOutput circosOutput = new CircosOutput();
         circosOutput.setGenomes(obj);
         circosOutput.setHisto(h);
+        circosOutput.setArc(GffWriter);
         return circosOutput;
     }
 }

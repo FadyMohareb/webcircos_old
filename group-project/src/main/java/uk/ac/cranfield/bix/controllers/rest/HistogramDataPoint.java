@@ -5,11 +5,13 @@
  */
 package uk.ac.cranfield.bix.controllers.rest;
 
+import java.io.Serializable;
+
 /**
  *
  * @author s262012
  */
-public class HistogramDataPoint {
+public class HistogramDataPoint implements Serializable{
     
     private String chr;
     private Integer start;
@@ -68,5 +70,9 @@ public class HistogramDataPoint {
         this.value = value;
     }
     
+    @Override
+    public String toString(){
+        return "[" + chr +","+ start+ end + name + value +"]";
+    }
     
 }

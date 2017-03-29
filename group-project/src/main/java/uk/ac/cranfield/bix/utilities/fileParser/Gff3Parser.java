@@ -22,8 +22,13 @@ import uk.ac.cranfield.bix.controllers.rest.IndGffProperties;
  */
 public class Gff3Parser {
 
-    public static ArrayList<String[]> GffParser(String Gff3filepath) {
-        ArrayList<String[]> Karyotype = new ArrayList();
+    /**
+     *
+     * @param Gff3filepath
+     * @return
+     */
+    public static List<String[]> GffParser(String Gff3filepath) {
+        List<String[]> Karyotype = new ArrayList();
         try (BufferedReader br = new BufferedReader(new FileReader(Gff3filepath))) {
             String line;
 
@@ -40,7 +45,7 @@ public class Gff3Parser {
         return Karyotype;
     }
 
-    public static List<GffDataPoint> GffDataPoints(ArrayList<String[]> Karyotype) {
+    public static List<GffDataPoint> GffDataPoints(List<String[]> Karyotype) {
 
         List<GffDataPoint> Gff3Data = new ArrayList();
         for (int i = 0; i < Karyotype.size(); i++) {

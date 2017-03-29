@@ -7,15 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import uk.ac.cranfield.bix.models.User;
-import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.Deserialize;
+import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeGff;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeSequence;
+import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeVcf;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffParser;
+import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistogramData;
+import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VCFHistParser;
+import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VcfToolsSNPDensity;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VcfToolsSNPS;
 import static uk.ac.cranfield.bix.utilities.fileParser.fastaParsers.fastaParser;
 
@@ -74,16 +78,22 @@ public class Utilities {
             case "alignment":
                 break;
             case "sequence":
-                //need to be changed to void and only create a binary file with the serialized object.
+                //Parse and Serialize fasta file
                 List<Sequence> fastaParser = fastaParser(filePath);
-                //String pathForSerializedFile = filePath.substring(0, filePath.lastIndexOf("/")+1)+"seq1.txt";
                 SerializeSequence(fastaParser, "C:/Users/solene/Documents/temp/seq2.txt");
                 break;
             case "annotation":
-                ArrayList<String[]> GffParser = GffParser(filePath);
+                List<String[]> GffParser = GffParser(filePath);
+                SerializeGff(GffParser, "C:/Users/solene/Documents/temp/gff2.txt");
                 break;
             case "variants":
-                VcfToolsSNPS(filePath);
+                System.out.println(""+filePath);
+                String VcfToolsSNPS = VcfToolsSNPS(filePath);
+                System.out.println(""+VcfToolsSNPS);
+                String VcfToolsSNPDensity = VcfToolsSNPDensity(VcfToolsSNPS);
+                System.out.println(""+VcfToolsSNPDensity);
+                ArrayList<String[]> VCFHistParser = VCFHistParser(VcfToolsSNPDensity);
+                SerializeVcf(VCFHistParser, "C:/Users/solene/Documents/temp/vcf2.txt");
                 break;
             default:
                 break;

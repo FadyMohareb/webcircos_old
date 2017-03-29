@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import uk.ac.cranfield.bix.controllers.rest.DataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
@@ -34,23 +33,28 @@ public class VCFParsers {
      *
      * @param filepath
      * @param filename
+     * @return 
      */
-    public static void VcfToolsSNPS(String filepath) {
+    public static String VcfToolsSNPS(String filepath) {
         //Run VCFtools to output an SNP only VCF file, with the filename + SNPsONly as title
         //cmdArray, each string is an argument
         String[] cmdArray = new String[6];
-        
+
         File VCF = new File(filepath);
-        String filename = VCF.getName(); 
-        
-         //need the file directory. Can take the absolute path and then remove the file name
+        String filename = VCF.getName();
+
+        //need the file directory. Can take the absolute path and then remove the file name
         int index = filepath.lastIndexOf("\\");
-        String pathWithoutName = filepath.substring(0, index+1);
+        String pathWithoutName = filepath.substring(0, index + 1);
+        System.out.println("path without name" + pathWithoutName);
         
+        String path = pathWithoutName + filename + "SNPsOnly.snpden";
+        System.out.println("path "+ path);
+
         cmdArray[0] = "C:\\Windows\\System32\\bash.exe";
         cmdArray[1] = "vcftools";
         cmdArray[2] = "--vcf " + filepath; //file extension, reads "--vcf" etc //filepath and path "path/to/example.vcf"
-        cmdArray[3] = "--out " + pathWithoutName + filename + "SNPsOnly"; //choose the user directory.
+        cmdArray[3] = "--out " + path; //choose the user directory.
         cmdArray[4] = "--remove-indels";
         cmdArray[5] = "--recode";
         try {
@@ -62,25 +66,30 @@ public class VCFParsers {
         } catch (IOException ex) {
             Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return path;
     }
 
 //run VCF tools to get a SNP density per N bases, lat line of CMD array sets this
-    public static void VcfToolsSNPDensity(ArrayList<Integer> seq, String SnpDenseFilepath) {
+    //The file is the output from above method.
+    public static String VcfToolsSNPDensity(String SnpDenseFilepath) {
         //each string is an argument
         String[] cmdArray = new String[8];
-        
+
         File SNPdense = new File(SnpDenseFilepath);
-        
+
         //get the file name
         String SNPfilename = SNPdense.getName();
-            if (SNPfilename.indexOf(".") > 0){
+        if (SNPfilename.indexOf(".") > 0) {
             SNPfilename = SNPfilename.substring(0, SNPfilename.lastIndexOf("."));
-            } 
-            
+        }
+
         //need the file directory. Can take the absolute path and then remove the file name
         int index = SnpDenseFilepath.lastIndexOf("\\");
-        String pathWithoutName = SnpDenseFilepath.substring(0, index+1);
-   
+        String pathWithoutName = SnpDenseFilepath.substring(0, index + 1);
+        
+        String path = pathWithoutName + SNPfilename + "SNPsOnly.snpden";
+
         cmdArray[0] = "C:\\Windows\\System32\\bash.exe";
         cmdArray[1] = "vcftools";
         cmdArray[2] = "--vcf " + SnpDenseFilepath; //file extension, reads "--vcf" etc //filepath and path "path/to/example.vcf"
@@ -95,6 +104,8 @@ public class VCFParsers {
         } catch (IOException ex) {
             Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return path;
     }
 
     public static ArrayList<String[]> VCFHistParser(String SnpDenseFilepath) throws FileNotFoundException {
@@ -123,9 +134,9 @@ public class VCFParsers {
         //Once you have it invoke -> HistWriter
     }
 
-    public static List<HistogramDataPoint> HistogramData(ArrayList<String[]> HistList, String filename, Integer bean) throws IOException {
+    public static List<HistogramDataPoint> HistogramData(ArrayList<String[]> HistList) throws IOException {
         //Interval is the width of the bin for the histogram
-        Integer interval = bean;
+        Integer interval = 1000000;
         //HistData is string that contains the data in the correct format for the Histogram module of BioCircos
         List<HistogramDataPoint> HistData = new ArrayList();
         for (int i = 0; i < HistList.size(); i++) {
