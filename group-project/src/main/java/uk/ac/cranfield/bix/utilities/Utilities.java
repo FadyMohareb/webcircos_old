@@ -1,13 +1,23 @@
 package uk.ac.cranfield.bix.utilities;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import uk.ac.cranfield.bix.models.User;
+import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.Deserialize;
+import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeSequence;
+import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffParser;
+import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VcfToolsSNPS;
+import static uk.ac.cranfield.bix.utilities.fileParser.fastaParsers.fastaParser;
 
 public class Utilities {
 
@@ -32,41 +42,53 @@ public class Utilities {
         return null;
     }
 
-    public static Cookie createCookie(String cookieName, String cookieValue, int expiryTime ) {
-        Cookie cookie = new Cookie(cookieName, cookieValue);
-        cookie.setPath("/");
-        //Put negative value for unlogged users (the cookie will not be stored and disappear when the usr close the application) and positive value for logged user 
-        cookie.setMaxAge(expiryTime);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        return cookie;
-
-    }
-    
-    public static String greetingMessage(){
+    public static String greetingMessage() {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(false); 
-        User user = (User)session.getAttribute("user");
-        
-        if(user!=null){
-            return "Welcome "+user.getName()+"!";
-        }else{
+        HttpSession session = attr.getRequest().getSession(false);
+        User user = (User) session.getAttribute("user");
+
+        if (user != null) {
+            return "Welcome " + user.getName() + "!";
+        } else {
             return "Welcome!";
         }
     }
-    
+
     /**
-     * Validate user email address before registering user in DB 
+     * Validate user email address before registering user in DB
+     *
      * @param email user email
-     * @return true if the email address is valid otherwise false 
+     * @return true if the email address is valid otherwise false
      */
-    public static boolean emailValidator(String email){
-        
-        String email_pattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"+"[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    public static boolean emailValidator(String email) {
+
+        String email_pattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern pattern = Pattern.compile(email_pattern);
         Matcher matcher = pattern.matcher(email);
         return matcher.find();
-        
+
+    }
+
+    public static void parseFile(String filePath, String fileType) throws IOException, ClassNotFoundException {
+        switch (fileType) {
+            case "alignment":
+                break;
+            case "sequence":
+                //need to be changed to void and only create a binary file with the serialized object.
+                List<Sequence> fastaParser = fastaParser(filePath);
+                //String pathForSerializedFile = filePath.substring(0, filePath.lastIndexOf("/")+1)+"seq1.txt";
+                SerializeSequence(fastaParser, "C:/Users/solene/Documents/temp/seq2.txt");
+                break;
+            case "annotation":
+                ArrayList<String[]> GffParser = GffParser(filePath);
+                break;
+            case "variants":
+                VcfToolsSNPS(filePath);
+                break;
+            default:
+                break;
+
+        }
     }
 
 }

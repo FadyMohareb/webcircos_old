@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import uk.ac.cranfield.bix.controllers.rest.NewFile;
 import uk.ac.cranfield.bix.controllers.rest.RestResponse;
+import static uk.ac.cranfield.bix.utilities.Utilities.parseFile;
 
 @Controller
 public class FileController {
@@ -35,7 +36,7 @@ public class FileController {
             //creating object file from path
             oldFile = new File(filePath);
             //current path THE ONE TO CHANGE AT DIFFERENT COMPUTERS
-            currentPath = ("Z:/ProfileData/s260533/Desktop/temp/");
+            currentPath = ("C:/Users/solene/Documents/temp");
             //user id from SpringSecurity
             userID = SecurityContextHolder.getContext().getAuthentication().getName();
             //temporary solution
@@ -64,6 +65,10 @@ public class FileController {
             bufferedWriter.write(fileName);
             bufferedWriter.close();
             fileWriter.close();
+            
+            // Parse and serialize files
+            parseFile(newFile.getAbsolutePath(), fileType);
+            
             return new RestResponse(null, null);
         } catch (Exception e) {
             return new RestResponse(e.getMessage(), null);
