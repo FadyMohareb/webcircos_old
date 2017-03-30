@@ -1,6 +1,9 @@
 package uk.ac.cranfield.bix.configs;
 
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                     //.antMatchers(HttpMethod.POST,"/comments.json").permitAll()
-                    .antMatchers("/resources/**", "/registrationReact", "/loginReact", "/loginReactAction", "/manageAccount", "/home", "/controller/upload").permitAll()
+                    .antMatchers("/resources/**", "/registrationReact", "/loginReact", "/loginReactAction", "/manageAccount", "/home", "/controller/upload", "/refresh").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
@@ -44,4 +47,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(BixPasswordEncoder.getInstance());
     }
+    
 }

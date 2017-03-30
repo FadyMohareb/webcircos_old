@@ -10,14 +10,30 @@ var UploadModal = React.createClass({className: "uploadModal",
         var file = this.refs.fileUpload.getDOMNode().files[0];
         var filePath = this.refs.fileUpload.getDOMNode().value;
         var fileType="";
+        var isSequence=false;
+        var isAnnotation=false;
+        var isVariants=false;
+        var isAlignment=false;
         if (file.name.endsWith(".fasta") || file.name.endsWith(".fa") || file.name.endsWith(".frn") || file.name.endsWith(".ffn"))
+        {
             fileType = "sequence";
+            isSequence=true;
+        }
         else if (file.name.endsWith(".gff") || file.name.endsWith(".gtf") || file.name.endsWith(".gff2") || file.name.endsWith(".gff3"))
+        {
             fileType = "annotation";
+            isAnnotation=true;
+        }
         else if (file.name.endsWith(".vcf"))
+        {
             fileType = "variants";
+            isVariants = true;
+        }
         else if (file.name.endsWith(".bam") || file.name.endsWith(".sam"))
+        {
             fileType = "alignment";
+            isAlignment = true;
+        }
         else
         {
             fileType = "unrecognized";
@@ -72,7 +88,7 @@ var UploadModal = React.createClass({className: "uploadModal",
                                         React.createElement("hr"),
                                         React.createElement('h4', {className: 'modal-title'}, 'What is file content? '),
                                         React.createElement('br'),
-                                        React.createElement('input', {type: "checkbox", ref: 'isSeq'}, " Sequence"),
+                                        React.createElement('input', {type: "checkbox", ref: 'isSeq', checked: true}, " Sequence"),
                                         React.createElement('br'),
                                         React.createElement('input', {type: "checkbox", ref: 'isAlign'}, " Alignment"),
                                         React.createElement('br'),

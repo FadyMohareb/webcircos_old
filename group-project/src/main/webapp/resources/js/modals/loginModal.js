@@ -44,7 +44,7 @@ var LoginModal = React.createClass({displayName: "LoginModal",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(loginCredentials),
                 success: function (data) {
-                    console.log(data)
+    //                console.log(data)
                     if(data.errors == null) {
                         location = '/home';
                     }else
