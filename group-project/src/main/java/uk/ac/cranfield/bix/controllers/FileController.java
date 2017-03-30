@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,33 +34,35 @@ public class FileController {
             //creating object file from path
             oldFile = new File(filePath);
             //current path THE ONE TO CHANGE AT DIFFERENT COMPUTERS
-            currentPath = ("Z:/ProfileData/s260533/Desktop/temp/");
+            currentPath = ("Z:/ProfileData/s260533/Desktop/");
             //user id from SpringSecurity
             userID = SecurityContextHolder.getContext().getAuthentication().getName();
             //temporary solution
             if ("anonymousUser".equals(userID))
             {
                 userID = RequestContextHolder.currentRequestAttributes().getSessionId();
+                currentPath = currentPath + "temp/"+userID + "/" + fileType;
             }
-            //newPath with added userID
-            newPath=(currentPath+userID);
-            dir1 = new File(newPath);
-            //creating new directory for user if doesn't exist
-            if (!dir1.exists())
-                dir1.mkdir();
-            //newPath with added FileType
-            newPath=(newPath+"/"+fileType);
-            dir2 = new File(newPath);
-            //creating new directory for user if doesn't exist
-            if (!dir2.exists())
-                dir2.mkdir();
-            //copy file to new directory
-            newFile = new File(newPath+"/"+fileName);
+            else
+            {
+                currentPath = currentPath + "user/"+ userID + "/" + fileType;
+            }
+//            //newPath with added FileType
+//            newPath=(newPath+"/"+fileType);
+//            dir2 = new File(newPath);
+//            //creating new directory for user if doesn't exist
+//            if (!dir2.exists())
+//                dir2.mkdir();
+//            //copy file to new directory
+            newFile = new File(currentPath+"/"+fileName);
             Files.copy(oldFile.toPath(), newFile.toPath());
             //new file
-            fileWriter = new FileWriter(newPath+"/contentOfFolder.txt");
+            newPath = currentPath+"/contentOfFolder.txt";
+            fileWriter = new FileWriter(newPath,true);
             bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(fileName);
+            bufferedWriter.append(fileName);
+            bufferedWriter.append("\n\t");
+            bufferedWriter.newLine();
             bufferedWriter.close();
             fileWriter.close();
             return new RestResponse(null, null);
