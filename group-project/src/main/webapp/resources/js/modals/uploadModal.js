@@ -8,7 +8,8 @@ var UploadModal = React.createClass({className: "uploadModal",
     handleSubmit: function(e){
         e.preventDefault();
         var file = this.refs.fileUpload.getDOMNode().files[0];
-        var filePath = this.refs.fileUpload.getDOMNode().value;
+        var domnode = this.refs.fileUpload.getDOMNode()
+        var filePath = domnode.value;
         var fileType="";
         var isSequence=false;
         var isAnnotation=false;
@@ -88,7 +89,7 @@ var UploadModal = React.createClass({className: "uploadModal",
                                         React.createElement("hr"),
                                         React.createElement('h4', {className: 'modal-title'}, 'What is file content? '),
                                         React.createElement('br'),
-                                        React.createElement('input', {type: "checkbox", ref: 'isSeq', checked: true}, " Sequence"),
+                                        React.createElement('input', {type: "checkbox", ref: 'isSeq'}, " Sequence"),
                                         React.createElement('br'),
                                         React.createElement('input', {type: "checkbox", ref: 'isAlign'}, " Alignment"),
                                         React.createElement('br'),

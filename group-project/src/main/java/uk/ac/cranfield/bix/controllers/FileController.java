@@ -60,9 +60,9 @@ public class FileController {
             newPath = currentPath+"/contentOfFolder.txt";
             fileWriter = new FileWriter(newPath,true);
             bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.append(fileName);
-            bufferedWriter.append("\n\t");
-            bufferedWriter.newLine();
+            bufferedWriter.append(newFile.toPath().toString());
+            bufferedWriter.append("\t");
+//            bufferedWriter.newLine();
             bufferedWriter.close();
             fileWriter.close();
             return new RestResponse(null, null);
