@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpSession;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
@@ -87,17 +89,25 @@ public class Utilities {
                 SerializeGff(GffParser, "C:/Users/solene/Documents/temp/gff2.txt");
                 break;
             case "variants":
-                System.out.println(""+filePath);
+                System.out.println("" + filePath);
                 String VcfToolsSNPS = VcfToolsSNPS(filePath);
-                System.out.println(""+VcfToolsSNPS);
+                System.out.println("" + VcfToolsSNPS);
                 String VcfToolsSNPDensity = VcfToolsSNPDensity(VcfToolsSNPS);
-                System.out.println(""+VcfToolsSNPDensity);
+                System.out.println("" + VcfToolsSNPDensity);
                 ArrayList<String[]> VCFHistParser = VCFHistParser(VcfToolsSNPDensity);
                 SerializeVcf(VCFHistParser, "C:/Users/solene/Documents/temp/vcf2.txt");
                 break;
             default:
                 break;
 
+        }
+    }
+
+    public static boolean isUserAuthenticated() {
+        if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
+            return true;
+        } else {
+            return false;
         }
     }
 

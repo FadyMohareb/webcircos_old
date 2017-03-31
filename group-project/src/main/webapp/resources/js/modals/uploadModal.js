@@ -1,6 +1,13 @@
 var converter = new Showdown.converter();
 
 var UploadModal = React.createClass({className: "uploadModal",
+    getInitialState: function(){
+        return { view: { isSequence: false, isAnnotation: false, isVariants: false,
+            isAlignment: false, isExpression: false, isDiffExpression: false }};
+    },
+    handleChboxClicked: function(){
+        this.state.view.isAnnotation = this.refs.isAnnot.getDOMNode().value;
+    },
     componentDidMount: function componentDidMount() {
         $(this.getDOMNode()).modal('show');
         $(this.getDOMNode()).on('hidden.bs.modal', this.props.handleHideUploadModal);
@@ -10,14 +17,30 @@ var UploadModal = React.createClass({className: "uploadModal",
         var file = this.refs.fileUpload.getDOMNode().files[0];
         var filePath = this.refs.fileUpload.getDOMNode().value;
         var fileType="";
+        var isSequence=false;
+        var isAnnotation=false;
+        var isVariants=false;
+        var isAlignment=false;
         if (file.name.endsWith(".fasta") || file.name.endsWith(".fa") || file.name.endsWith(".frn") || file.name.endsWith(".ffn"))
+        {
             fileType = "sequence";
-        else if (file.name.endsWith(".gff") || file.name.endsWith(".gtf") || file.name.endsWith(".gff2") || file.name.endsWith(".gff3"))
+            isSequence=true;
+        }
+        else if (this.state.view.isAnnotation || file.name.endsWith(".gff") || file.name.endsWith(".gtf") || file.name.endsWith(".gff2") || file.name.endsWith(".gff3"))
+        {
             fileType = "annotation";
+            isAnnotation=true;
+        }
         else if (file.name.endsWith(".vcf"))
+        {
             fileType = "variants";
+            isVariants = true;
+        }
         else if (file.name.endsWith(".bam") || file.name.endsWith(".sam"))
+        {
             fileType = "alignment";
+            isAlignment = true;
+        }
         else
         {
             fileType = "unrecognized";
@@ -75,6 +98,8 @@ var UploadModal = React.createClass({className: "uploadModal",
                                         React.createElement('input', {type: "checkbox", ref: 'isSeq'}, " Sequence"),
                                         React.createElement('br'),
                                         React.createElement('input', {type: "checkbox", ref: 'isAlign'}, " Alignment"),
+                                        React.createElement('br'),
+                                        React.createElement('input', {type: "checkbox", ref: 'isAnnot', onClick: this.handleChboxClicked}, " Annotation"),
                                         React.createElement('br'),
                                         React.createElement('input', {type: "checkbox", ref: 'isVar'}, " Variants"),
                                         React.createElement('br'),

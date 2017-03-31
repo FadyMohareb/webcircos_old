@@ -49,8 +49,8 @@ public class CircosController {
         List<Object[]> obj = createBiocircosGenomeObject(seq);
         
         //Create Histogram
-        List<HistogramDataPoint> vcf = (List<HistogramDataPoint>) Deserialize("C:/Users/solene/Documents/temp/vcf2.txt");
-        Histogram h = HistWriter(vcf);
+//        List<HistogramDataPoint> vcf = (List<HistogramDataPoint>) Deserialize("C:/Users/solene/Documents/temp/vcf2.txt");
+//        Histogram h = HistWriter(vcf);
         
         //Create ARC_01
         List<GffDataPoint> gff = (List<GffDataPoint>) Deserialize("C:/Users/solene/Documents/temp/gff2.txt");
@@ -58,7 +58,7 @@ public class CircosController {
         
         CircosOutput circosOutput = new CircosOutput();
         circosOutput.setGenomes(obj);
-        circosOutput.setHisto(h);
+//        circosOutput.setHisto(h);
         circosOutput.setArc(GffWriter);
         return circosOutput;
     }
