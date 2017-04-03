@@ -111,4 +111,13 @@ public class Utilities {
         }
     }
 
+    /**
+     * Check if a folder with this name already exist for this user.  
+     * @return if the folder exist or not.  
+     */
+    public static boolean folderExist(String folderPath) {
+        File userFolder = new File(folderPath);
+        return userFolder.exists();
+    }
+
 }
