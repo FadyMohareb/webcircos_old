@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.cranfield.bix.controllers.rest;
+package uk.ac.cranfield.bix.controllers.rest.finalObjects;
+
+import java.io.Serializable;
 
 /**
  *
  * @author s262012
  */
-public class Sequence {
-    
+public class Sequence implements Serializable {
+
     private String sequenceName;
     private Integer sequenceLength;
 
@@ -29,7 +31,10 @@ public class Sequence {
     public void setSequenceLength(Integer sequenceLength) {
         this.sequenceLength = sequenceLength;
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "[" + sequenceName +","+ sequenceLength+"]";
+    }
+
 }

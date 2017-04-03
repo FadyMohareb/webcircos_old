@@ -28,12 +28,22 @@
         <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
         <script src="${contextPath}/resources/js/panels/viewPanel.js"></script>
         <script src="${contextPath}/resources/js/modals/newProjectModal.js"></script>
+        <script src="${contextPath}/resources/js/tools/d3.js"></script>
+        <script src="${contextPath}/resources/js//tools/biocircos-1.1.1.js"></script>   
+        <script src="${contextPath}/resources/js/simpleCircos.js"></script>
+        
+        <%--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes (2097152 B = 2 MB) -->
+        <property name="maxUploadSize" value="4 000 000 000"/>
+        </bean>--%>
+    
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     </head>
     <body>
         <div class="row">  
             <security:authorize acess="isAuthenticated"></security>
+            
             <c:if test="${pageContext.request.userPrincipal.name != null}">
                 <div id="upperLeftContainer" class="col-lg-3 page-header" style="float:left;margin:0px 20px 0px 30px">${upperLeftContainer} 
                     <h2>Welcome ${pageContext.request.userPrincipal.name}!</h2>

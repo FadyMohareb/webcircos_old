@@ -5,11 +5,13 @@
  */
 package uk.ac.cranfield.bix.controllers.rest;
 
+import java.io.Serializable;
+
 /**
  *
  * @author s262012
  */
-public class GffDataPoint {
+public class GffDataPoint implements Serializable{
     
     private String chr;
     private Integer start;
@@ -54,5 +56,9 @@ public class GffDataPoint {
     public void setColor(String color) {
         this.color = color;
     }
-   
+    
+   @Override
+   public String toString(){
+        return "[" + chr +","+ start+ end + color +"]";
+   }
 }

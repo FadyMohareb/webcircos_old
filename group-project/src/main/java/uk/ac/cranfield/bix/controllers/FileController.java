@@ -2,68 +2,93 @@ package uk.ac.cranfield.bix.controllers;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
-import uk.ac.cranfield.bix.controllers.rest.NewFile;
+import org.springframework.web.multipart.MultipartFile;
 import uk.ac.cranfield.bix.controllers.rest.RestResponse;
+import static uk.ac.cranfield.bix.utilities.Utilities.parseFile;
 
 @Controller
 public class FileController {
     @RequestMapping(value = "/controller/upload", method = RequestMethod.POST)
     public
     @ResponseBody
-    RestResponse upload(@RequestBody(required = true) NewFile inputFile) {
+    RestResponse upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("String") String fileType) {
         //initializations
-        String filePath, fileName, currentPath, fileType, newPath="", userID;
-        File oldFile, newFile, dir1, dir2;
+        String fileName, path, userID;
+        File dir1, dir2;
         FileWriter fileWriter;
         BufferedWriter bufferedWriter;
+        String[] splittedFileName;
         
         try {
-            //information about old file to copy
-            filePath = inputFile.getFilePath();
-            fileType = inputFile.getFileType();
-            fileName = inputFile.getFileName();
-            //creating object file from path
-            oldFile = new File(filePath);
-            //current path THE ONE TO CHANGE AT DIFFERENT COMPUTERS
-            currentPath = ("Z:/ProfileData/s260533/Desktop/temp/");
-            //user id from SpringSecurity
-            userID = SecurityContextHolder.getContext().getAuthentication().getName();
-            //temporary solution
-            if ("anonymousUser".equals(userID))
+            //current path THE ONE OF TWO TO CHANGE AT DIFFERENT COMPUTERS
+            path = ("C:/Users/solene/Documents/");
+            //is user logged
+            if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
             {
+//                System.out.println("User is ANONYMOUS");
                 userID = RequestContextHolder.currentRequestAttributes().getSessionId();
+                //newPath with added userID
+                path = path + "temp/" + userID;
+                dir1 = new File(path);
+                //creating new directory for user if doesn't exist
+                if (!dir1.exists())
+                    dir1.mkdir();
             }
-            //newPath with added userID
-            newPath=(currentPath+userID);
-            dir1 = new File(newPath);
-            //creating new directory for user if doesn't exist
-            if (!dir1.exists())
-                dir1.mkdir();
+            else
+            {
+//                System.out.println("User is LOGGED");
+                //user id from SpringSecurity
+                userID = SecurityContextHolder.getContext().getAuthentication().getName();
+                //newPath with added userID
+                path = path + "user/" + userID;
+                dir1 = new File(path);
+                //creating new directory for user if doesn't exist
+                if (!dir1.exists())
+                    dir1.mkdir();
+                //project id needed
+//                projectID=??
+//                newPath=(newPath+projectID);
+//                dir1_5 = new File(newPath);
+//                //creating new directory for user if doesn't exist
+//                if (!dir1_5.exists())
+//                    dir1_5.mkdir();
+            }
             //newPath with added FileType
-            newPath=(newPath+"/"+fileType);
-            dir2 = new File(newPath);
-            //creating new directory for user if doesn't exist
+            path=(path+"/"+fileType);
+            dir2 = new File(path);
             if (!dir2.exists())
                 dir2.mkdir();
-            //copy file to new directory
-            newFile = new File(newPath+"/"+fileName);
-            Files.copy(oldFile.toPath(), newFile.toPath());
+            
+            fileName = multipartFile.getOriginalFilename();
+            splittedFileName = fileName.split("\\\\");
+            if (splittedFileName.length>1)
+                fileName = splittedFileName[splittedFileName.length-1];
+
+            FileCopyUtils.copy(multipartFile.getBytes(), new FileOutputStream(path+"/"+fileName));
             //new file
-            fileWriter = new FileWriter(newPath+"/contentOfFolder.txt");
+            fileWriter = new FileWriter(path+"/contentOfFolder.txt",true);
             bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(fileName);
+            bufferedWriter.append(path+"/"+fileName);
+            bufferedWriter.append("\t");
+//            bufferedWriter.newLine();
             bufferedWriter.close();
             fileWriter.close();
+            
+            // Parse and serialize files
+            parseFile(path+"/"+fileName, fileType);
+            
             return new RestResponse(null, null);
         } catch (Exception e) {
             return new RestResponse(e.getMessage(), null);

@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.cranfield.bix.controllers.rest;
+package uk.ac.cranfield.bix.controllers.rest.finalObjects;
+
+import uk.ac.cranfield.bix.controllers.rest.TextProperties;
 
 /**
  *

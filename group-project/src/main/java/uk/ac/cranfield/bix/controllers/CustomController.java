@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -135,6 +136,10 @@ public class CustomController {
         Map<String, Object> map = new HashMap<>();
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         map.put("userName", name);
+        if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
+            System.out.println("User is ANONYMOUS");
+        else
+            System.out.println("User is LOGGED");
 //        String sessionID = RequestContextHolder.currentRequestAttributes().getSessionId();
         return new ModelAndView("homepage", map);
     }

@@ -5,6 +5,7 @@ var ViewPanel = React.createClass({className: "viewPanel",
     handleSubmit: function (e) {
          e.preventDefault();
          alert('This button will refresh the circos');
+         //send the list of file that need to be parsed or the list of needed objects.
 
     },
     

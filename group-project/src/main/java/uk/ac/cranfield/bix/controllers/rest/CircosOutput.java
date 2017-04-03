@@ -5,6 +5,11 @@
  */
 package uk.ac.cranfield.bix.controllers.rest;
 
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.BackgroundDisplay;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.DisplayText;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.IndGff;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.Snp;
 import java.util.List;
 
 /**
