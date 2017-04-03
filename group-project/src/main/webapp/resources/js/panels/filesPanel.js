@@ -44,7 +44,7 @@ var FilesPanel = React.createClass({className: "filesPanel",
                     var list = [];
                     for (var i = 0; i < n; i++)
                     {
-                        var parts= filesList[i].split("\\");
+                        var parts= filesList[i].split("/");
                         if (parts[0].length!==0)
                         {
                             var fileName = parts[parts.length-1];

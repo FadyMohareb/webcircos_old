@@ -38,7 +38,7 @@ public class UpdateController {
             //is user logged
             if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
             {
-                System.out.println("User is ANONYMOUS");
+//                System.out.println("User is ANONYMOUS");
                 userID = RequestContextHolder.currentRequestAttributes().getSessionId();
                 currentPath = currentPath + "temp/";
                 //newPath with added userID
