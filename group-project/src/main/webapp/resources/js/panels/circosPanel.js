@@ -88,19 +88,25 @@ var CircosPanel = React.createClass({className: "circosPanel",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(circosInput),
             success: function (data) {
+                var ARC_01;
                 console.log(data)
 //                var HISTOGRAM01 = [data.histo.histId, data.histo.properties, data.histo.histDataPoint]
-                var ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint]
+                if (data.arc !== null) {
+                    ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint]
+                }else{
+                    ARC_01 = []
+                }
                
-                console.log(ARC_01)
                 renderCircos(data.genomes, ARC_01)
             },
-            error: function (xhr, status, err) {
+            error: function () {
                 alert("Wrong data");
                 console.error(status, err.toString());
             }
 
         });
+
+        return
     },
     render: function () {
 

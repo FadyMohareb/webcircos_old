@@ -5,14 +5,18 @@
  */
 package uk.ac.cranfield.bix.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
 import uk.ac.cranfield.bix.controllers.rest.CircosInput;
 import uk.ac.cranfield.bix.controllers.rest.CircosOutput;
 import uk.ac.cranfield.bix.controllers.rest.GffDataPoint;
@@ -25,7 +29,6 @@ import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffDataPoints;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.fastaParsers.createBiocircosGenomeObject;
-
 
 /**
  *
@@ -43,23 +46,38 @@ public class CircosController {
     @RequestMapping(value = "/circos.data", method = RequestMethod.POST)
     public @ResponseBody
     CircosOutput sendData(@RequestBody CircosInput circosInput) throws IOException, ClassNotFoundException {
+        String userID = "";
+        String path = "";
+        CircosOutput circosOutput = new CircosOutput();
+        //For tomorrow meeting I need to know where to find data. So I retrieve the session id to set the proper path. 
+        if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
+            userID = RequestContextHolder.currentRequestAttributes().getSessionId();
+            path = "C:/Users/solene/Documents/temp/" + userID + "/";
+        } else {
+            userID = SecurityContextHolder.getContext().getAuthentication().getName();
+            path = "C:/Users/solene/Documents/user/" + userID + "/";
+        }
 
-        //Create BiocircosGenome variable
-        List<Sequence> seq = (List<Sequence>) Deserialize("C:/Users/solene/Documents/temp/seq2.txt");
-        List<Object[]> obj = createBiocircosGenomeObject(seq);
-        
-        //Create Histogram
+        if (new File(path + "sequence/test.txt").exists()) {
+
+            //Create BiocircosGenome variable
+            List<Sequence> seq = (List<Sequence>) Deserialize(path + "sequence/test.txt");
+            List<Object[]> obj = createBiocircosGenomeObject(seq);
+
+            //Create Histogram
 //        List<HistogramDataPoint> vcf = (List<HistogramDataPoint>) Deserialize("C:/Users/solene/Documents/temp/vcf2.txt");
 //        Histogram h = HistWriter(vcf);
-        
-        //Create ARC_01
-        List<GffDataPoint> gff = (List<GffDataPoint>) Deserialize("C:/Users/solene/Documents/temp/gff2.txt");
-        IndGff GffWriter = GffWriter(gff);
-        
-        CircosOutput circosOutput = new CircosOutput();
-        circosOutput.setGenomes(obj);
-//        circosOutput.setHisto(h);
-        circosOutput.setArc(GffWriter);
+
+            //Create ARC_01
+            circosOutput.setGenomes(obj);  
+        }
+
+        if (new File(path + "annotation/ITAG2.4_gene_models.txt").exists()) {
+            List<GffDataPoint> gff = (List<GffDataPoint>) Deserialize(path + "annotation/ITAG2.4_gene_models.txt");
+            IndGff GffWriter = GffWriter(gff);
+            circosOutput.setArc(GffWriter);
+        }
+
         return circosOutput;
     }
 }
