@@ -7,16 +7,16 @@
 
 var CircosPanel = React.createClass({className: "circosPanel",
     doit: function doit() {
-        renderCircos: function renderCircos(BioCircosGenome, HISTOGRAM01, ARC_01) {
+        renderCircos: function renderCircos(BioCircosGenome, ARC_01) {
 
-            BioCircos01 = new BioCircos(HISTOGRAM01, ARC_01, BioCircosGenome, {// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
+            BioCircos01 = new BioCircos(ARC_01, BioCircosGenome, {// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
                 //Main configuration
                 target: "testDiv", // Main configuration "target"
-                svgWidth: 790, // Main configuration "svgWidth"
-                svgHeight: 790, // Main configuration "svgHeight"
-                chrPad: 0.04, // Main configuration "chrPad"
-                innerRadius: 246, // Main configuration "innerRadius"
-                outerRadius: 270, // Main configuration "outerRadius"
+                svgWidth: 490, // Main configuration "svgWidth"
+                svgHeight: 490, // Main configuration "svgHeight"
+                chrPad: 0.02, // Main configuration "chrPad"
+                innerRadius: 180, // Main configuration "innerRadius"
+                outerRadius: 200, // Main configuration "outerRadius"
 
                 zoom: true,
                 HISTOGRAMMouseEvent: true,
@@ -88,19 +88,25 @@ var CircosPanel = React.createClass({className: "circosPanel",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(circosInput),
             success: function (data) {
+                var ARC_01;
                 console.log(data)
-                var HISTOGRAM01 = [data.histo.histId, data.histo.properties, data.histo.histDataPoint]
-                var ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint]
-                console.log(HISTOGRAM01)
-                console.log(ARC_01)
-                renderCircos(data.genomes, HISTOGRAM01, ARC_01)
+//                var HISTOGRAM01 = [data.histo.histId, data.histo.properties, data.histo.histDataPoint]
+                if (data.arc !== null) {
+                    ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint]
+                }else{
+                    ARC_01 = []
+                }
+               
+                renderCircos(data.genomes, ARC_01)
             },
-            error: function (xhr, status, err) {
+            error: function () {
                 alert("Wrong data");
                 console.error(status, err.toString());
             }
 
         });
+
+        return
     },
     render: function () {
 

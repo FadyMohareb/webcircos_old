@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import uk.ac.cranfield.bix.controllers.rest.Sequence;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 
 /**
  *
@@ -29,7 +29,7 @@ public class fastaParsers {
      * sequence, and chromosome name, should work in all situations
      *
      */
-    public List<Sequence> fastaParser(String filename) throws FileNotFoundException, IOException {
+    public static List<Sequence> fastaParser(String filename) throws FileNotFoundException, IOException {
         //Might put it in a HashMap 
         List<Sequence> sequence = new ArrayList();
         boolean flag = false;
@@ -49,8 +49,8 @@ public class fastaParsers {
                     } else if (line.charAt(0) == '>') {
                         seq.setSequenceLength(length);
                         sequence.add(seq);
-
-                        seq.setSequenceName(line.trim());
+                        seq = new Sequence();
+                        seq.setSequenceName(line.substring(1).trim());
                         System.out.println(line + "Working");
                         length = 0;
                     } else {

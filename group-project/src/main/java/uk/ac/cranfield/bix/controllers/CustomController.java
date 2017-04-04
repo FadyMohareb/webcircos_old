@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,21 +35,6 @@ public class CustomController {
 
     @Autowired
     private SecurityService securityService;
-
-//    @RequestMapping(value = "/loginReact", method = RequestMethod.GET)
-//    public String loginReact() {
-//        return "loginReact";
-//    }
-
-//    @RequestMapping(value = "/registrationReact")
-//    public String registrationReact() {
-//        return "registrationReact";
-//    }
-
-//    @RequestMapping(value = "/comment")
-//    public String comments() {
-//        return "commentReact";
-//    }
 
     @RequestMapping(value = "/registrationReact", method = RequestMethod.POST)
     public
@@ -84,15 +70,6 @@ public class CustomController {
         }
     }
     
-//    @RequestMapping(value = "/manageAccount")
-//    public String test() {
-//        return "manageAccount";
-//    }
-//    
-//     @RequestMapping(value = "/changePassword")
-//    public String changeP() {
-//        return "changePassword";
-//    }
     
     @RequestMapping(value = "/changePasswordAction", method = RequestMethod.POST)
     public
@@ -135,7 +112,7 @@ public class CustomController {
         Map<String, Object> map = new HashMap<>();
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         map.put("userName", name);
-//        String sessionID = RequestContextHolder.currentRequestAttributes().getSessionId();
+
         return new ModelAndView("homepage", map);
     }
 }

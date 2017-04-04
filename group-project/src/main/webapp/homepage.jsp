@@ -7,7 +7,7 @@
 
 <html>
     <head>
-        <title>SeqCircos</title>
+        <title>WebCircos</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
@@ -22,14 +22,22 @@
         <script src="${contextPath}/resources/js/dynamic/accountDropdown.js"></script>
         <script src="${contextPath}/resources/js/panels/filesPanel.js"></script>
         <script src="${contextPath}/resources/js/panels/projectsPanel.js"></script>
+         <script src="${contextPath}/resources/js/tools/d3.js"></script>
+        <script src="${contextPath}/resources/js//tools/biocircos-1.1.1.js"></script> 
         <script src="${contextPath}/resources/js/panels/circosPanel.js"></script>
         <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>
         <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
         <script src="${contextPath}/resources/js/panels/viewPanel.js"></script>
         <script src="${contextPath}/resources/js/modals/newProjectModal.js"></script>
-        <script src="${contextPath}/resources/js/tools/d3.js"></script>
-        <script src="${contextPath}/resources/js//tools/biocircos-1.1.1.js"></script> 
+         
+        
+        
+        <%--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes (2097152 B = 2 MB) -->
+        <property name="maxUploadSize" value="4 000 000 000"/>
+        </bean>--%>
+    
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     </head>
@@ -60,27 +68,27 @@
         </div>
         <div class="row" style="margin:0px 20px 0px 20px">
             <div class="row">
-                <div class="col-lg-3" style="float:left">
-                    <div id="projectsContainer" class="row" style="margin:0px 20px 0px 20px">${projectsContainer}</div>
+                <div class="col-lg-3" style="float:left;margin:0px 10px 0px 10px;width:25%">
+                    <div id="projectsContainer" class="row">${projectsContainer}</div>
                     <script type="text/javascript">
                         $(function () {
                             renderProjectsPanel();
                         });
                     </script>
-                    <div id="filesContainer" class="row" style="margin:0px 20px 0px 20px">${filesContainer}</div>
+                    <div id="filesContainer" class="row">${filesContainer}</div>
                     <script type="text/javascript">
                         $(function () {
                             renderFilesPanel();
                         });
                     </script>
                 </div>
-                <div id="centerContainer" class="col-lg-6">${centerContainer}</div>
+                <div id="centerContainer" class="col-lg-6" style="float:left;margin:0px 10px 0px 10px;width:50%">${centerContainer}</div>
                 <script type="text/javascript">
                     $(function () {
                         renderCircosPanel();
                     });
                 </script>
-                <div id="rightContainer" class="col-lg-2" style="float:left;margin:0px 20px 0px 20px">${rightContainer}</div>
+                <div id="rightContainer" class="col-lg-2" style="float:right;margin:0px 5px 0px 5px;width:20%">${rightContainer}</div>
                 <script type="text/javascript">
                     $(function () {
                         renderViewPanel();

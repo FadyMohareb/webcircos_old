@@ -5,8 +5,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,41 +23,55 @@ public class UpdateController {
     @ResponseBody
     RestResponse upload(@RequestBody(required = true) String panelType) 
     {
-        String userID, currentPath, newPath, type, line;
-        List<String> fileList = null;
-        File dir1, dir2;
+        String userID, currentPath, newPath, type, line, fileList="";
+        File dir1, dir1_5, dir2;
         FileWriter fileWriter;
         BufferedWriter bufferedWriter;
         FileReader fileReader;
         BufferedReader bufferedReader;
-        File[] listFiles = null;
         try
         {
+            //file type needs to consist only letters
             type = panelType.replaceAll("[^a-zA-Z]","");
-            //current path THE ONE TO CHANGE AT DIFFERENT COMPUTERS
-            currentPath = ("Z:/ProfileData/s260533/Desktop/");
-            //user id from SpringSecurity
-            userID = SecurityContextHolder.getContext().getAuthentication().getName();
-            //temporary solution
-            if ("anonymousUser".equals(userID))
+            //current path THE ONE OF TWO TO CHANGE AT DIFFERENT COMPUTERS
+            currentPath = ("C:/Users/agata/Desktop/WebCircos/");
+            //is user logged
+            if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
             {
+//                System.out.println("User is ANONYMOUS");
                 userID = RequestContextHolder.currentRequestAttributes().getSessionId();
                 currentPath = currentPath + "temp/";
+                //newPath with added userID
+                newPath=(currentPath+userID);
+                dir1 = new File(newPath);
+                //creating new directory for user if doesn't exist
+                if (!dir1.exists())
+                    dir1.mkdir();
             }
             else
             {
-                currentPath = currentPath + "/user/";
+                System.out.println("User is LOGGED");
+                //user id from SpringSecurity
+                userID = SecurityContextHolder.getContext().getAuthentication().getName();
+                currentPath = currentPath + "user/";
+                //newPath with added userID
+                newPath=(currentPath+userID);
+                dir1 = new File(newPath);
+                //creating new directory for user if doesn't exist
+                if (!dir1.exists())
+                    dir1.mkdir();
+                //project id needed
+//                projectID=??
+//                newPath=(newPath+projectID);
+//                dir1_5 = new File(newPath);
+//                //creating new directory for user if doesn't exist
+//                if (!dir1_5.exists())
+//                    dir1_5.mkdir();
             }
-            //newPath with added userID
-            newPath=(currentPath+userID);
-            dir1 = new File(newPath);
-            //creating new directory for user if doesn't exist
-            if (!dir1.exists())
-                dir1.mkdir();
             //newPath with added FileType
             newPath=(newPath+"/"+type);
             dir2 = new File(newPath);
-            //creating new directory for user if doesn't exist
+            //creating new directory for user if it doesn't exist or reading from existing one
             newPath = newPath+"/contentOfFolder.txt";
             if (!dir2.exists())
             {
@@ -70,12 +84,23 @@ public class UpdateController {
             }
             else
             {
-                listFiles = dir2.listFiles();
+                //reading from existing file
+                fileReader = new FileReader(newPath);
+                bufferedReader = new BufferedReader(fileReader);
+                while((line = bufferedReader.readLine())!=null)
+                {
+                    fileList = fileList + line;
+                }
+                bufferedReader.close();
+                fileReader.close();
+//                System.out.println(fileList);
+                //alternative solution
+//                listFiles = dir2.listFiles();
 //                System.out.println(Arrays.toString(listFiles));
             }
-            return new RestResponse(Arrays.toString(listFiles), null); 
+            return new RestResponse(fileList, null); 
         }
-        catch(Exception e)
+        catch(IllegalStateException | IOException e)
         {
             return new RestResponse(e.getMessage(), null);
         }
