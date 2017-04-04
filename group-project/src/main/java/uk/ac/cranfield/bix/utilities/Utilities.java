@@ -76,17 +76,18 @@ public class Utilities {
     }
 
     public static void parseFile(String filePath, String fileType) throws IOException, ClassNotFoundException {
+        String fileWithoutExtension = filePath.substring(0, filePath.lastIndexOf("."));
         switch (fileType) {
             case "alignment":
                 break;
             case "sequence":
                 //Parse and Serialize fasta file
                 List<Sequence> fastaParser = fastaParser(filePath);
-                SerializeSequence(fastaParser, "C:/Users/solene/Documents/temp/seq2.txt");
+                SerializeSequence(fastaParser, fileWithoutExtension+".txt");
                 break;
             case "annotation":
                 List<String[]> GffParser = GffParser(filePath);
-                SerializeGff(GffParser, "C:/Users/solene/Documents/temp/gff2.txt");
+                SerializeGff(GffParser, fileWithoutExtension+".txt");
                 break;
             case "variants":
                 System.out.println("" + filePath);
@@ -95,7 +96,7 @@ public class Utilities {
                 String VcfToolsSNPDensity = VcfToolsSNPDensity(VcfToolsSNPS);
                 System.out.println("" + VcfToolsSNPDensity);
                 ArrayList<String[]> VCFHistParser = VCFHistParser(VcfToolsSNPDensity);
-                SerializeVcf(VCFHistParser, "C:/Users/solene/Documents/temp/vcf2.txt");
+                SerializeVcf(VCFHistParser, fileWithoutExtension+".txt");
                 break;
             default:
                 break;

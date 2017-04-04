@@ -5,6 +5,7 @@
  */
 package uk.ac.cranfield.bix.utilities;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -77,7 +78,7 @@ public class SerializeDeserialize {
 
     public static Object Deserialize(String filename) throws ClassNotFoundException {
         try {
-            FileInputStream fileIn = new FileInputStream(filename);
+            FileInputStream fileIn = new FileInputStream(new File (filename));
             ObjectInputStream in = new ObjectInputStream(fileIn);
             Object readObject = in.readObject();
             in.close();

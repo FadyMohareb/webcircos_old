@@ -36,21 +36,6 @@ public class CustomController {
     @Autowired
     private SecurityService securityService;
 
-//    @RequestMapping(value = "/loginReact", method = RequestMethod.GET)
-//    public String loginReact() {
-//        return "loginReact";
-//    }
-
-//    @RequestMapping(value = "/registrationReact")
-//    public String registrationReact() {
-//        return "registrationReact";
-//    }
-
-//    @RequestMapping(value = "/comment")
-//    public String comments() {
-//        return "commentReact";
-//    }
-
     @RequestMapping(value = "/registrationReact", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -85,15 +70,6 @@ public class CustomController {
         }
     }
     
-//    @RequestMapping(value = "/manageAccount")
-//    public String test() {
-//        return "manageAccount";
-//    }
-//    
-//     @RequestMapping(value = "/changePassword")
-//    public String changeP() {
-//        return "changePassword";
-//    }
     
     @RequestMapping(value = "/changePasswordAction", method = RequestMethod.POST)
     public
@@ -136,11 +112,7 @@ public class CustomController {
         Map<String, Object> map = new HashMap<>();
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         map.put("userName", name);
-        if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
-            System.out.println("User is ANONYMOUS");
-        else
-            System.out.println("User is LOGGED");
-//        String sessionID = RequestContextHolder.currentRequestAttributes().getSessionId();
+
         return new ModelAndView("homepage", map);
     }
 }

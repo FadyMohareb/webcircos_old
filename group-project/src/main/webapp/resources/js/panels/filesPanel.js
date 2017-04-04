@@ -29,35 +29,6 @@ var FilesPanel = React.createClass({className: "filesPanel",
     },
     contentUpdate: function(panelType)
     {
-        var flag=false;
-        var type = panelType.panelType;
-        var filelist;
-        console.log(panelType);
-        $.ajax({
-            url: "/refresh",
-            type: 'POST',
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(type),
-            success: function (data) {
-                console.log(data.errors);
-            },
-            error: function (status, err) {
-                console.log("Panel not refreshed");
-                console.error(status, err.toString());
-            }
-//            ,
-//            callback: function(data){
-//                fileList=data.errors;
-//                callback(fileList);
-//            }
-        });
-        console.log(filelist);
-        return (React.createElement('input', { type: 'checkbox' }, " "+type));
-            
-    },
-    contentUpdate: function(panelType)
-    {
         var type = panelType.panelType;
         $.ajax({
             url: "/refresh",

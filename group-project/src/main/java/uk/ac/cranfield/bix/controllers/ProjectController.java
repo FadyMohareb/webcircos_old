@@ -53,7 +53,7 @@ public class ProjectController {
                 projectService.save(p);
                 
                 //Check if user has a folder with his id 
-                String folderPath = "C:/Users/solene/documents/"+ user.getLogin();
+                String folderPath = "C:/Users/agata/Desktop/WebCircos/"+ user.getLogin();
                 boolean folderExist = folderExist(folderPath);
                 
                 if(!folderExist){
