@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.cranfield.bix.controllers;
 
 import java.io.File;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -71,5 +67,24 @@ public class ProjectController {
             return new RestResponse(e.getMessage(), null);
         }
     }
-
+    @RequestMapping(value = "/project/getProjects", method = RequestMethod.GET)
+    public @ResponseBody
+    RestResponse getProjects() {
+        try {
+            //Find user
+            String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userService.findByUsername(userLogin);
+            List<Project> allProjects = projectService.findAll(user);
+            String projectName = "";
+            for (int i=0;i<allProjects.size();i++)
+            {
+                Project project = allProjects.get(i);
+                projectName = projectName + project.getP_name() + "\t";
+            }
+            
+            return new RestResponse(projectName, null);
+        } catch (Exception e) {
+            return new RestResponse(e.getMessage(), null);
+        }
+    }
 }

@@ -5,6 +5,7 @@
  */
 package uk.ac.cranfield.bix.services;
 
+import java.util.List;
 import uk.ac.cranfield.bix.models.Project;
 import uk.ac.cranfield.bix.models.User;
 
@@ -14,6 +15,6 @@ import uk.ac.cranfield.bix.models.User;
  */
 public interface ProjectService {
     Project findByProjectName(String projectName, User user);
-    
     void save(Project project);
+    List<Project> findAll(User user);
 }

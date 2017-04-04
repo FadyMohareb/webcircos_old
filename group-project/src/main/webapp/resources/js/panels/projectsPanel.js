@@ -1,8 +1,17 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/* global React, NewProjModal */
+var ProperListRender = React.createClass({displayName: "ProperListRender",
+    render: function() {
+      return (React.createElement("div", null,
+            this.props.list.map(function(listValue)
+            {
+                return (React.createElement("h5",null," "+listValue+"\n"));
+                //checkbox instead of line
+//                return (React.createElement("input", { type: 'checkbox' }, " "+listValue+"\n"));
+            })
+        )
+      );
+    }
+  });
 var converter = new Showdown.converter();
 
 var ProjectsPanel = React.createClass({displayName: "projectsPanel",
@@ -16,20 +25,48 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
         this.setState({view: {showNewProjModal: false}});
         $(".modal-backdrop.in").remove();
     },
-    handleUserLogged: function handleUserLogged() {
-        this.setState({view: {userLogged: true, currProj: null}});
+//    used to define any props accessed by this.props
+    getDefaultProps: function ()
+    {
+        return ;
     },
-    handleUserAnonym: function handleUserAnonym() {
-        this.setState({view: {userLogged: false, currProj: null}});
+    getProjects: function getProjects() 
+    {
+        $.ajax({
+            url: "/project/getProjects",
+            type: 'GET',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) 
+            {
+                console.log(data.errors);
+                var ProjectList = data.errors.split("\t");
+                if (ProjectList[0].length !== 0)
+                {
+                    var n = ProjectList.length;
+                    var list = [];
+                    for (var i = 0; i < n; i++)
+                    {
+                        var ProjectName = ProjectList[i];
+                            list[i]=ProjectName;
+                    }
+                }
+                return React.render(React.createElement(ProperListRender, {list: list}), document.getElementById('projects'));
+            },
+            error: function (status, err) {
+                console.error(status, err.toString());
+            }});
+        
+//        return React.render(React.createElement(ProperListRender, {list: "Add project"}), document.getElementById('projects'));
+//        return React.render(React.createElement('h5',null, "I'm here"),document.getElementById('projects'));
     },
-    getProjects: function getProjects() {
-        var projectsList = ''; // need to create a method to get list of projects and display it; dropdown menu should updated so that as the button name current project would be displayed
-        return projectsList;
+    componentDidMount: function()
+    {
+        this.getProjects()
     },
     handleSubmit: function handleSubmit(projName){
         this.state.currProj = projName;
     },
-    
     render: function () {
         return (React.createElement('div', {className: "panel panel-primary"},
                 React.createElement('div', {className: "panel-heading"}, "Projects  ",
@@ -54,6 +91,7 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
                                                 React.createElement("a", {href: '#', onClick: this.handleSubmit("Project 3 name")}, "Project 3 name"))
                                         )
                                 ),
+                        React.createElement('div', {className: 'container', id: 'projects'}),
                         this.state.view.showNewProjModal ? React.createElement(NewProjModal, {  }) : null))
                         
                 );
