@@ -16,11 +16,15 @@ import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import uk.ac.cranfield.bix.models.User;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeGff;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeSequence;
+import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeTranscriptomicCov;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeVcf;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeVcfCoverageGenomics;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.SortToBins;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.VCFDepthExtract;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.VCFLineParser;
+import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.CoverageParser;
+import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.GffParser2;
+import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.SortToBinsTranscriptomics;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffParser;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VCFHistParser;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VcfToolsSNPDensity;
@@ -90,6 +94,12 @@ public class Utilities {
             case "annotation":
                 List<String[]> GffParser = GffParser(filePath);
                 SerializeGff(GffParser, fileWithoutExtension+".txt");
+                
+                List<List<String[]>> listTranscriptomicCoverage = GffParser2(filePath);
+                ArrayList<Object[]> coverageData = CoverageParser(listTranscriptomicCoverage ,"/home/vmuser/Downloads/bedfiles/MT_Leaf12.bedcov" );
+                ArrayList<Object[]> sortedBinsTCov = SortToBinsTranscriptomics(listTranscriptomicCoverage, coverageData);
+                SerializeTranscriptomicCov(sortedBinsTCov, fileWithoutExtension+"transcriptomicCov.txt");
+                
                 break;
             case "variants":
 

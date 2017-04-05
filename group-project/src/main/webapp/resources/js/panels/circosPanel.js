@@ -7,9 +7,9 @@
 
 var CircosPanel = React.createClass({className: "circosPanel",
     doit: function doit() {
-        renderCircos: function renderCircos(BioCircosGenome, ARC_01, HISTOGRAM01,LINE01) {
+        renderCircos: function renderCircos(BioCircosGenome, ARC_01, HISTOGRAM01,LINE01,LINE02) {
 
-            BioCircos01 = new BioCircos(ARC_01, HISTOGRAM01,LINE01, BioCircosGenome, {// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
+            BioCircos01 = new BioCircos(ARC_01, HISTOGRAM01,LINE01,LINE02, BioCircosGenome, {// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
                 //Main configuration
                 target: "testDiv", // Main configuration "target"
                 svgWidth: 1350, // Main configuration "svgWidth"
@@ -75,6 +75,109 @@ var CircosPanel = React.createClass({className: "circosPanel",
                 HISTOGRAMMouseOverTooltipsPadding: "3px",
                 HISTOGRAMMouseOverTooltipsBorderRadius: "3px",
                 HISTOGRAMMouseOverTooltipsOpacity: 0.8,
+                ARCMouseEvent : true,
+	   ARCMouseClickDisplay : true,
+	   ARCMouseClickColor : "red",
+	   ARCMouseClickArcOpacity : 1.0,
+	   ARCMouseClickArcStrokeColor : "#F26223",
+	   ARCMouseClickArcStrokeWidth : 1,
+	   ARCMouseClickTextFromData : "fourth",
+	   ARCMouseClickTextOpacity : 1,
+	   ARCMouseClickTextColor : "red",
+	   ARCMouseClickTextSize : 8,
+	   ARCMouseClickTextPostionX : 0,
+	   ARCMouseClickTextPostionY : 0,
+	   ARCMouseClickTextDrag : true,
+	   ARCMouseDownDisplay : false,
+	   ARCMouseDownColor : "green",
+	   ARCMouseDownArcOpacity : 1.0,
+	   ARCMouseDownArcStrokeColor : "#F26223",
+	   ARCMouseDownArcStrokeWidth : 0,
+	   ARCMouseEnterDisplay : false,
+	   ARCMouseEnterColor : "yellow",
+	   ARCMouseEnterArcOpacity : 1.0,
+	   ARCMouseEnterArcStrokeColor : "#F26223",
+	   ARCMouseEnterArcStrokeWidth : 0,
+	   ARCMouseLeaveDisplay : false,
+	   ARCMouseLeaveColor : "pink",
+	   ARCMouseLeaveArcOpacity : 1.0,
+	   ARCMouseLeaveArcStrokeColor : "#F26223",
+	   ARCMouseLeaveArcStrokeWidth : 0,
+	   ARCMouseMoveDisplay : false,
+	   ARCMouseMoveColor : "red",
+	   ARCMouseMoveArcOpacity : 1.0,
+	   ARCMouseMoveArcStrokeColor : "#F26223",
+	   ARCMouseMoveArcStrokeWidth : 0,
+	   ARCMouseOutDisplay : true,
+	   ARCMouseOutAnimationTime : 500,
+	   ARCMouseOutColor : "red",
+	   ARCMouseOutArcOpacity : 1.0,
+	   ARCMouseOutArcStrokeColor : "red",
+	   ARCMouseOutArcStrokeWidth : 0,
+	   ARCMouseUpDisplay : false,
+	   ARCMouseUpColor : "grey",
+	   ARCMouseUpArcOpacity : 1.0,
+	   ARCMouseUpArcStrokeColor : "#F26223",
+	   ARCMouseUpArcStrokeWidth : 0,
+	   ARCMouseOverDisplay : true,
+	   ARCMouseOverColor : "red",
+	   ARCMouseOverArcOpacity : 1.0,
+	   ARCMouseOverArcStrokeColor : "#F26223",
+	   ARCMouseOverArcStrokeWidth : 3,
+	   ARCMouseOverTooltipsHtml01 : "item : ",
+          ARCMouseOverTooltipsHtml02 : "chr : ",
+          ARCMouseOverTooltipsHtml03 : "<br>end : ",
+          ARCMouseOverTooltipsHtml04 : "<br>des : ",
+          ARCMouseOverTooltipsHtml05 : "",
+          ARCMouseOverTooltipsPosition : "absolute",
+          ARCMouseOverTooltipsBackgroundColor : "white",
+          ARCMouseOverTooltipsBorderStyle : "solid",
+          ARCMouseOverTooltipsBorderWidth : 0,
+          ARCMouseOverTooltipsPadding : "3px",
+          ARCMouseOverTooltipsBorderRadius : "3px",
+          ARCMouseOverTooltipsOpacity : 0.8,
+          LINEMouseEvent : true,
+   LINEMouseClickDisplay : false,
+   LINEMouseClickLineOpacity : 1,           //"none"
+   LINEMouseClickLineStrokeColor : "red",   //"none"
+   LINEMouseClickLineStrokeWidth : "none",  //"none"
+   LINEMouseDownDisplay : false,
+   LINEMouseDownLineOpacity : 1,           //"none"
+   LINEMouseDownLineStrokeColor : "red",   //"none"
+   LINEMouseDownLineStrokeWidth : "none",  //"none"
+   LINEMouseEnterDisplay : false,
+   LINEMouseEnterLineOpacity : 1,           //"none"
+   LINEMouseEnterLineStrokeColor : "red",   //"none"
+   LINEMouseEnterLineStrokeWidth : "none",  //"none"
+   LINEMouseLeaveDisplay : false,
+   LINEMouseLeaveLineOpacity : 1,           //"none"
+   LINEMouseLeaveLineStrokeColor : "red",   //"none"
+   LINEMouseLeaveLineStrokeWidth : "none",  //"none"
+   LINEMouseMoveDisplay : false,
+   LINEMouseMoveLineOpacity : 1,           //"none"
+   LINEMouseMoveLineStrokeColor : "red",   //"none"
+   LINEMouseMoveLineStrokeWidth : "none",  //"none"
+   LINEMouseOutDisplay : false,
+   LINEMouseOutAnimationTime : 500,
+   LINEMouseOutLineOpacity : 1.0,   //"none"
+   LINEMouseOutLineStrokeColor : "red",    //"none"
+   LINEMouseOutLineStrokeWidth : "none",    //"none"
+   LINEMouseUpDisplay : true,
+   LINEMouseUpLineOpacity : 1,           //"none"
+   LINEMouseUpLineStrokeColor : "red",   //"none"
+   LINEMouseUpLineStrokeWidth : "none",  //"none"
+   LINEMouseOverDisplay : true,
+   LINEMouseOverLineOpacity : 1,           //"none"
+   LINEMouseOverLineStrokeColor : "red",   //"none"
+   LINEMouseOverLineStrokeWidth : "none",  //"none"
+   LINEMouseOverTooltipsHtml01 : "Line",
+   LINEMouseOverTooltipsPosition : "absolute",
+   LINEMouseOverTooltipsBackgroundColor : "white",
+   LINEMouseOverTooltipsBorderStyle : "solid",
+   LINEMouseOverTooltipsBorderWidth : 0,
+   LINEMouseOverTooltipsPadding : "3px",
+   LINEMouseOverTooltipsBorderRadius : "3px",
+   LINEMouseOverTooltipsOpacity : 0.8
             });
             BioCircos01.draw_genome(BioCircos01.genomeLength); // BioCircos.js callback
 
@@ -92,6 +195,7 @@ var CircosPanel = React.createClass({className: "circosPanel",
                 var ARC_01;
                 var HISTOGRAM01;
                 var LINE01;
+                var LINE02;
                 console.log(data);
                 console.log([data.genomicCoverage.lineId, data.genomicCoverage.properties, data.genomicCoverage.linePoints]);
                 if(data.histo !== null){
@@ -114,8 +218,15 @@ var CircosPanel = React.createClass({className: "circosPanel",
                 }else{
                     LINE01 = [];
                 }
+                
+                if (data.transcriptomicCoverage !== null) {
+                
+                    LINE02 = [data.transcriptomicCoverage.lineId, data.transcriptomicCoverage.properties , data.transcriptomicCoverage.linePoints];
+                }else{
+                    LINE02 = [];
+                }
                console.log(LINE01);
-                renderCircos(data.genomes, ARC_01,HISTOGRAM01, LINE01);
+                renderCircos(data.genomes, ARC_01,HISTOGRAM01, LINE01, LINE02);
             },
             error: function () {
                 alert("Wrong data");

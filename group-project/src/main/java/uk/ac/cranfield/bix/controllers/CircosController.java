@@ -27,6 +27,7 @@ import uk.ac.cranfield.bix.controllers.rest.finalObjects.Line;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.Deserialize;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.GenomeCoverageWriter;
+import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.TranscriptomicCovWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.fastaParsers.createBiocircosGenomeObject;
@@ -89,6 +90,13 @@ public class CircosController {
          List<LineDataPoint> genomCov = (List<LineDataPoint>) Deserialize(path+"variants/MT_raw_10pcoverage.txt");
          Line l = GenomeCoverageWriter(genomCov);
          circosOutput.setGenomicCoverage(l);
+        }
+        
+        if(new File(path+"annotation/ITAG2.4_gene_modelstranscriptomicCov.txt").exists()){
+            //Create line chart 
+            List<LineDataPoint> transcriptomicsCov = (List<LineDataPoint>) Deserialize(path+"annotation/ITAG2.4_gene_modelstranscriptomicCov.txt");
+            Line li = TranscriptomicCovWriter(transcriptomicsCov);
+            circosOutput.setTranscriptomicCoverage(li);
         }
 
         return circosOutput;

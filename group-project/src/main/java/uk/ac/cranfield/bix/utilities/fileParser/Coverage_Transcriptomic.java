@@ -6,6 +6,7 @@
 package uk.ac.cranfield.bix.utilities.fileParser;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,12 +39,15 @@ public class Coverage_Transcriptomic {
             Integer i = 0;
             while((line = br.readLine()) != null){
                 
-                if(line.contains("##sequence-region")){
+                if(line.startsWith("##sequence")){
                     //split line by tab and only keep 1 and 3
-                    String[] split = line.split("\\t");                    
-                    metadata.add(new String[]{split[1],split[2]});
+                    String[] split = line.split("\\s");  
+                    String[] s = new String[2];
+                    s[0] = split[1];
+                    s[1] = split[3];
+                    metadata.add(s);
                 }
-                else{
+                else if (line.charAt(0) != '#'){
                      if(line.split("\\t")[2].equalsIgnoreCase("mrna")){
                          Karyotype.add(line.split("\\t"));
 
@@ -60,12 +64,12 @@ public class Coverage_Transcriptomic {
     }
      
      
-     public ArrayList<Object[]> CoverageParser(List<List<String[]>> list , String CoveragePath){
+     public static ArrayList<Object[]> CoverageParser(List<List<String[]>> list , String CoveragePath){
          //Karyotype is all entries in gff file that have mrna as type
          //Iterator It = Karyotype.iterator();
          
         ArrayList<Object[]> Coverage = new ArrayList();
-        try (BufferedReader br = new BufferedReader(new FileReader(CoveragePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(new File(CoveragePath)))) {
              String line;
              
             List<String[]> Karyotype = list.get(1);
@@ -113,7 +117,7 @@ public class Coverage_Transcriptomic {
      }
       //need to add to bins
      //Need path of the bedfile 
-     public ArrayList<Object[]> SortToBins(List<List<String[]>> li, ArrayList<Object[]> Coverage){
+     public static ArrayList<Object[]> SortToBinsTranscriptomics(List<List<String[]>> li, ArrayList<Object[]> Coverage){
          
         List<List<Object[]>> lists = new ArrayList<>();
         Integer BinSize = 1000000;
@@ -173,19 +177,20 @@ public class Coverage_Transcriptomic {
          return BinContents;
      }
      
-     public List<LineDataPoint> CoverageData(String Gff3filename, ArrayList<Object[]> BinContents){
+     public static List<LineDataPoint> CoverageDataTranscriptomics(ArrayList<Object[]> BinContents){
         Integer BinSize = 1000000;
 
         List<LineDataPoint> linePoint = new ArrayList();
         
          for(int j = 0; j < BinContents.size(); j ++){
                 LineDataPoint point = new LineDataPoint(BinContents.get(j)[1].toString(),(Integer)BinContents.get(j)[2] + BinSize/2,(Double) BinContents.get(j)[0]);
-        }
+                linePoint.add(point);
+         }
          return linePoint;
      }
      
      
-     public void FileWriter(List<LineDataPoint> Data) throws IOException{
+     public static Line TranscriptomicCovWriter(List<LineDataPoint> Data) throws IOException{
         
          //Create line
          Line l = new Line();
@@ -194,15 +199,17 @@ public class Coverage_Transcriptomic {
          
          //create line properties
          LineProperties prop = new LineProperties();
-         prop.setMaxRadius(160);
-         prop.setMinRadius(110);
+         prop.setMaxRadius(60);
+         prop.setMinRadius(30);
          prop.setLineColor("#EEAD0E");
-         prop.setLineWidth(2);
+         prop.setLineWidth(1);
         
          l.setProperties(prop);
          
          //Set line data
          l.setLinePoints(Data);
+         
+         return l;
     
     }
 }
