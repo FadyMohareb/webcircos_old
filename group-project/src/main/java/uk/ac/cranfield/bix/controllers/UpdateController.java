@@ -34,7 +34,7 @@ public class UpdateController {
             //file type needs to consist only letters
             type = panelType.replaceAll("[^a-zA-Z]","");
             //current path THE ONE OF TWO TO CHANGE AT DIFFERENT COMPUTERS
-            currentPath = ("C:/Users/solene/Documents/");
+            currentPath = ("/home/vmuser/");
             //is user logged
             if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
             {

@@ -33,7 +33,7 @@ public class FileController {
         
         try {
             //current path THE ONE OF TWO TO CHANGE AT DIFFERENT COMPUTERS
-            path = ("C:/Users/solene/Documents/");
+            path = ("/home/vmuser/");
             //is user logged
             if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
             {

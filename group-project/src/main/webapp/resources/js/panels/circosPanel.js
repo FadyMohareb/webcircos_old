@@ -7,16 +7,17 @@
 
 var CircosPanel = React.createClass({className: "circosPanel",
     doit: function doit() {
-        renderCircos: function renderCircos(BioCircosGenome, ARC_01) {
+        renderCircos: function renderCircos(BioCircosGenome, ARC_01, HISTOGRAM01,LINE01) {
 
-            BioCircos01 = new BioCircos(ARC_01, BioCircosGenome, {// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
+            BioCircos01 = new BioCircos(ARC_01, HISTOGRAM01,LINE01, BioCircosGenome, {// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
                 //Main configuration
                 target: "testDiv", // Main configuration "target"
-                svgWidth: 490, // Main configuration "svgWidth"
-                svgHeight: 490, // Main configuration "svgHeight"
+                svgWidth: 1350, // Main configuration "svgWidth"
+                svgHeight: 900, // Main configuration "svgHeight"
                 chrPad: 0.02, // Main configuration "chrPad"
-                innerRadius: 180, // Main configuration "innerRadius"
-                outerRadius: 200, // Main configuration "outerRadius"
+                innerRadius: 246, // Main configuration "innerRadius"
+                outerRadius: 270, // Main configuration "outerRadius"
+                
 
                 zoom: true,
                 HISTOGRAMMouseEvent: true,
@@ -89,15 +90,32 @@ var CircosPanel = React.createClass({className: "circosPanel",
             data: JSON.stringify(circosInput),
             success: function (data) {
                 var ARC_01;
-                console.log(data)
-//                var HISTOGRAM01 = [data.histo.histId, data.histo.properties, data.histo.histDataPoint]
-                if (data.arc !== null) {
-                    ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint]
+                var HISTOGRAM01;
+                var LINE01;
+                console.log(data);
+                console.log([data.genomicCoverage.lineId, data.genomicCoverage.properties, data.genomicCoverage.linePoints]);
+                if(data.histo !== null){
+                    HISTOGRAM01 = [data.histo.histId, data.histo.properties, data.histo.histDataPoint];
                 }else{
-                    ARC_01 = []
+                    HISTOGRAM01 = [];
                 }
-               
-                renderCircos(data.genomes, ARC_01)
+
+                if (data.arc !== null) {
+                    ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint];
+                }else{
+                    ARC_01 = [];
+                }
+                
+                if (data.genomicCoverage !== null) {
+                    //data.genomicCoverage.properties.LineColor = data.genomicCoverage.properties.lineColor;
+                    //data.genomicCoverage.properties.LineWidth = data.genomicCoverage.properties.lineWidth;
+                                    
+                    LINE01 = [data.genomicCoverage.lineId, data.genomicCoverage.properties , data.genomicCoverage.linePoints];
+                }else{
+                    LINE01 = [];
+                }
+               console.log(LINE01);
+                renderCircos(data.genomes, ARC_01,HISTOGRAM01, LINE01);
             },
             error: function () {
                 alert("Wrong data");
@@ -106,7 +124,7 @@ var CircosPanel = React.createClass({className: "circosPanel",
 
         });
 
-        return
+        return;
     },
     render: function () {
 

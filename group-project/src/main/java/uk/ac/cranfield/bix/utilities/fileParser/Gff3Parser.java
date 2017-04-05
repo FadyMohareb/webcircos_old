@@ -69,8 +69,8 @@ public class Gff3Parser {
         IndGff gff = new IndGff();
         
         IndGffProperties properties = new IndGffProperties();
-        properties.setInnerRadius(-100);
-        properties.setOuterRadius(-100);
+        properties.setInnerRadius(-10);
+        properties.setOuterRadius(-40);
 
         gff.setIndGffid("ARC_01");
         gff.setProperties(properties);

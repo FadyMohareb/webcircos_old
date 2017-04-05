@@ -12,14 +12,16 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import uk.ac.cranfield.bix.models.User;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeGff;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeSequence;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeVcf;
+import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeVcfCoverageGenomics;
+import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.SortToBins;
+import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.VCFDepthExtract;
+import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.VCFLineParser;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffParser;
-import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistogramData;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VCFHistParser;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VcfToolsSNPDensity;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VcfToolsSNPS;
@@ -75,7 +77,7 @@ public class Utilities {
 
     }
 
-    public static void parseFile(String filePath, String fileType) throws IOException, ClassNotFoundException {
+    public static void parseFile(String filePath, String fileType) throws IOException, ClassNotFoundException, InterruptedException {
         String fileWithoutExtension = filePath.substring(0, filePath.lastIndexOf("."));
         switch (fileType) {
             case "alignment":
@@ -90,13 +92,17 @@ public class Utilities {
                 SerializeGff(GffParser, fileWithoutExtension+".txt");
                 break;
             case "variants":
-                System.out.println("" + filePath);
+
                 String VcfToolsSNPS = VcfToolsSNPS(filePath);
-                System.out.println("" + VcfToolsSNPS);
                 String VcfToolsSNPDensity = VcfToolsSNPDensity(VcfToolsSNPS);
-                System.out.println("" + VcfToolsSNPDensity);
                 ArrayList<String[]> VCFHistParser = VCFHistParser(VcfToolsSNPDensity);
                 SerializeVcf(VCFHistParser, fileWithoutExtension+".txt");
+                
+                List<List<String[]>> lists = VCFLineParser(filePath);
+                ArrayList<Object[]> depth = VCFDepthExtract(lists);
+                ArrayList<Object[]>  sortedBins = SortToBins(lists, depth);
+                SerializeVcfCoverageGenomics(sortedBins, fileWithoutExtension+"coverage.txt");
+                
                 break;
             default:
                 break;

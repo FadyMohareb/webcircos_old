@@ -7,7 +7,6 @@ package uk.ac.cranfield.bix.controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,10 +21,12 @@ import uk.ac.cranfield.bix.controllers.rest.CircosOutput;
 import uk.ac.cranfield.bix.controllers.rest.GffDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
+import uk.ac.cranfield.bix.controllers.rest.LineDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.IndGff;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.Line;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.Deserialize;
-import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffDataPoints;
+import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.GenomeCoverageWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.fastaParsers.createBiocircosGenomeObject;
@@ -52,30 +53,42 @@ public class CircosController {
         //For tomorrow meeting I need to know where to find data. So I retrieve the session id to set the proper path. 
         if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
             userID = RequestContextHolder.currentRequestAttributes().getSessionId();
-            path = "C:/Users/solene/Documents/temp/" + userID + "/";
+            path = "/home/vmuser/temp/" + userID + "/";
         } else {
             userID = SecurityContextHolder.getContext().getAuthentication().getName();
-            path = "C:/Users/solene/Documents/user/" + userID + "/";
+            path = "/home/vmuser/user/" + userID + "/";
         }
 
-        if (new File(path + "sequence/test.txt").exists()) {
+        if (new File(path + "sequence/S_lycopersicum_chromosomes.2.50.txt").exists()) {
 
             //Create BiocircosGenome variable
-            List<Sequence> seq = (List<Sequence>) Deserialize(path + "sequence/test.txt");
+            List<Sequence> seq = (List<Sequence>) Deserialize(path + "sequence/S_lycopersicum_chromosomes.2.50.txt");
             List<Object[]> obj = createBiocircosGenomeObject(seq);
 
-            //Create Histogram
-//        List<HistogramDataPoint> vcf = (List<HistogramDataPoint>) Deserialize("C:/Users/solene/Documents/temp/vcf2.txt");
-//        Histogram h = HistWriter(vcf);
-
-            //Create ARC_01
             circosOutput.setGenomes(obj);  
         }
 
         if (new File(path + "annotation/ITAG2.4_gene_models.txt").exists()) {
+             //Create ARC_01
             List<GffDataPoint> gff = (List<GffDataPoint>) Deserialize(path + "annotation/ITAG2.4_gene_models.txt");
             IndGff GffWriter = GffWriter(gff);
             circosOutput.setArc(GffWriter);
+        }
+        
+        if(new File(path + "variants/MT_raw_10p.txt").exists()){
+            
+            //Create Histogram
+            List<HistogramDataPoint> vcf = (List<HistogramDataPoint>) Deserialize(path + "variants/MT_raw_10p.txt");
+            Histogram h = HistWriter(vcf);
+            circosOutput.setHisto(h);
+   
+        }
+        
+        if(new File(path+"variants/MT_raw_10pcoverage.txt").exists()){
+         //Create line chart
+         List<LineDataPoint> genomCov = (List<LineDataPoint>) Deserialize(path+"variants/MT_raw_10pcoverage.txt");
+         Line l = GenomeCoverageWriter(genomCov);
+         circosOutput.setGenomicCoverage(l);
         }
 
         return circosOutput;
