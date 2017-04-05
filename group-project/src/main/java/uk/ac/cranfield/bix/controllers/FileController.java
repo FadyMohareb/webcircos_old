@@ -4,18 +4,15 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.nio.file.Files;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.ac.cranfield.bix.controllers.rest.RestResponse;
+import uk.ac.cranfield.bix.models.PathFinder;
 import static uk.ac.cranfield.bix.utilities.Utilities.parseFile;
 
 @Controller
@@ -32,39 +29,7 @@ public class FileController {
         String[] splittedFileName;
         
         try {
-            //current path THE ONE OF TWO TO CHANGE AT DIFFERENT COMPUTERS
-            path = ("C:/Users/agata/Desktop/WebCircos/");
-            //is user logged
-            if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
-            {
-//                System.out.println("User is ANONYMOUS");
-                userID = RequestContextHolder.currentRequestAttributes().getSessionId();
-                //newPath with added userID
-                path = path + "temp/" + userID;
-                dir1 = new File(path);
-                //creating new directory for user if doesn't exist
-                if (!dir1.exists())
-                    dir1.mkdir();
-            }
-            else
-            {
-//                System.out.println("User is LOGGED");
-                //user id from SpringSecurity
-                userID = SecurityContextHolder.getContext().getAuthentication().getName();
-                //newPath with added userID
-                path = path + "user/" + userID;
-                dir1 = new File(path);
-                //creating new directory for user if doesn't exist
-                if (!dir1.exists())
-                    dir1.mkdir();
-                //project id needed
-//                projectID=??
-//                newPath=(newPath+projectID);
-//                dir1_5 = new File(newPath);
-//                //creating new directory for user if doesn't exist
-//                if (!dir1_5.exists())
-//                    dir1_5.mkdir();
-            }
+            path = new PathFinder().getFilePath();
             //newPath with added FileType
             path=(path+"/"+fileType);
             dir2 = new File(path);
