@@ -1,6 +1,7 @@
 package uk.ac.cranfield.bix.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,7 +17,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "Files")
 @JsonIgnoreProperties({"bytes"})
-public class FileInput {
+public class FileInput implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +30,7 @@ public class FileInput {
     private String f_name;
     
     @NotNull
-    @Size(min = 3, max = 45)
+    @Size(min = 3, max = 250)
     @Column(name = "file_path")
     private String f_path;
     
@@ -41,9 +42,6 @@ public class FileInput {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
-
-    private byte[] bytes;
-    private String f_size;
     
     public FileInput() {
     }
@@ -86,21 +84,5 @@ public class FileInput {
 
     public void setProject(Project project) {
         this.project = project;
-    }
-    
-    public byte[] getBytes() {
-        return bytes;
-    }
-
-    public void setBytes(byte[] bytes) {
-        this.bytes = bytes;
-    }
-
-    public String getF_size() {
-        return f_size;
-    }
-
-    public void setF_size(String f_size) {
-        this.f_size = f_size;
     }
 }
