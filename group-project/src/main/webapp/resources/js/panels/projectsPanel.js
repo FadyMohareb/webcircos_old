@@ -12,17 +12,7 @@ var ProperListRender = React.createClass({displayName: "ProperListRender",
                                             React.createElement("a", {href: '#'}, projectName)));
                                 })
                         )
-                )
-                //React.createElement("ui", null,
-//            this.props.list.map(function(listValue)
-//            {
-//                return (React.createElement("li",null,
-//                        React.createElement("a",{href: '#' }," "+listValue+"\n")));
-//                //checkbox instead of line
-////                return (React.createElement("input", { type: 'checkbox' }, " "+listValue+"\n"));
-//            })
-                //)
-                );
+                ));
     }
 });
 var converter = new Showdown.converter();
@@ -69,9 +59,6 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
             error: function (status, err) {
                 console.error(status, err.toString());
             }});
-
-//        return React.render(React.createElement(ProperListRender, {list: "Add project"}), document.getElementById('projects'));
-//        return React.render(React.createElement('h5',null, "I'm here"),document.getElementById('projects'));
     },
     componentDidMount: function ()
     {
@@ -87,18 +74,6 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
                                 React.createElement('span', {className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true'}))),
                 React.createElement('div', {className: "panel-body"},
                         React.createElement("div", {id: 'projects'}, 'Create your first project'),
-//                        React.createElement("div", {className: 'btn-group'},
-//                                React.createElement("button", {type: 'button', className: "btn btn-default dropdown-toggle",
-//                                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': "false"},
-//                                        "Current project name  ",
-//                                        React.createElement("span", {className: 'caret'}),
-//                                        React.createElement("span", {className: 'sr-only'})),
-//                                React.createElement("ul", {className: 'dropdown-menu'},
-//                                        React.createElement("li", {className: 'dropdown-header'}, "Current project name"),
-//                                        React.createElement("li", {role: 'separator', className: 'divider'}),
-//                                        React.createElement('div', {className: 'container', id: 'projects'}))
-//                                ),
-
                         this.state.view.showNewProjModal ? React.createElement(NewProjModal, {}) : null))
 
                 );
