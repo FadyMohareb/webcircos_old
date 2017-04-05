@@ -20,7 +20,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<FileInput> findAll(User user, Project project){
-        return FileRepository.getAll(user);
+    public List<FileInput> findAll(User user, int projectId){
+        return FileRepository.getAll(user, projectId);
     }
 }

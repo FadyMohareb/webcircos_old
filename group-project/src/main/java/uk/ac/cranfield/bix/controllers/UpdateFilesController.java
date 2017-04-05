@@ -6,22 +6,42 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.cranfield.bix.controllers.rest.RestResponse;
+import uk.ac.cranfield.bix.models.FileInput;
 import uk.ac.cranfield.bix.models.PathFinder;
+import uk.ac.cranfield.bix.models.Project;
+import uk.ac.cranfield.bix.models.User;
+import uk.ac.cranfield.bix.services.FileService;
+import uk.ac.cranfield.bix.services.ProjectService;
+import uk.ac.cranfield.bix.services.UserService;
 
 @Controller
 public class UpdateFilesController {
-    @RequestMapping(value = "/refresh", method = RequestMethod.POST)
+    @Autowired
+    private ProjectService projectService;
+
+    @Autowired
+    private UserService userService;
+    
+    @Autowired
+    private FileService fileService;
+    
+    
+    @RequestMapping(value = "/refresh/notLogged", method = RequestMethod.POST)
     public
     @ResponseBody
-    RestResponse update(@RequestBody(required = true) String panelType) 
+    RestResponse updateNotLogged(@RequestBody(required = true) String panelType) 
     {
         String path, newPath, type, line, fileList="";
         File dir1;
@@ -78,12 +98,64 @@ public class UpdateFilesController {
         }
         else
         {
+            return new RestResponse("Something went wrong. Sorry!", null);
+        }
+    }
+    
+    @RequestMapping(value = "/refresh/logged", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    RestResponse updateLogged(@RequestParam("panelType") String panelType, @RequestParam("projectName") String projectName)
+    {
+        String path, newPath, type, line, fileList="";
+        File dir1, dir2;
+        //file type needs to consist only letters
+        type = panelType.replaceAll("[^a-zA-Z]","");
+        if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
+        {
+            return new RestResponse("Something went wrong. Sorry!", null);
+        }
+        else
+        {
 //            System.out.println("User is LOGGED");
             path = new PathFinder().getEntireFilePathLogged();
             try
             {
-                fileList = "empty";
-                return new RestResponse(fileList, null); 
+                //newPath with added FileType
+                newPath=(path+"/"+projectName);
+                dir1 = new File(newPath);
+                if (!dir1.exists())
+                {
+                    dir1.mkdir();
+                }
+                //newPath with added FileType
+                newPath=(newPath+"/"+type);
+                dir2 = new File(newPath);
+                if (!dir2.exists())
+                {
+                    dir2.mkdir();
+                }
+                //Find user
+                String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+                User user = userService.findByUsername(userLogin);
+
+                //Check if project allready exist
+                Project project = projectService.findByProjectName(projectName, user);
+                Integer projectId = project.getId();
+                
+                List<FileInput> findAll = fileService.findAll(user, projectId);
+                String toString = "";
+                
+                for (FileInput file : findAll){        
+                    toString = toString + file.getF_name() + "\t";
+                };
+                
+                
+                
+                File[] fileArray = dir2.listFiles();
+                fileList = Arrays.toString(fileArray);
+                                
+                return new RestResponse(toString, null); 
             }
             catch(Exception e)
             {
