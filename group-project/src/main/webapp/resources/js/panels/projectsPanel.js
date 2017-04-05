@@ -1,4 +1,3 @@
-/* global React, NewProjModal */
 var ProperListRender = React.createClass({displayName: "ProperListRender",
     render: function () {
         return (
@@ -12,7 +11,8 @@ var ProperListRender = React.createClass({displayName: "ProperListRender",
                                             React.createElement("a", {href: '#'}, projectName)));
                                 })
                         )
-                ));
+                )
+                );
     }
 });
 var converter = new Showdown.converter();
@@ -59,6 +59,7 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
             error: function (status, err) {
                 console.error(status, err.toString());
             }});
+
     },
     componentDidMount: function ()
     {
@@ -74,7 +75,8 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
                                 React.createElement('span', {className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true'}))),
                 React.createElement('div', {className: "panel-body"},
                         React.createElement("div", {id: 'projects'}, 'Create your first project'),
-                        this.state.view.showNewProjModal ? React.createElement(NewProjModal, {}) : null))
+
+                        this.state.view.showNewProjModal ? React.createElement(NewProjModal, {handleHideNewProjModal: this.handleHideNewProjModal}) : null))
 
                 );
     }
@@ -86,4 +88,3 @@ var renderProjectsPanel = function () {
             document.getElementById("projectsContainer")
             );
 };
-

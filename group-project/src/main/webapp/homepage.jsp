@@ -58,7 +58,7 @@
                     </script>
                 </c:if>
                 <c:if test="${pageContext.request.userPrincipal.name == null}">
-                    <div id="upperLeftContainer" class="col-lg-3" style="float:left;margin:0px 40px 20px 40px">${upperLeftContainer}
+                    <div id="upperLeftContainer" class="col-lg-3" style="float:left;margin:0px 20px 20px 20px">${upperLeftContainer}
                         <script type="text/javascript">
                             $(function () {
                                 renderHomePage();

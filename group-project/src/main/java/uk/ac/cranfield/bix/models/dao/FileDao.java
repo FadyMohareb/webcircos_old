@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import uk.ac.cranfield.bix.models.FileInput;
+import uk.ac.cranfield.bix.models.User;
 
 /**
  *
@@ -22,34 +23,33 @@ import uk.ac.cranfield.bix.models.FileInput;
 public class FileDao {
     
     @Autowired
-  private SessionFactory _sessionFactory;
-  
-  private Session getSession() {
-    return _sessionFactory.getCurrentSession();
-  }
-  
-  public void save(FileInput file) {
-    getSession().save(file);
-    return;
-  }
-  
-  public void delete(FileInput file) {
-    getSession().delete(file);
-    return;
-  }
-  
-  @SuppressWarnings("unchecked")
-  public List<FileInput> getAll() {
-    return getSession().createQuery("from File").list();
-  }
-  
-  public FileInput getById(long id) {
-    return (FileInput) getSession().load(FileInput.class, id);
-  }
-  
-  public void update(FileInput file) {
-    getSession().update(file);
-    return;
-  }
+    private SessionFactory _sessionFactory;
+
+    private Session getSession() {
+      return _sessionFactory.getCurrentSession();
+    }
     
+    public void save(FileInput file, int projectId) {
+      getSession().save(file);
+      return;
+    }
+
+    public void delete(FileInput file) {
+      getSession().delete(file);
+      return;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<FileInput> getAll(User user) {
+      return getSession().createQuery("from File").list();
+    }
+
+    public FileInput getById(long id) {
+      return (FileInput) getSession().load(FileInput.class, id);
+    }
+
+    public void update(FileInput file) {
+      getSession().update(file);
+      return;
+    }
 }
