@@ -53,6 +53,7 @@ var HomePage = React.createClass({
   }
 });
 
-var renderHomePage = function () {
+var renderHomePage = function (asd) {
+    console.log("asdasd: " + asd);
     React.render(React.createElement(HomePage, null), document.getElementById('upperLeftContainer'));
 };

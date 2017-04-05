@@ -52,10 +52,10 @@ public class CircosController {
         //For tomorrow meeting I need to know where to find data. So I retrieve the session id to set the proper path. 
         if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
             userID = RequestContextHolder.currentRequestAttributes().getSessionId();
-            path = "C:/Users/agata/Desktop/WebCircos/temp/" + userID + "/";
+            path = "Z:/ProfileData/s260592/Desktop/WebCircos/temp/" + userID + "/";
         } else {
             userID = SecurityContextHolder.getContext().getAuthentication().getName();
-            path = "C:/Users/agata/Desktop/WebCircos/user/" + userID + "/";
+            path = "Z:/ProfileData/s260592/Desktop/WebCircos/user/" + userID + "/";
         }
 
         if (new File(path + "sequence/test.txt").exists()) {

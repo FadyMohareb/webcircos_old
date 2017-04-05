@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uk.ac.cranfield.bix.controllers.rest.FilesProperties;
 import uk.ac.cranfield.bix.controllers.rest.RestResponse;
 import uk.ac.cranfield.bix.models.PathFinder;
 
@@ -21,8 +22,13 @@ public class UpdateFilesController {
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
     public
     @ResponseBody
-    RestResponse update(@RequestBody(required = true) String panelType) 
+    RestResponse update(@RequestBody(required = true) FilesProperties filesProps) 
     {
+        if(filesProps.getProjectName()==null)
+         System.out.println("Project name is NULL");
+        else
+            System.out.println(filesProps.getProjectName());
+        
         String path, newPath, type, line, fileList="";
         File dir1;
         FileWriter fileWriter;
@@ -32,7 +38,7 @@ public class UpdateFilesController {
         
         
         //file type needs to consist only letters
-        type = panelType.replaceAll("[^a-zA-Z]","");
+        type = filesProps.getPanelType().replaceAll("[^a-zA-Z]","");
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         {
 //          System.out.println("User is ANONYMOUS");

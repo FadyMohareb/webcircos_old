@@ -1,7 +1,9 @@
 /* global React, Showdown, SecurityContextHolder, RequestContextHolder, UploadModal */
 
 var converter = new Showdown.converter();
+
 var ProperFilesListRender = React.createClass({displayName: "ProperFilesListRender",
+    
     render: function() {
       return (React.createElement("div", null,
             this.props.list.map(function(listValue)
@@ -18,6 +20,7 @@ var ProperFilesListRender = React.createClass({displayName: "ProperFilesListRend
 var FilesPanel = React.createClass({className: "filesPanel",
 
     getInitialState: function getInitialState() {
+        this.props.projectName = 'null';
         return {view: {showUploadModal: false} };
     },
     handleShowUploadModal: function handleShowUploadModal() {
@@ -30,12 +33,16 @@ var FilesPanel = React.createClass({className: "filesPanel",
     contentUpdate: function(panelType)
     {
         var type = panelType.panelType;
+        var filesProperties = {};
+        filesProperties.panelType = type;
+        filesProperties.projectName = this.props.projectName;
+        
         $.ajax({
             url: "/refresh",
             type: 'POST',
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(type),
+            data: JSON.stringify(filesProperties),
             success: function (data) 
             {
                 var filesList = data.errors.split("\t");
@@ -71,6 +78,7 @@ var FilesPanel = React.createClass({className: "filesPanel",
                         React.createElement('div', {className: "panel panel-success"},
                                 React.createElement('div', {className: "panel-heading"}, "Sequence"),
                                     React.createElement('div', {className: "panel-body"},
+                                    React.createElement('div', {className: 'container'}, this.props.projectName),
                                         React.createElement('div', {className: 'container', id: 'sequence'},
                                             React.createElement(this.contentUpdate, {panelType: "sequence"})))),
                         React.createElement('div', {className: "panel panel-info"},

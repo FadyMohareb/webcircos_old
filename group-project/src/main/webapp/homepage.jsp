@@ -45,7 +45,6 @@
     <body>
         <div class="row">  
             <security:authorize acess="isAuthenticated"></security>
-
                 <c:if test="${pageContext.request.userPrincipal.name != null}">
                     <div id="upperLeftContainer" class="col-lg-3 page-header" style="float:left;margin:0px 20px 0px 30px">${upperLeftContainer} 
                         <h2>Welcome ${pageContext.request.userPrincipal.name}!</h2>
@@ -53,7 +52,7 @@
                     <div id="upperRightContainer" class="col-lg-3" style="float:right;margin:0px 40px 0px 40px">${upperRightContainer}</div>
                     <script type="text/javascript">
                         $(function () {
-                            renderAccountDropdown();
+                            renderAccountDropdown('${pageContext.request.userPrincipal.name}');
                         });
                     </script>
                 </c:if>
@@ -61,7 +60,7 @@
                     <div id="upperLeftContainer" class="col-lg-3" style="float:left;margin:0px 20px 20px 20px">${upperLeftContainer}
                         <script type="text/javascript">
                             $(function () {
-                                renderHomePage();
+                                renderHomePage('${pageContext.request.userPrincipal.name}');
                             });
                         </script>
                     </div>

@@ -60,7 +60,8 @@ var AccountDropdown = React.createClass({displayName: "accountDropdown",
     }
 });
 
-var renderAccountDropdown = function () {
+var renderAccountDropdown = function (asd) {
+    console.log(asd)
     React.render(
         React.createElement(AccountDropdown),
         document.getElementById("upperRightContainer")
