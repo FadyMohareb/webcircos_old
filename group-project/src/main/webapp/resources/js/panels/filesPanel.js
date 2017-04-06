@@ -46,7 +46,8 @@ var FilesPanel = React.createClass({className: "filesPanel",
                 var filesList = data.errors;
                 if (filesList !== "")
                 {
-                    if (filesList.substring(0)==="[")
+                    var substring0=filesList.substring(0,1);
+                    if (substring0==="[")
                     {
                         filesList = filesList.substring(1,filesList.length-1);
                         var filesSplited = filesList.split(",");

@@ -131,7 +131,8 @@ public class UpdateFilesController {
 
                     for (FileInput file : findAll)
                     {
-//                        if (panelType==file.getF_type())
+                        String fileType = file.getF_type();
+                        if (type.matches(fileType))
                             toString.add(file.getF_name());
                     };
 //                    File[] fileArray = dir2.listFiles();
