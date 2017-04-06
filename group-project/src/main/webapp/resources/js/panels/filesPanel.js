@@ -107,7 +107,8 @@ var FilesPanel = React.createClass({className: "filesPanel",
                                         React.createElement('div', {className: 'container', id: 'difExpression'},
                                             React.createElement(this.contentUpdate, {panelType: "difExpression"}))))
                         ),
-                this.state.view.showUploadModal ? React.createElement(UploadModal, {handleHideUploadModal: this.handleHideUploadModal}) : null
+                this.state.view.showUploadModal ? React.createElement(UploadModal, {handleHideUploadModal: this.handleHideUploadModal,
+                projectName: this.props.projectName}) : null
                 ));
     }
 });

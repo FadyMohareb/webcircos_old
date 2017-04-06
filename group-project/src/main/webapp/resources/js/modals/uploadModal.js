@@ -6,6 +6,7 @@ String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 var UploadModal = React.createClass({className: "uploadModal",
+    
     componentDidMount: function componentDidMount() 
     {
         $(this.getDOMNode()).modal('show');
@@ -17,6 +18,7 @@ var UploadModal = React.createClass({className: "uploadModal",
     },
     getInitialState: function()
     {
+        
         return { view: {
                 isSequence: false, 
                 isAnnotation: false, 
@@ -91,6 +93,10 @@ var UploadModal = React.createClass({className: "uploadModal",
         if (this.fileType !== "unrecognized")
         {
             var file = this.refs.fileUpload.getDOMNode().files[0];
+//            var projectName = this.state.projectName;
+//            console.log('Project name: ' + projectName);
+            
+            
             var fd = new FormData();    
             fd.append('file', file);
             fd.append('String', this.fileType);
@@ -165,6 +171,7 @@ var UploadModal = React.createClass({className: "uploadModal",
                                                 React.createElement('span', {'aria-hidden': 'true'}, '\xD7')),
                                         React.createElement('h3', {className: 'modal-title'}, 'Upload file')),
                                 React.createElement('div', {className: 'modal-body'},
+                                React.createElement('div', {className: 'container'}, this.props.projectName),
                                         React.createElement('h4', {className: 'modal-title'}, 'Choose file: '),
                                         React.createElement('input', {type: 'file', ref: 'fileUpload'}),
                                         React.createElement("hr"),
@@ -188,6 +195,7 @@ var UploadModal = React.createClass({className: "uploadModal",
                 );
     },
     propTypes: {
-        handleHideUploadModal: React.PropTypes.func.isRequired
+        handleHideUploadModal: React.PropTypes.func.isRequired,
+        projectName: React.PropTypes.string
     }
 });
