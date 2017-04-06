@@ -7,6 +7,9 @@ var ProjectsPanelAnon = React.createClass({displayName: "projectsPanelAnon",
                         React.createElement('div', {className: "panel-body"}, 
                         React.createElement('div', null, "Sign in to access your projects")))
                 );
+    },
+  propTypes: {
+        userStatus: React.PropTypes.bool
     }
 });
 

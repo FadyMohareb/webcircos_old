@@ -16,5 +16,5 @@ import uk.ac.cranfield.bix.models.User;
  */
 public interface FileService {
     void save(FileInput file, int projectId);
-    List<FileInput> findAll(User user, int projectId);
+    List<FileInput> findAll(Project project);
 }

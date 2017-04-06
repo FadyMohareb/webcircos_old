@@ -41,10 +41,10 @@ public class FileDao {
     }
 
     @SuppressWarnings("unchecked")
-    public List<FileInput> getAll(User user, int projectId) {
+    public List<FileInput> getAll(Project project) {
       return (List<FileInput>) getSession()
-              .createQuery("Select f from FileInput f")
-//              .setParameter("projectId", projectId)
+              .createQuery("Select f from FileInput f where f.project=:project")
+              .setParameter("project", project)
               .list(); 
     }
     

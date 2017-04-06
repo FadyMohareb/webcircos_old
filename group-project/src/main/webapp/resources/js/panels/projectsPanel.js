@@ -1,5 +1,9 @@
+var converter = new Showdown.converter();
+
 var ProperListRender = React.createClass({displayName: "ProperListRender",
+    
     render: function () {
+       
         return (
                 React.createElement('div', {className: 'btn-group'},
                         React.createElement('button', {className: 'btn btn-default dropdown-toggle', 'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false'}, 'Action',
@@ -7,19 +11,24 @@ var ProperListRender = React.createClass({displayName: "ProperListRender",
                         React.createElement('ul', {className: 'dropdown-menu'},
                                 this.props.list.map(function (projectName)
                                 {
-                                    return (React.createElement("li", null,
-                                            React.createElement("a", {href: '#'}, projectName)));
+                                    handleProjectChange: function handleProjectChange(event) {
+                                        event.preventDefault();
+                                        console.log(event.target.id);
+                                        React.render(React.createElement(FilesPanel, { projectName: event.target.id }), document.getElementById('filesContainer'));
+                                    
+                                    };
+                                    
+                                    return (React.createElement("li",{onClick: handleProjectChange, id: projectName}, projectName));
                                 })
                         )
                 )
                 );
     }
 });
-var converter = new Showdown.converter();
 
 var ProjectsPanel = React.createClass({displayName: "projectsPanel",
     getInitialState: function getInitialState() {
-        return {view: {showNewProjModal: false, userLogged: false, currProj: null}}; // need a method to check whether user is logged or not
+        return {view: {showNewProjModal: false, userLogged: false, currProj: 'test'}}; // need a method to check whether user is logged or not
     },
     handleShowNewProjModal: function handleShowNewProjModal() {
         this.setState({view: {showNewProjModal: true}});
@@ -53,8 +62,9 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
                         var ProjectName = ProjectList[i];
                         list[i] = ProjectName;
                     }
+                    return React.render(React.createElement(ProperListRender, {list: list}), document.getElementById('projects'));
                 }
-                return React.render(React.createElement(ProperListRender, {list: list}), document.getElementById('projects'));
+                 
             },
             error: function (status, err) {
                 console.error(status, err.toString());
@@ -88,3 +98,5 @@ var renderProjectsPanel = function () {
             document.getElementById("projectsContainer")
             );
 };
+
+

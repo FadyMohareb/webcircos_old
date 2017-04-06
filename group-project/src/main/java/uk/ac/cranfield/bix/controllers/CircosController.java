@@ -7,6 +7,7 @@ package uk.ac.cranfield.bix.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,24 +42,26 @@ public class CircosController {
     @RequestMapping(value = "/circos.data", method = RequestMethod.POST)
     public @ResponseBody
     CircosOutput sendData(@RequestBody CircosInput circosInput) throws IOException, ClassNotFoundException {
-        String userID = "";
+        String userID = "", currentPath;
         String path;
+        File dirSequence;
         CircosOutput circosOutput = new CircosOutput();
         //For tomorrow meeting I need to know where to find data. So I retrieve the session id to set the proper path. 
         if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
-            path = new PathFinder().getEntireFilePathLogged()+"/";
+            path = new PathFinder().getEntireFilePathNotLogged()+"/";
 //            userID = RequestContextHolder.currentRequestAttributes().getSessionId();
 //            path = "C:/Users/agata/Desktop/WebCircos/temp/" + userID + "/";
         } else {
-            path = new PathFinder().getEntireFilePathNotLogged()+"/";
+//            path = new PathFinder().getEntireFilePathNotLogged()+"/";
+            path = new PathFinder().getCurrentPath();
 //            userID = SecurityContextHolder.getContext().getAuthentication().getName();
 //            path = "C:/Users/agata/Desktop/WebCircos/user/" + userID + "/";
         }
-
-        if (new File(path + "sequence/test.txt").exists()) {
+        
+        if (new File(path + "sequence/S_lycopersicum_chromosomes.2.50.txt").exists()) {
 
             //Create BiocircosGenome variable
-            List<Sequence> seq = (List<Sequence>) Deserialize(path + "sequence/test.txt");
+            List<Sequence> seq = (List<Sequence>) Deserialize(path + "sequence/S_lycopersicum_chromosomes.2.50.txt");
             List<Object[]> obj = createBiocircosGenomeObject(seq);
 
             //Create Histogram

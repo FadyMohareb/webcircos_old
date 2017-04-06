@@ -1,6 +1,7 @@
 /* global React, Showdown, SecurityContextHolder, RequestContextHolder, UploadModal */
 
 var converter = new Showdown.converter();
+
 var ProperFilesListRender = React.createClass({displayName: "ProperFilesListRender",
     render: function() {
       return (React.createElement("div", null,
@@ -29,78 +30,100 @@ var FilesPanel = React.createClass({className: "filesPanel",
     },
     contentUpdateProject: function(panelType)
     {
-        var projectName = "blablabla";
+        var projectName = this.props.projectName;
         var fd = new FormData();
         var type = panelType.panelType;
         fd.append('panelType', type);
         fd.append('projectName', projectName);
         $.ajax({
-            url: "/refresh/logged",
+            url: "/refresh",
             type: 'POST',
             processData: false,
             contentType: false,
             data: fd,
-            success: function (data) 
+            success: function(data) 
             {
-                var filesList = data.errors.split("\t");
-                if (filesList[0].length !== 0)
+                var filesList = data.errors;
+                if (filesList !== "")
                 {
-                    var n = filesList.length;
-                    var list = [];
-                    for (var i = 0; i < n; i++)
+                    if (filesList.substring(0)==="[")
                     {
-                        var parts= filesList[i].split("/");
-                        if (parts[0].length!==0)
+                        filesList = filesList.substring(1,filesList.length-1);
+                        var filesSplited = filesList.split(",");
+                        var n = filesSplited.length;
+                        var list = [];
+                        for (var i = 0; i < n; i++)
                         {
-                            var fileName = parts[parts.length-1];
-                            list[i]=fileName;
+                            list[i]=filesSplited[i];
                         }
                     }
-                    return React.render(React.createElement(ProperFilesListRender, {list: list}), document.getElementById(type));
+                    else
+                    {
+                        var filesSplited = filesList.split("\t");
+                        var list = [];
+                        for (var i = 0; i < filesSplited.length; i++)
+                        {
+                            if (filesSplited[i]!=="")
+                            {
+                                var filesSplited2 = filesSplited[i].split("/");
+                                var fileName = filesSplited2[filesSplited2.length-1];
+                                list[i]=fileName;
+                            }
+                        }
+                        
+                        
+                    }
+                    
+                    
+                    if (list.length >0)
+                        return React.render(React.createElement(ProperFilesListRender, {list: list}), document.getElementById(type));
                 }
-//                else
-//                    return React.render(React.createElement("h6",null,"No files had been uploaded"), document.getElementById(type));
+                else
+                    return React.render(React.createElement("h6",null,"No files had been uploaded"), document.getElementById(type));
             },
             error: function (status, err) {
                 console.log("Panel not refreshed");
                 console.error(status, err.toString());
             }});
     },
-    contentUpdate: function(panelType)
-    {
-        var type = panelType.panelType;
-        $.ajax({
-            url: "/refresh/notLogged",
-            type: 'POST',
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(type),
-            success: function (data) 
-            {
-                var filesList = data.errors.split("\t");
-                if (filesList[0].length !== 0)
-                {
-                    var n = filesList.length;
-                    var list = [];
-                    for (var i = 0; i < n; i++)
-                    {
-                        var parts= filesList[i].split("/");
-                        if (parts[0].length!==0)
-                        {
-                            var fileName = parts[parts.length-1];
-                            list[i]=fileName;
-                        }
-                    }
-                    return React.render(React.createElement(ProperFilesListRender, {list: list}), document.getElementById(type));
-                }
-//                else
-//                    return React.render(React.createElement("h6",null,"No files had been uploaded"), document.getElementById(type));
-            },
-            error: function (status, err) {
-                console.log("Panel not refreshed");
-                console.error(status, err.toString());
-            }});
-    },
+//    contentUpdate: function(panelType)
+//    {
+//        var type = panelType.panelType;
+//        var filesProperties = {};
+//        filesProperties.panelType = type;
+//        filesProperties.projectName = this.props.projectName;
+//        
+//        $.ajax({
+//            url: "/refresh/notLogged",
+//            type: 'POST',
+//            dataType: 'json',
+//            contentType: "application/json; charset=utf-8",
+//            data: JSON.stringify(filesProperties),
+//            success: function (data) 
+//            {
+//                var filesList = data.errors.split("\t");
+//                if (filesList[0].length !== 0)
+//                {
+//                    var n = filesList.length;
+//                    var list = [];
+//                    for (var i = 0; i < n; i++)
+//                    {
+//                        var parts= filesList[i].split("/");
+//                        if (parts[0].length!==0)
+//                        {
+//                            var fileName = parts[parts.length-1];
+//                            list[i]=fileName;
+//                        }
+//                    }
+//                    
+//                }
+//                return React.render(React.createElement(ProperFilesListRender, {list: list}), document.getElementById(type));
+//            },
+//            error: function (status, err) {
+//                console.log("Panel not refreshed");
+//                console.error(status, err.toString());
+//            }});
+//    },
     render: function () {
         return (React.createElement('div', {className: "panel panel-primary"},
                 React.createElement('div', {className: "panel-heading"}, "Files  ",
@@ -110,6 +133,7 @@ var FilesPanel = React.createClass({className: "filesPanel",
                         React.createElement('div', {className: "panel panel-success"},
                                 React.createElement('div', {className: "panel-heading"}, "Sequence"),
                                     React.createElement('div', {className: "panel-body"},
+                                    React.createElement('div', {className: 'container'}, this.state.projectName),
                                         React.createElement('div', {className: 'container', id: 'sequence'},
                                             React.createElement(this.contentUpdateProject, {panelType: "sequence"})))),
                         React.createElement('div', {className: "panel panel-info"},
@@ -138,7 +162,8 @@ var FilesPanel = React.createClass({className: "filesPanel",
                                         React.createElement('div', {className: 'container', id: 'difExpression'},
                                             React.createElement(this.contentUpdateProject, {panelType: "difExpression"}))))
                         ),
-                this.state.view.showUploadModal ? React.createElement(UploadModal, {handleHideUploadModal: this.handleHideUploadModal}) : null
+                 this.state.view.showUploadModal ? React.createElement(UploadModal, {handleHideUploadModal: this.handleHideUploadModal,
+                 projectName: this.props.projectName}) : null
                 ));
     }
 });
