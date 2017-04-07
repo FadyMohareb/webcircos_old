@@ -12,8 +12,10 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import uk.ac.cranfield.bix.models.User;
+import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeExpression;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeGff;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeSequence;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeTranscriptomicCov;
@@ -25,7 +27,13 @@ import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.VCFLineP
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.CoverageParser;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.GffParser2;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.SortToBinsTranscriptomics;
+import static uk.ac.cranfield.bix.utilities.fileParser.DifferentialExpression.DiffJavascriptWriter;
+import static uk.ac.cranfield.bix.utilities.fileParser.DifferentialExpression.EbSeqParser;
+import static uk.ac.cranfield.bix.utilities.fileParser.DifferentialExpression.EbseqData;
+import static uk.ac.cranfield.bix.utilities.fileParser.DifferentialExpression.GffParserExpression;
+import static uk.ac.cranfield.bix.utilities.fileParser.DifferentialExpression.gffSorter;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffParser;
+import static uk.ac.cranfield.bix.utilities.fileParser.RSEMBamExpression.RsemGenesResultsParser;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VCFHistParser;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VcfToolsSNPDensity;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VcfToolsSNPS;
@@ -92,13 +100,32 @@ public class Utilities {
                 SerializeSequence(fastaParser, fileWithoutExtension+".txt");
                 break;
             case "annotation":
-                List<String[]> GffParser = GffParser(filePath);
-                SerializeGff(GffParser, fileWithoutExtension+".txt");
+//                //Genes
+//                List<String[]> GffParser = GffParser(filePath);
+//                SerializeGff(GffParser, fileWithoutExtension+".txt");
+//                
+//                //Coverage
+//                List<List<String[]>> listTranscriptomicCoverage = GffParser2(filePath);
+//                ArrayList<Object[]> coverageData = CoverageParser(listTranscriptomicCoverage ,"/home/vmuser/Downloads/bedfiles/MT_Leaf12.bedcov" );
+//                ArrayList<Object[]> sortedBinsTCov = SortToBinsTranscriptomics(listTranscriptomicCoverage, coverageData);
+//                SerializeTranscriptomicCov(sortedBinsTCov, fileWithoutExtension+"transcriptomicCov.txt");
                 
-                List<List<String[]>> listTranscriptomicCoverage = GffParser2(filePath);
-                ArrayList<Object[]> coverageData = CoverageParser(listTranscriptomicCoverage ,"/home/vmuser/Downloads/bedfiles/MT_Leaf12.bedcov" );
-                ArrayList<Object[]> sortedBinsTCov = SortToBinsTranscriptomics(listTranscriptomicCoverage, coverageData);
-                SerializeTranscriptomicCov(sortedBinsTCov, fileWithoutExtension+"transcriptomicCov.txt");
+                //Gene DE
+//                List<List<String[]>> genesAndMetadataForDExpr = GffParserExpression(filePath);
+//                ArrayList<String[]> ebseqData =  EbSeqParser("/home/vmuser/Downloads/GeneMat.results.sorted");
+//                ArrayList<String[]> sortedgff =  gffSorter(genesAndMetadataForDExpr);
+//                ArrayList<Object[]> data = EbseqData(genesAndMetadataForDExpr, sortedgff);
+//                List<HistogramDataPoint> dataToSerialize = DiffJavascriptWriter(ebseqData, data, "differential Expression");                
+//                SerializeExpression(dataToSerialize, fileWithoutExtension+"DExpression.txt");
+                
+                //Gene Expression
+                List<List<String[]>> genesAndMetadataForExpr = GffParserExpression(filePath);
+                ArrayList<String[]> ExprData =  RsemGenesResultsParser("/home/vmuser/Downloads/Downloads.genes.results");
+                ArrayList<String[]> sortedgffExpr =  gffSorter(genesAndMetadataForExpr);
+                ArrayList<Object[]> dataExpr = EbseqData(genesAndMetadataForExpr, sortedgffExpr);
+                List<HistogramDataPoint> dataToSerializeExpr = DiffJavascriptWriter(ExprData, dataExpr, "Expression");                
+                SerializeExpression(dataToSerializeExpr, fileWithoutExtension+"Expression.txt");
+                
                 
                 break;
             case "variants":

@@ -22,12 +22,14 @@ import uk.ac.cranfield.bix.controllers.rest.GffDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.LineDataPoint;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.HeatMap;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.IndGff;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Line;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.Deserialize;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.GenomeCoverageWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.TranscriptomicCovWriter;
+import static uk.ac.cranfield.bix.utilities.fileParser.DifferentialExpression.HeatMapWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.fastaParsers.createBiocircosGenomeObject;
@@ -97,6 +99,20 @@ public class CircosController {
             List<LineDataPoint> transcriptomicsCov = (List<LineDataPoint>) Deserialize(path+"annotation/ITAG2.4_gene_modelstranscriptomicCov.txt");
             Line li = TranscriptomicCovWriter(transcriptomicsCov);
             circosOutput.setTranscriptomicCoverage(li);
+        }
+        
+        if(new File(path+"annotation/ITAG2.4_gene_modelsDExpression.txt").exists()){
+            //Create heat map
+            List<HistogramDataPoint> DEHeatMap = (List<HistogramDataPoint>) Deserialize(path+"annotation/ITAG2.4_gene_modelsDExpression.txt");
+            HeatMap hMap = HeatMapWriter(DEHeatMap,-25,-65);
+            circosOutput.setdEHeatMap(hMap);
+        }
+        
+        if(new File(path+"annotation/ITAG2.4_gene_modelsExpression.txt").exists()){
+            //Create heat map
+            List<HistogramDataPoint> DEHeatMap = (List<HistogramDataPoint>) Deserialize(path+"annotation/ITAG2.4_gene_modelsExpression.txt");
+            HeatMap ehMap = HeatMapWriter(DEHeatMap,-45 ,-85);
+            circosOutput.setGeneExpressionHeatMap(ehMap);
         }
 
         return circosOutput;

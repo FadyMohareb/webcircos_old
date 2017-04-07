@@ -11,6 +11,7 @@ import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.IndGff;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Snp;
 import java.util.List;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.HeatMap;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Line;
 
 /**
@@ -34,6 +35,10 @@ public class CircosOutput {
     private Line genomicCoverage;
     
     private Line transcriptomicCoverage;
+    
+    private HeatMap dEHeatMap;
+    
+    private HeatMap geneExpressionHeatMap;
 
     public List<Object[]> getGenomes() {
         return genomes;
@@ -98,5 +103,21 @@ public class CircosOutput {
     public void setTranscriptomicCoverage(Line transcriptomicCoverage) {
         this.transcriptomicCoverage = transcriptomicCoverage;
     }
-  
+
+    public HeatMap getdEHeatMap() {
+        return dEHeatMap;
+    }
+
+    public void setdEHeatMap(HeatMap dEHeatMap) {
+        this.dEHeatMap = dEHeatMap;
+    }
+
+    public HeatMap getGeneExpressionHeatMap() {
+        return geneExpressionHeatMap;
+    }
+
+    public void setGeneExpressionHeatMap(HeatMap geneExpressionHeatMap) {
+        this.geneExpressionHeatMap = geneExpressionHeatMap;
+    }
+     
 }

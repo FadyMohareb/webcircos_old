@@ -78,8 +78,8 @@ public class SerializeDeserialize {
             System.out.println(e.getMessage());
         }
     }
-    
-        public static void SerializeVcfCoverageGenomics(ArrayList<Object[]>  list, String filepath) {
+
+    public static void SerializeVcfCoverageGenomics(ArrayList<Object[]> list, String filepath) {
         try {
             List<LineDataPoint> lineData = CoverageData(list);
             try (FileOutputStream fileOut = new FileOutputStream(filepath); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
@@ -93,12 +93,26 @@ public class SerializeDeserialize {
             System.out.println(e.getMessage());
         }
     }
-        
-            public static void SerializeTranscriptomicCov(ArrayList<Object[]> list, String filepath) {
+
+    public static void SerializeTranscriptomicCov(ArrayList<Object[]> list, String filepath) {
         try {
-             List<LineDataPoint> linePoints = CoverageDataTranscriptomics(list);
+            List<LineDataPoint> linePoints = CoverageDataTranscriptomics(list);
             try (FileOutputStream fileOut = new FileOutputStream(filepath); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
                 out.writeObject(linePoints);
+            }
+            System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public static void SerializeExpression(List<HistogramDataPoint> list, String filepath) {
+        try {
+            try (FileOutputStream fileOut = new FileOutputStream(filepath); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+                out.writeObject(list);
             }
             System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
 
@@ -111,7 +125,7 @@ public class SerializeDeserialize {
 
     public static Object Deserialize(String filename) throws ClassNotFoundException {
         try {
-            FileInputStream fileIn = new FileInputStream(new File (filename));
+            FileInputStream fileIn = new FileInputStream(new File(filename));
             ObjectInputStream in = new ObjectInputStream(fileIn);
             Object readObject = in.readObject();
             in.close();
