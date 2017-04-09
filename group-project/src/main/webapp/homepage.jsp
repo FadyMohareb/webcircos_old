@@ -20,16 +20,20 @@
         <script src="${contextPath}/resources/js/modals/registrationModal.js"></script>
         <script src="${contextPath}/resources/js/modals/resetPswdModal.js"></script>
         <script src="${contextPath}/resources/js/dynamic/accountDropdown.js"></script>
-        <script src="${contextPath}/resources/js/panels/filesPanel.js"></script>
         <script src="${contextPath}/resources/js/panels/projectsPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/filesPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/filesGeneralPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/filesTabContainer.js"></script>
+        <script src="${contextPath}/resources/js/panels/filesParentPoolPanel.js"></script>
         <script src="${contextPath}/resources/js/panels/projectsPanelAnon.js"></script>
         <script src="${contextPath}/resources/js/tools/d3.js"></script>
         <script src="${contextPath}/resources/js//tools/biocircos-1.1.1.js"></script> 
         <script src="${contextPath}/resources/js/panels/circosPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/parentPoolPanel.js"></script>
         <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>
         <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
-        <script src="${contextPath}/resources/js/panels/viewPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/centerTabs.js"></script>
         <script src="${contextPath}/resources/js/modals/newProjectModal.js"></script>
 
 
@@ -91,16 +95,10 @@
                         });
                     </script>
                 </div>
-                <div id="centerContainer" class="col-lg-6" style="float:left;margin:0px 10px 0px 10px;width:50%">${centerContainer}</div>
+                <div id="centerContainer" class="col-lg-6" style="float:left;margin:0px 10px 0px 10px;width:72%">${centerContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderCircosPanel();
-                    });
-                </script>
-                <div id="rightContainer" class="col-lg-2" style="float:right;margin:0px 5px 0px 5px;width:20%">${rightContainer}</div>
-                <script type="text/javascript">
-                    $(function () {
-                        renderViewPanel();
+                        renderCircosTabsComponent();
                     });
                 </script>
             </div>

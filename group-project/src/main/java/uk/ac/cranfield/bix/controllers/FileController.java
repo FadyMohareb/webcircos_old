@@ -40,8 +40,10 @@ public class FileController {
     @ResponseBody
     RestResponse upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("String") String fileType) 
     {
+        
         //initializations
         String fileName, path, userID;
+        String projectName = "blablabla";
         File dir1, dir2;
         FileWriter fileWriter;
         BufferedWriter bufferedWriter;
@@ -92,7 +94,7 @@ public class FileController {
             User user = userService.findByUsername(userLogin);
             
             //Check if project allready exist
-            String projectName = "blablabla";
+            
             Project project = projectService.findByProjectName(projectName, user);
             Integer projectId = project.getId();
             

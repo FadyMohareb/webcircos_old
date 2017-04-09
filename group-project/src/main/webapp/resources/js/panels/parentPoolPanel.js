@@ -5,7 +5,7 @@
  */
 
 
-var CircosPanel = React.createClass({className: "circosPanel",
+var ParentPoolPanel = React.createClass({className: "parentPoolPanel",
     doit: function doit() {
         renderCircos: function renderCircos(BioCircosGenome, ARC_01) {
 
@@ -113,16 +113,16 @@ var CircosPanel = React.createClass({className: "circosPanel",
         return (
                 React.createElement('div', {id: "blabla"}),
                         React.createElement('button', {className: 'btn btn-primary'},
-                                'Circos tab test')
+                                'Parent-pool tab test')
                 );
 
 
     }
 })
 
-var renderCircosPanel = function () {
+var renderParentPoolPanel = function () {
     React.render(
-            React.createElement(CircosPanel),
-            document.getElementById("circos")
+            React.createElement(ParentPoolPanel),
+            document.getElementById("parentPool")
             );
 };
