@@ -94,7 +94,8 @@ public class CustomController {
         }   
     }
     
-     @RequestMapping(value = "/logOutAction", method = RequestMethod.GET)
+    
+    @RequestMapping(value = "/logOutAction", method = RequestMethod.GET)
     public
     @ResponseBody
     RestResponse logOut(HttpServletRequest request, HttpServletResponse response) {

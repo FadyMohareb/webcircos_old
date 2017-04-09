@@ -7,7 +7,7 @@ package uk.ac.cranfield.bix.controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.nio.file.Path;
 import java.util.List;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,18 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestContextHolder;
 import uk.ac.cranfield.bix.controllers.rest.CircosInput;
 import uk.ac.cranfield.bix.controllers.rest.CircosOutput;
 import uk.ac.cranfield.bix.controllers.rest.GffDataPoint;
-import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
-import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.IndGff;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
+import uk.ac.cranfield.bix.models.PathFinder;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.Deserialize;
-import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffDataPoints;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffWriter;
-import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.fastaParsers.createBiocircosGenomeObject;
 
 /**
@@ -46,22 +42,26 @@ public class CircosController {
     @RequestMapping(value = "/circos.data", method = RequestMethod.POST)
     public @ResponseBody
     CircosOutput sendData(@RequestBody CircosInput circosInput) throws IOException, ClassNotFoundException {
-        String userID = "";
-        String path = "";
+        String userID = "", currentPath;
+        String path;
+        File dirSequence;
         CircosOutput circosOutput = new CircosOutput();
         //For tomorrow meeting I need to know where to find data. So I retrieve the session id to set the proper path. 
         if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
-            userID = RequestContextHolder.currentRequestAttributes().getSessionId();
-            path = "Z:/ProfileData/s260592/Desktop/WebCircos/temp/" + userID + "/";
+            path = new PathFinder().getEntireFilePathNotLogged()+"/";
+//            userID = RequestContextHolder.currentRequestAttributes().getSessionId();
+//            path = "C:/Users/agata/Desktop/WebCircos/temp/" + userID + "/";
         } else {
-            userID = SecurityContextHolder.getContext().getAuthentication().getName();
-            path = "Z:/ProfileData/s260592/Desktop/WebCircos/user/" + userID + "/";
+//            path = new PathFinder().getEntireFilePathNotLogged()+"/";
+            path = new PathFinder().getCurrentPath();
+//            userID = SecurityContextHolder.getContext().getAuthentication().getName();
+//            path = "C:/Users/agata/Desktop/WebCircos/user/" + userID + "/";
         }
-
-        if (new File(path + "sequence/test.txt").exists()) {
+        
+        if (new File(path + "sequence/S_lycopersicum_chromosomes.2.50.txt").exists()) {
 
             //Create BiocircosGenome variable
-            List<Sequence> seq = (List<Sequence>) Deserialize(path + "sequence/test.txt");
+            List<Sequence> seq = (List<Sequence>) Deserialize(path + "sequence/S_lycopersicum_chromosomes.2.50.txt");
             List<Object[]> obj = createBiocircosGenomeObject(seq);
 
             //Create Histogram

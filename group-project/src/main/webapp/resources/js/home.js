@@ -45,15 +45,26 @@ var HomePage = React.createClass({
     return (
                 React.createElement("div", {className: "pull-left"},
                     React.createElement("button", { className: 'btn btn-primary', onClick: this.handleShowModal}, "Sign in"),
+                    React.createElement('div', {className: 'container'}, this.props.userStatus),
                       this.state.view.showModal ? React.createElement(LoginModal, { handleHideModal: this.handleHideModal,
                           handleShowRegModal: this.handleShowRegModal, handleShowResetModal: this.handleShowResetModal}) : null,
                       this.state.view.showRegModal ? React.createElement(RegistrationModal, { handleHideRegModal: this.handleHideRegModal }) : null,
                       this.state.view.showResetModal ? React.createElement(ResetPswdModal, { handleHideResetModal: this.handleHideResetModal }) : null)
     );
-  }
+  },
+  propTypes: {
+        userStatus: React.PropTypes.bool
+    }
 });
 
 var renderHomePage = function (asd) {
     console.log("asdasd: " + asd);
-    React.render(React.createElement(HomePage, null), document.getElementById('upperLeftContainer'));
+    var logged = null;
+    
+    if (asd !== null)
+        logged = true;
+    else
+        logged = false;
+    
+    React.render(React.createElement(HomePage, { userStatus: logged }), document.getElementById('upperLeftContainer'));
 };

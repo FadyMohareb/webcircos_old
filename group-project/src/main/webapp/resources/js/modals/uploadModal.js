@@ -1,11 +1,10 @@
-/* global React */
-
 var converter = new Showdown.converter();
 //funkcja dla IE
 String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 var UploadModal = React.createClass({className: "uploadModal",
+    
     componentDidMount: function componentDidMount() 
     {
         $(this.getDOMNode()).modal('show');
@@ -17,6 +16,7 @@ var UploadModal = React.createClass({className: "uploadModal",
     },
     getInitialState: function()
     {
+        
         return { view: {
                 isSequence: false, 
                 isAnnotation: false, 
@@ -92,9 +92,12 @@ var UploadModal = React.createClass({className: "uploadModal",
         if (this.fileType !== "unrecognized")
         {
             var file = this.refs.fileUpload.getDOMNode().files[0];
+            var projectName = this.props.projectName;
+            
             var fd = new FormData();    
             fd.append('file', file);
-            fd.append('String', this.fileType);
+            fd.append('projectName', projectName);
+            fd.append('fileType', this.fileType);
             $.ajax({
             url: "/controller/upload",
             type: 'POST',
@@ -190,6 +193,7 @@ var UploadModal = React.createClass({className: "uploadModal",
                 );
     },
     propTypes: {
-        handleHideUploadModal: React.PropTypes.func.isRequired
+        handleHideUploadModal: React.PropTypes.func.isRequired,
+        projectName: React.PropTypes.string
     }
 });

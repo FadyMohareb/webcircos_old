@@ -38,13 +38,12 @@ public class FileController {
     @RequestMapping(value = "/controller/upload", method = RequestMethod.POST)
     public
     @ResponseBody
-    RestResponse upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("String") String fileType) 
+    RestResponse upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName")String projectName, @RequestParam("fileType") String fileType) 
     {
         
         //initializations
         String fileName, path, userID;
-        String projectName = "blablabla";
-        File dir1, dir2;
+        File dir1, dir2, dir1_5;
         FileWriter fileWriter;
         BufferedWriter bufferedWriter;
         String[] splittedFileName;
@@ -94,14 +93,21 @@ public class FileController {
             User user = userService.findByUsername(userLogin);
             
             //Check if project allready exist
-            
             Project project = projectService.findByProjectName(projectName, user);
             Integer projectId = project.getId();
             
 //            System.out.println("User is LOGGED");
-            path = new PathFinder().getEntireFilePathLogged();
+            PathFinder pathFinder = new PathFinder();
+            path = pathFinder.getEntireFilePathLogged();
             try
             {
+                //newPath with added ProjectName
+                path=(path+"/"+projectName);
+                dir1_5 = new File(path);
+                if (!dir1_5.exists())
+                    dir1_5.mkdir();
+                //temporary solution
+                pathFinder.setCurrentPath(path);
                 //newPath with added FileType
                 path=(path+"/"+fileType);
                 dir2 = new File(path);
@@ -112,7 +118,7 @@ public class FileController {
                 splittedFileName = fileName.split("\\\\");
                 if (splittedFileName.length>1)
                     fileName = splittedFileName[splittedFileName.length-1];
-
+                
                 FileCopyUtils.copy(multipartFile.getBytes(), new FileOutputStream(path+"/"+fileName));
                 
                 // Parse and serialize files
