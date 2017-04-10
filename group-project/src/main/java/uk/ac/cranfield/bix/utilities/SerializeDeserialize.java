@@ -15,6 +15,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import uk.ac.cranfield.bix.controllers.rest.GffDataPoint;
+import uk.ac.cranfield.bix.controllers.rest.HeatMapDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.LineDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
@@ -109,7 +110,7 @@ public class SerializeDeserialize {
         }
     }
     
-    public static void SerializeExpression(List<HistogramDataPoint> list, String filepath) {
+    public static void SerializeExpression(List<HeatMapDataPoint> list, String filepath) {
         try {
             try (FileOutputStream fileOut = new FileOutputStream(filepath); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
                 out.writeObject(list);

@@ -38,7 +38,18 @@ var BioCircos;
       if(arguments.length >= 2){
             self.argumentsBiocircosSettings=arguments[arguments.length-1];
             self.argumentsBiocircosGenome=arguments[arguments.length-2];
-
+			
+			self.GENOME = new Array();
+			self.GENOMEConfig = new Array();
+			for(var n = 0; n < arguments.length; n++){
+				var reg = /^Genome/;
+				if(reg.test(arguments[n][0])){
+					self.GENOMEConfig.push(arguments[n][1]);
+					self.GENOME.push(arguments[n]);
+				}
+			}
+			
+			
             self.CNV = new Array();
             self.CNVConfig = new Array();
             for (var n=0; n< arguments.length; n++){
@@ -152,7 +163,32 @@ var BioCircos;
           "outerRadius" : 270,
           "zoom" : false,
           "genomeFillColor" : ["rgb(153,102,0)", "rgb(102,102,0)", "rgb(153,153,30)", "rgb(204,0,0)","rgb(255,0,0)", "rgb(255,0,204)", "rgb(255,204,204)", "rgb(255,153,0)", "rgb(255,204,0)", "rgb(255,255,0)", "rgb(204,255,0)", "rgb(0,255,0)","rgb(53,128,0)", "rgb(0,0,204)", "rgb(102,153,255)", "rgb(153,204,255)", "rgb(0,255,255)", "rgb(204,255,255)", "rgb(153,0,204)", "rgb(204,51,255)","rgb(204,153,255)", "rgb(102,102,102)", "rgb(153,153,153)", "rgb(204,204,204)"],
-          "CNVMouseEvent" : true,
+         
+			 "GenomeMouseEvent" : true,
+			 "GenomeMouseOverDisplay" : true,
+			 "GenomeMouseOverTooltipsPosition" : "absolute",
+			 "GenomeMouseOverTooltipsBackgroundColor" : "red",
+			 "GenomeMouseOverTooltipsBorderStyle" : "solid",
+			 "GenomeMouseOverTooltipsBorderWidth" : 0,
+			 "GenomeMouseOverTooltipsPadding" : "3px",
+			 "GenomeMouseOverTooltipsBorderRadius" : "3px",
+			 "GenomeMouseOverTooltipsOpacity" :  0.8,
+			 "GenomeMouseOverColor" : "none",
+			 "GenomeMouseOverOpacity" : 1.0,
+			 "GenomeMouseOverStrokeColor" : "#F26223",
+			 "GenomeMouseOverStrokeWidth" : 3,
+			 "GenomeMouseOverTooltipsHtml01" : "Length : ",
+			 
+
+			 
+			 	 "GenomeMouseOutDisplay" : true,
+				 "GenomeMouseOutAnimationTime" : 500,
+				 "GenomeMouseOutColor" : "none",
+				 "GenomeMouseOutOpacity" : 1.0,    
+				 "GenomeMouseOutStrokeColor" : "none",
+				"GenomeMouseOutStrokeWidth" : "none", 
+		  
+		  "CNVMouseEvent" : true,
           "CNVMouseClickDisplay" : false,
           "CNVMouseClickColor" : "red",
           "CNVMouseClickArcOpacity" : 1.0,
@@ -260,7 +296,8 @@ var BioCircos;
           "HEATMAPMouseOverTooltipsHtml03" : "-",
           "HEATMAPMouseOverTooltipsHtml04" : "<br>name : ",
           "HEATMAPMouseOverTooltipsHtml05" : "<br>value : ",
-          "HEATMAPMouseOverTooltipsHtml06" : "",
+          "HEATMAPMouseOverTooltipsHtml06" : "<br>SnpCount",
+          "HEATMAPMouseOverTooltipsHtml07" : "",
           "HEATMAPMouseOverTooltipsPosition" : "absolute",
           "HEATMAPMouseOverTooltipsBackgroundColor" : "white",
           "HEATMAPMouseOverTooltipsBorderStyle" : "solid",
@@ -632,7 +669,12 @@ var BioCircos;
           }
       };
 
-      self.CNVsettings = {
+	self.GENOMEsettings = {
+		"innerRadius" : 246,
+		"outerRadius" : 270,
+	}	
+
+	self.CNVsettings = {
           "maxRadius": 200,
           "minRadius": 190,
           "CNVwidth": 10,
@@ -1138,17 +1180,77 @@ var BioCircos;
     }
 
     if(self.genomeBorderDisplay == true){
-        svg.append("g").selectAll("path")
+        svg.append("g")		
+			.attr("class","BioCircosGenome")
+			.selectAll("path.BioCircosGenome")
             .data(chord.groups)
           .enter().append("path")
+			.attr("class","BioCircosGenome")
             .style("fill", function(d) { return fill(d.index); })
             .style("stroke", self.genomeBorderColor)
             .style("stroke-width", self.genomeBorderSize)
             .attr("d", d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius))
             .attr("name", function(d) { return d.index+1; });
+			
+		 
+		if(self.settings.GenomeMouseEvent == true){
+		
+			var GenomeMouseOnTooltip = d3.select("body")
+				.append("div")
+				.attr("class","BioCircosGenomeTooltip")
+				.attr("id","BioCircosGenomeTooltip")
+				.style("opacity",0);
+				
+			var GenomeMouseOn = svg.selectAll("path.BioCircosGenome");	
+			console.log(self.settings.GenomeMouseOverDisplay);
+			
+			if(self.settings.GenomeMouseOverDisplay==true){
+				
+				GenomeMouseOn.on("mouseover",function(d){console.log(d);
+					GenomeMouseOnTooltip.html(self.settings.GenomeMouseOverTooltipsHtml01 + d.value)
+							  .style("left", (d3.event.pageX) + "px")
+                              .style("top", (d3.event.pageY + 20) + "px")
+                              .style("position", self.settings.GenomeMouseOverTooltipsPosition)
+                              .style("background-color", self.settings.GenomeMouseOverTooltipsBackgroundColor)
+                              .style("border-style", self.settings.GenomeMouseOverTooltipsBorderStyle)
+                              .style("border-width", self.settings.GenomeMouseOverTooltipsBorderWidth)
+                              .style("padding", self.settings.GenomeMouseOverTooltipsPadding)
+                              .style("border-radius", self.settings.GenomeMouseOverTooltipsBorderRadius)
+                              .style("opacity", self.settings.GenomeMouseOverTooltipsOpacity)
+                           d3.select(this)
+                              .style("fill",  function(d,i) { if(self.settings.GenomeMouseOverColor=="none"){return "";}else{return self.settings.GenomeMouseOverColor;} })
+                              .style("opacity",  function(d,i) { if(self.settings.GenomeMouseOverOpacity=="none"){return "";}else{return self.settings.GenomeMouseOver=Opacity;} })
+                              .style("stroke", function(d,i) { if(self.settings.GenomeMouseOverStrokeColor=="none"){return "";}else{return self.settings.GenomeMouseOver=StrokeColor;} })
+                              .style("stroke-width", function(d,i) { if(self.settings.GenomeMouseOverStrokeWidth=="none"){return "";}else{return self.settings.GenomeMouseOver=StrokeWidth;} });
+				
+				})
+			}	
+		    if(self.settings.GenomeMouseOutDisplay==true){
+                   GenomeMouseOn.on("mouseout",function(d){
+                       GenomeMouseOnTooltip.style("opacity",0.0);
+                       d3.select(this)
+                           .transition()
+                           .duration(self.settings.GenomeMouseOutAnimationTime)
+                          .style("fill",  function(d,i) { if(self.settings.GenomeMouseOutColor=="none"){return "";}else{return self.settings.GenomeMouseOutColor;} })
+                          .style("opacity",  function(d,i) { if(self.settings.GenomeMouseOutOpacity=="none"){return "";}else{return self.settings.GenomeMouseOutOpacity;} })
+                          .style("stroke", function(d,i) { if(self.settings.GenomeMouseOutStrokeColor=="none"){return "";}else{return self.settings.GenomeMouseOutStrokeColor;} })
+                          .style("stroke-width", function(d,i) { if(self.settings.GenomeMouseOutStrokeWidth=="none"){return "";}else{return self.settings.GenomeMouseOutStrokeWidth;} });
+                   });
+            }
+		
+		}	
+			
+			
+			
+			
+			
+			
+			
+			
     }else{
-        svg.append("g").selectAll("path")
-            .data(chord.groups)
+        svg.append("g").selectAll("path.BioCircosGenome")
+            .attr("class","BioCircosGenome")
+			.data(chord.groups)
           .enter().append("path")
             .style("fill", function(d) { return fill(d.index); })
             .style("stroke", function(d) { return fill(d.index); })
@@ -1159,8 +1261,8 @@ var BioCircos;
     if(self.genomeTextDisplay == true){
 		var strip = function(value, precision){
 			var power = Math.pow(10, precision || 0);
-			
 			return String(Math.round(value*power) / power); };
+		
 		svg.append("g").selectAll("text")
             .data(chord.groups)
           .enter().append("text")
@@ -1212,19 +1314,17 @@ var BioCircos;
 
 				
         
-			function groupTicks(d) {
-				var k = (d.endAngle - d.startAngle) / d.value;
-				
-				
-			return d3.range(0, d.value, self.ticksScale)
-			.map(function(v) {            
-				return {
-				angle: v * k + d.startAngle,
-				label: v / self.ticksScale + ""
+		function groupTicks(d) {
+			var k = (d.endAngle - d.startAngle) / d.value;							
+				return d3.range(0, d.value, self.ticksScale)
+				.map(function(v) {            
+					return {
+					angle: v * k + d.startAngle,
+					label: v / self.ticksScale + ""
 				};
-				});
-			
-			}
+			});
+		
+		}
 		
 	}
 
@@ -1276,7 +1376,17 @@ var BioCircos;
         }
     }
 
-    if(self.ARC.length > 0){
+   
+	
+	
+	
+	
+	
+	
+	if(self.ARC.length > 0){
+		var length = self.ARC.length;
+		console.log(length);
+		console.log("Hello")
         for(var arci=0; arci<self.ARC.length; arci++){
             self.update_ARCsettings(self.ARCConfig[arci]);
 
@@ -1520,6 +1630,7 @@ var BioCircos;
                   histogram_end: v.end,
                   histogram_name: v.name,
                   histogram_value: v.value,
+		  histogram_snp: v.snpCount
                 };
               });
             }
@@ -1537,7 +1648,7 @@ var BioCircos;
 
             if(self.settings.HISTOGRAMMouseOverDisplay==true){
                 HISTOGRAMMouseOn.on("mouseover",function(d){
-                      HISTOGRAMMouseOnTooltip.html(self.settings.HISTOGRAMMouseOverTooltipsHtml01+d.histogram_chr+self.settings.HISTOGRAMMouseOverTooltipsHtml02+d.histogram_start+self.settings.HISTOGRAMMouseOverTooltipsHtml03+d.histogram_end+self.settings.HISTOGRAMMouseOverTooltipsHtml04+d.histogram_name+self.settings.HISTOGRAMMouseOverTooltipsHtml05+d.histogram_value+self.settings.HISTOGRAMMouseOverTooltipsHtml06)
+                      HISTOGRAMMouseOnTooltip.html(self.settings.HISTOGRAMMouseOverTooltipsHtml01+d.histogram_chr+self.settings.HISTOGRAMMouseOverTooltipsHtml02+d.histogram_start+self.settings.HISTOGRAMMouseOverTooltipsHtml03+d.histogram_end+self.settings.HISTOGRAMMouseOverTooltipsHtml04+d.histogram_name+self.settings.HISTOGRAMMouseOverTooltipsHtml05+d.histogram_value+self.settings.HISTOGRAMMouseOverTooltipsHtml06+d.histogram_snp+self.settings.HISTOGRAMMouseOverToolTipsHtml07)
                        .style("left", (d3.event.pageX) + "px")
                        .style("top", (d3.event.pageY + 20) + "px")
                        .style("position", self.settings.HISTOGRAMMouseOverTooltipsPosition)

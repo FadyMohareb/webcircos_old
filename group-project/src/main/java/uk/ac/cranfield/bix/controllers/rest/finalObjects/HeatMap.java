@@ -6,6 +6,7 @@
 package uk.ac.cranfield.bix.controllers.rest.finalObjects;
 
 import java.util.List;
+import uk.ac.cranfield.bix.controllers.rest.HeatMapDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.HeatMapProperties;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 
@@ -17,7 +18,7 @@ public class HeatMap {
     
     private String heatMapId;
     private HeatMapProperties properties;
-    private List<HistogramDataPoint> heatMapDataPoint;
+    private List<HeatMapDataPoint> heatMapDataPoint;
 
     public String getHeatMapId() {
         return heatMapId;
@@ -35,11 +36,11 @@ public class HeatMap {
         this.properties = properties;
     }
 
-    public List<HistogramDataPoint> getHeatMapDataPoint() {
+    public List<HeatMapDataPoint> getHeatMapDataPoint() {
         return heatMapDataPoint;
     }
 
-    public void setHeatMapDataPoint(List<HistogramDataPoint> heatMapDataPoint) {
+    public void setHeatMapDataPoint(List<HeatMapDataPoint> heatMapDataPoint) {
         this.heatMapDataPoint = heatMapDataPoint;
     }
     

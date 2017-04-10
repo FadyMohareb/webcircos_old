@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import uk.ac.cranfield.bix.controllers.rest.HeatMapDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import uk.ac.cranfield.bix.models.User;
@@ -115,7 +116,7 @@ public class Utilities {
                 ArrayList<String[]> ebseqData =  EbSeqParser("/home/vmuser/Downloads/GeneMat.results.sorted");
                 ArrayList<String[]> sortedgff =  gffSorter(genesAndMetadataForDExpr);
                 ArrayList<Object[]> data = EbseqData(genesAndMetadataForDExpr, sortedgff);
-                List<HistogramDataPoint> dataToSerialize = DiffJavascriptWriter(ebseqData, data, "differential Expression");                
+                List<HeatMapDataPoint> dataToSerialize = DiffJavascriptWriter(ebseqData, data, "differential Expression");                
                 SerializeExpression(dataToSerialize, fileWithoutExtension+"DExpression.txt");
                 
 //                Gene Expression
@@ -123,7 +124,7 @@ public class Utilities {
                 ArrayList<String[]> ExprData =  RsemGenesResultsParser("/home/vmuser/Downloads/Downloads.genes.results");
                 ArrayList<String[]> sortedgffExpr =  gffSorter(genesAndMetadataForExpr);
                 ArrayList<Object[]> dataExpr = EbseqData(genesAndMetadataForExpr, sortedgffExpr);
-                List<HistogramDataPoint> dataToSerializeExpr = DiffJavascriptWriter(ExprData, dataExpr, "Expression");                
+                List<HeatMapDataPoint> dataToSerializeExpr = DiffJavascriptWriter(ExprData, dataExpr, "Expression");                
                 SerializeExpression(dataToSerializeExpr, fileWithoutExtension+"Expression.txt");
                 
                 

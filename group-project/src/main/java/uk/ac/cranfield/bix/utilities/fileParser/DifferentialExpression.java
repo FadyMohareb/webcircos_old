@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import uk.ac.cranfield.bix.controllers.rest.HeatMapDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.HeatMapProperties;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.HeatMap;
@@ -190,7 +191,7 @@ public class DifferentialExpression {
         return LineNumbers;
     }
 
-    public static List<HistogramDataPoint> DiffJavascriptWriter(ArrayList<String[]> Ebseq, ArrayList<Object[]> LineNumbers, String diffExprOrExpr) {
+    public static List<HeatMapDataPoint> DiffJavascriptWriter(ArrayList<String[]> Ebseq, ArrayList<Object[]> LineNumbers, String diffExprOrExpr) {
 
         //List of the Transcript per million(Tpm) values for the entries inside the limits of the bin
         ArrayList<ArrayList<Double>> BinTpms = new ArrayList();
@@ -255,17 +256,17 @@ public class DifferentialExpression {
 
         }
         //for all the HeatMapValues
-        List<HistogramDataPoint> heatMapDataPoint = new ArrayList();
+        List<HeatMapDataPoint> heatMapDataPoint = new ArrayList();
         for (int j = 0; j < DiffHeatMapValues.size(); j++) {
             //append the data to a string in the right format
-            HistogramDataPoint point = new HistogramDataPoint(LineNumbers.get(j)[1].toString(), 4 + (Integer) LineNumbers.get(j)[2], (Integer) LineNumbers.get(j)[3], diffExprOrExpr, DiffHeatMapValues.get(j));
+            HeatMapDataPoint point = new HeatMapDataPoint(LineNumbers.get(j)[1].toString(), 4 + (Integer) LineNumbers.get(j)[2], (Integer) LineNumbers.get(j)[3], diffExprOrExpr, DiffHeatMapValues.get(j));
             heatMapDataPoint.add(point);
         }
         return heatMapDataPoint;
     }
     
         //write out to a javascript file
-    public static HeatMap HeatMapWriter(List<HistogramDataPoint> heatMapDataPoint, Integer innerRadius, Integer outerRadius) throws IOException {
+    public static HeatMap HeatMapWriter(List<HeatMapDataPoint> heatMapDataPoint, Integer innerRadius, Integer outerRadius) throws IOException {
 
         //Create heatMap 
         HeatMap heatMap = new HeatMap();

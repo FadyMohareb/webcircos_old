@@ -19,6 +19,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import uk.ac.cranfield.bix.controllers.rest.CircosInput;
 import uk.ac.cranfield.bix.controllers.rest.CircosOutput;
 import uk.ac.cranfield.bix.controllers.rest.GffDataPoint;
+import uk.ac.cranfield.bix.controllers.rest.HeatMapDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.LineDataPoint;
@@ -103,14 +104,14 @@ public class CircosController {
         
         if(new File(path+"annotation/ITAG2.4_gene_modelsDExpression.txt").exists()){
             //Create heat map
-            List<HistogramDataPoint> DEHeatMap = (List<HistogramDataPoint>) Deserialize(path+"annotation/ITAG2.4_gene_modelsDExpression.txt");
+            List<HeatMapDataPoint> DEHeatMap = (List<HeatMapDataPoint>) Deserialize(path+"annotation/ITAG2.4_gene_modelsDExpression.txt");
             HeatMap hMap = HeatMapWriter(DEHeatMap,-25,-65);
             circosOutput.setdEHeatMap(hMap);
         }
         
         if(new File(path+"annotation/ITAG2.4_gene_modelsExpression.txt").exists()){
             //Create heat map
-            List<HistogramDataPoint> DEHeatMap = (List<HistogramDataPoint>) Deserialize(path+"annotation/ITAG2.4_gene_modelsExpression.txt");
+            List<HeatMapDataPoint> DEHeatMap = (List<HeatMapDataPoint>) Deserialize(path+"annotation/ITAG2.4_gene_modelsExpression.txt");
             HeatMap ehMap = HeatMapWriter(DEHeatMap,-45 ,-85);
             circosOutput.setGeneExpressionHeatMap(ehMap);
         }

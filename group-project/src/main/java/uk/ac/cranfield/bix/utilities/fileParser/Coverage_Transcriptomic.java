@@ -63,7 +63,7 @@ public class Coverage_Transcriptomic {
         return list;
     }
      
-     
+     //Find overlapping regions between bed file and chromosome from vcf file
      public static ArrayList<Object[]> CoverageParser(List<List<String[]>> list , String CoveragePath){
          //Karyotype is all entries in gff file that have mrna as type
          //Iterator It = Karyotype.iterator();
@@ -115,8 +115,8 @@ public class Coverage_Transcriptomic {
         return Coverage;
       
      }
+     
       //need to add to bins
-     //Need path of the bedfile 
      public static ArrayList<Object[]> SortToBinsTranscriptomics(List<List<String[]>> li, ArrayList<Object[]> Coverage){
          
         List<List<Object[]>> lists = new ArrayList<>();
