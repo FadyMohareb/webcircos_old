@@ -33,13 +33,13 @@ public class Project {
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
-    private Set<File> files;
+    private Set<FileInput> files;
 
-    public Set<File> getFiles() {
+    public Set<FileInput> getFiles() {
         return files;
     }
 
-    public void setFiles(Set<File> files) {
+    public void setFiles(Set<FileInput> files) {
         this.files = files;
     }
 

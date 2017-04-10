@@ -5,7 +5,14 @@
  */
 package uk.ac.cranfield.bix.controllers.rest;
 
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.BackgroundDisplay;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.DisplayText;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.IndGff;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.Snp;
 import java.util.List;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.HeatMap;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.Line;
 
 /**
  * This class will contain all the object to draw a circos 
@@ -24,6 +31,14 @@ public class CircosOutput {
     private BackgroundDisplay background;
     
     private IndGff arc;
+    
+    private Line genomicCoverage;
+    
+    private Line transcriptomicCoverage;
+    
+    private HeatMap dEHeatMap;
+    
+    private HeatMap geneExpressionHeatMap;
 
     public List<Object[]> getGenomes() {
         return genomes;
@@ -72,5 +87,37 @@ public class CircosOutput {
     public void setArc(IndGff arc) {
         this.arc = arc;
     }
-  
+
+    public Line getGenomicCoverage() {
+        return genomicCoverage;
+    }
+
+    public void setGenomicCoverage(Line genomicCoverage) {
+        this.genomicCoverage = genomicCoverage;
+    }
+
+    public Line getTranscriptomicCoverage() {
+        return transcriptomicCoverage;
+    }
+
+    public void setTranscriptomicCoverage(Line transcriptomicCoverage) {
+        this.transcriptomicCoverage = transcriptomicCoverage;
+    }
+
+    public HeatMap getdEHeatMap() {
+        return dEHeatMap;
+    }
+
+    public void setdEHeatMap(HeatMap dEHeatMap) {
+        this.dEHeatMap = dEHeatMap;
+    }
+
+    public HeatMap getGeneExpressionHeatMap() {
+        return geneExpressionHeatMap;
+    }
+
+    public void setGeneExpressionHeatMap(HeatMap geneExpressionHeatMap) {
+        this.geneExpressionHeatMap = geneExpressionHeatMap;
+    }
+     
 }

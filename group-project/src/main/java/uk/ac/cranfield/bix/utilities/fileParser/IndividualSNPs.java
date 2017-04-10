@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import uk.ac.cranfield.bix.controllers.rest.Histogram;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.HistogramProperties;
 
@@ -56,10 +56,10 @@ public class IndividualSNPs {
        
         for (int i = 0; i < IndvHistList.size(); i++) {
             if (IndvHistList.get(i)[1].equalsIgnoreCase("0")) {
-                HistogramDataPoint histPoint = new HistogramDataPoint(IndvHistList.get(i)[0],1,Integer.parseInt(IndvHistList.get(i)[1]) + interval,Chr.get(j),Double.parseDouble(IndvHistList.get(i)[3]));
+                HistogramDataPoint histPoint = new HistogramDataPoint(IndvHistList.get(i)[0],1,Integer.parseInt(IndvHistList.get(i)[1]) + interval,Chr.get(j),Double.parseDouble(IndvHistList.get(i)[3]),IndvHistList.get(i)[2]);
                 IndvHistdata.add(histPoint);
             } else {
-                HistogramDataPoint histPoint = new HistogramDataPoint(IndvHistList.get(i)[0],Integer.parseInt(IndvHistList.get(i)[1]) + 4,Integer.parseInt(IndvHistList.get(i)[1]) + interval,Chr.get(j),Double.parseDouble(IndvHistList.get(i)[3]));
+                HistogramDataPoint histPoint = new HistogramDataPoint(IndvHistList.get(i)[0],Integer.parseInt(IndvHistList.get(i)[1]) + 4,Integer.parseInt(IndvHistList.get(i)[1]) + interval,Chr.get(j),Double.parseDouble(IndvHistList.get(i)[3]),IndvHistList.get(i)[2]);
                 IndvHistdata.add(histPoint);
             }
         }

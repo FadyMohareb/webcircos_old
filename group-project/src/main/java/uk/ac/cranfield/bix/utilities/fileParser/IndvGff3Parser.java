@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import uk.ac.cranfield.bix.controllers.rest.GffDataPoint;
-import uk.ac.cranfield.bix.controllers.rest.IndGff;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.IndGff;
 import uk.ac.cranfield.bix.controllers.rest.IndGffProperties;
 
 /**
@@ -47,13 +47,15 @@ public class IndvGff3Parser {
     public List<GffDataPoint> IndvGffDataPoints(ArrayList<String[]> IndvKaryotype) {
 
         List<GffDataPoint> IndvGff3Data = new ArrayList();
+        
 
         for (int i = 0; i < IndvKaryotype.size(); i++) {
+            String geneName = IndvKaryotype.get(i)[8].split(";")[2].split("=")[1];
             if (IndvKaryotype.size() % 2 == 0) {
-                GffDataPoint ggfPoint = new GffDataPoint(IndvKaryotype.get(i)[0], Integer.parseInt(IndvKaryotype.get(i)[3]), Integer.parseInt(IndvKaryotype.get(i)[4]), "rgb(240,231,36)");
+                GffDataPoint ggfPoint = new GffDataPoint(IndvKaryotype.get(i)[0], Integer.parseInt(IndvKaryotype.get(i)[3]), Integer.parseInt(IndvKaryotype.get(i)[4]), "rgb(240,231,36)",geneName);
                 IndvGff3Data.add(ggfPoint);
             } else {
-                GffDataPoint ggfPoint = new GffDataPoint(IndvKaryotype.get(i)[0], Integer.parseInt(IndvKaryotype.get(i)[3]), Integer.parseInt(IndvKaryotype.get(i)[4]), "rgb(0,0,0)");
+                GffDataPoint ggfPoint = new GffDataPoint(IndvKaryotype.get(i)[0], Integer.parseInt(IndvKaryotype.get(i)[3]), Integer.parseInt(IndvKaryotype.get(i)[4]), "rgb(0,0,0)",geneName);
                 IndvGff3Data.add(ggfPoint);
             }
         }

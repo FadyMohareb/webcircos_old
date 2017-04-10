@@ -10,16 +10,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import uk.ac.cranfield.bix.controllers.rest.DataPoint;
-import uk.ac.cranfield.bix.controllers.rest.Histogram;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.HistogramProperties;
 
@@ -33,104 +30,89 @@ public class VCFParsers {
     /**
      *
      * @param filepath
+     * @param filename
+     * @return
      */
-    public void VcfToolsSNPS(String filepath, String filename) {
+    public static String VcfToolsSNPS(String filepath) throws InterruptedException, IOException {
         //Run VCFtools to output an SNP only VCF file, with the filename + SNPsONly as title
         //cmdArray, each string is an argument
-        String[] cmdArray = new String[6];
-        cmdArray[0] = "C:\\Windows\\System32\\bash.exe";
-        cmdArray[1] = "vcftools";
-        cmdArray[2] = "--vcf " + filepath; //file extension, reads "--vcf" etc //filepath and path "path/to/example.vcf"
-        cmdArray[3] = "--out " + filename + "SNPsOnly";
-        cmdArray[4] = "--remove-indels";
-        cmdArray[5] = "--recode";
-        try {
-            //process builder runs the cmd Array
-            ProcessBuilder probuilder = new ProcessBuilder(cmdArray);
+        File VCF = new File(filepath);
+        String filename = VCF.getName();
 
-            Process process = probuilder.start();
-            //Process process = Runtime.getRuntime().exec(cmdArray);
-        } catch (IOException ex) {
+        //need the file directory. Can take the absolute path and then remove the file name
+        int index = filepath.lastIndexOf("/");
+        String pathWithoutName = filepath.substring(0, index + 1);
+
+        String path = pathWithoutName + filename;
+
+        String line = "/usr/local/bin/vcftools --vcf " + filepath + " --out " + path + " --remove-indels --recode";
+ 
+        String s;
+        Process p;
+                try {
+            p = Runtime.getRuntime().exec(line);
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while((s = br.readLine()) != null)
+                System.out.println("line: " +s);
+            p.waitFor();
+            System.out.println("exit:" + p.exitValue());
+            p.destroy();
+            
+            
+            
+        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        return path;
     }
 
 //run VCF tools to get a SNP density per N bases, lat line of CMD array sets this
-    public void VcfToolsSNPDensity(ArrayList<Integer> seq, Integer i, String SnpDenseFilepath, String SNPfilename) {
+    //The file is the output from above method.
+    public static String VcfToolsSNPDensity(String SnpDenseFilepath) throws InterruptedException {
         //each string is an argument
-        String[] cmdArray = new String[8];
-        cmdArray[0] = "C:\\Windows\\System32\\bash.exe";
-        cmdArray[1] = "vcftools";
-        cmdArray[2] = "--vcf " + SnpDenseFilepath; //file extension, reads "--vcf" etc //filepath and path "path/to/example.vcf"
-        cmdArray[3] = "--out " + SNPfilename + "SNPsOnly" + i;
-        cmdArray[4] = "--chr ";
-        cmdArray[5] = i.toString();
-        cmdArray[6] = "--SNPdensity ";
-        cmdArray[7] = Integer.toString(seq.get(i) / 10);
-        try {
-            ProcessBuilder probuilder = new ProcessBuilder(cmdArray);
+        String[] cmdArray = new String[2];
 
-            Process process = probuilder.start();
-            //Process process = Runtime.getRuntime().exec(cmdArray);
-        } catch (IOException ex) {
-            Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+        File SNPdense = new File(SnpDenseFilepath);
 
-    public String getHistSNPDense(String SnpDenseFilepath, String SNPfilename) {
-        //This is just to get the SNP density file, can be replaced with the drag and drop filepath
-        JFileChooser chooser = new JFileChooser();
-        chooser.addChoosableFileFilter(new FileNameExtensionFilter("VCF Files", "vcf"));
-        chooser.showOpenDialog(chooser);
-        chooser.setVisible(true);
-        File SNPdense = chooser.getSelectedFile();
-        SnpDenseFilepath = SNPdense.getAbsolutePath();
-        SNPfilename = SNPdense.getName();
+        //get the file name
+        String SNPfilename = SNPdense.getName();
         if (SNPfilename.indexOf(".") > 0) {
             SNPfilename = SNPfilename.substring(0, SNPfilename.lastIndexOf("."));
         }
-        System.out.println(SnpDenseFilepath);
-        System.out.println("Density file: " + SNPfilename);
-        return SnpDenseFilepath;
-    }
 
-    public List<DataPoint> HtmlDataPoints(ArrayList<String[]> list) {
-        //Creates string that contains all the data points in correct fromat for SNP module in BioCircos
-        //However it turns out that there is way too many to display, literally cuases a stack overflow
-        List<DataPoint> Data = new ArrayList();
-        for (int i = 0; i < list.size(); i++) {
-            DataPoint point = new DataPoint(list.get(i)[0].substring(list.get(i)[0].length() - 2, list.get(i)[0].length()), Integer.parseInt(list.get(i)[1]), Integer.parseInt(list.get(i)[5]), list.get(i)[4], "rgb(153,102,0)");
-            Data.add(point);
-        }
-        return Data;
-    }
+        //need the file directory. Can take the absolute path and then remove the file name
+        int index = SnpDenseFilepath.lastIndexOf("/");
+        String pathWithoutName = SnpDenseFilepath.substring(0, index + 1);
 
-    public ArrayList<String[]> VCFparser(String filepath) {
+        String path = pathWithoutName + SNPfilename + "SNPsOnly";
+        System.out.println("inside SNP density function " + path);
+
+
+        String line = "/usr/local/bin/vcftools --vcf " + SnpDenseFilepath +" --out " + path +" --SNPdensity 1000000";
+        System.out.println("command "+ line);
+
+         String s;
+         Process runtime;
         try {
-            //Reads the VCF file,  splits by tab, adds each Line as a list containg each column entry
-            BufferedReader br = new BufferedReader(new FileReader(filepath));
-            String line;
-            ArrayList<String[]> list = new ArrayList();
-            try {
-                while ((line = br.readLine()) != null) {
-
-                    if (line.charAt(0) != '#') {
-                        list.add(line.split("\\t"));
-                    }
-                }
-
-            } catch (IOException ex) {
-                Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return list;
-        } catch (FileNotFoundException ex) {
+           
+            runtime = Runtime.getRuntime().exec(line);
+            BufferedReader br = new BufferedReader(new InputStreamReader(runtime.getInputStream()));
+            while((s = br.readLine()) != null)
+                System.out.println("line: " +s);
+            runtime.waitFor();
+            System.out.println("exit:" + runtime.exitValue());
+            runtime.destroy();
+            
+        } catch (IOException ex) {
             Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
         }
+
+        return path + ".snpden";
     }
 
-    public ArrayList<String[]> VCFHistParser(String SnpDenseFilepath) throws FileNotFoundException {
-        BufferedReader br = new BufferedReader(new FileReader(SnpDenseFilepath));
+    public static ArrayList<String[]> VCFHistParser(String SnpDenseFilepath) throws FileNotFoundException {
+        BufferedReader br = new BufferedReader(new FileReader(new File(SnpDenseFilepath)));
         ArrayList<String[]> HistList = new ArrayList();
         //Reads VCF file line by line, adds relevant lines as lists of column elements
         //ArrayList to store MetaData Stores Meta Data
@@ -155,17 +137,18 @@ public class VCFParsers {
         //Once you have it invoke -> HistWriter
     }
 
-    public List<HistogramDataPoint> HistogramData(ArrayList<String[]> HistList, String filename, Integer bean) throws IOException {
+    public static List<HistogramDataPoint> HistogramData(ArrayList<String[]> HistList) throws IOException {
         //Interval is the width of the bin for the histogram
-        Integer interval = bean;
+        Integer interval = 1000000;
         //HistData is string that contains the data in the correct format for the Histogram module of BioCircos
         List<HistogramDataPoint> HistData = new ArrayList();
         for (int i = 0; i < HistList.size(); i++) {
+            //take the HistList.get(i)[2] and add it at the end to have the SNP count. 
             if (HistList.get(i)[1].equalsIgnoreCase("0")) {
-                HistogramDataPoint histPoint = new HistogramDataPoint(HistList.get(i)[0], 1, Integer.parseInt(HistList.get(i)[1]) + interval, "Hist", Double.parseDouble(HistList.get(i)[3]));
+                HistogramDataPoint histPoint = new HistogramDataPoint(HistList.get(i)[0], 1, Integer.parseInt(HistList.get(i)[1]) + interval, "Hist", Double.parseDouble(HistList.get(i)[3]),HistList.get(i)[2]);
                 HistData.add(histPoint);
             } else {
-                HistogramDataPoint histPoint = new HistogramDataPoint(HistList.get(i)[0], Integer.parseInt(HistList.get(i)[1]) + 4, Integer.parseInt(HistList.get(i)[1]) + interval, "Hist", Double.parseDouble(HistList.get(i)[3]));
+                HistogramDataPoint histPoint = new HistogramDataPoint(HistList.get(i)[0], Integer.parseInt(HistList.get(i)[1]) + 4, Integer.parseInt(HistList.get(i)[1]) + interval, "Hist", Double.parseDouble(HistList.get(i)[3]),HistList.get(i)[2]);
                 HistData.add(histPoint);
             }
 
@@ -181,8 +164,8 @@ public class VCFParsers {
         //create historgram properties object
         HistogramProperties histProperties = new HistogramProperties();
         histProperties.setHistogramFillColor("#FF6666");
-        histProperties.setMaxRadius(220);
-        histProperties.setMinRadius(185);
+        histProperties.setMaxRadius(100);
+        histProperties.setMinRadius(75);
 
         //set values of the object
         hist.setHistId("HISTOGRAM01");

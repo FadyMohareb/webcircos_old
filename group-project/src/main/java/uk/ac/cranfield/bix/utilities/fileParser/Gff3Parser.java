@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import uk.ac.cranfield.bix.controllers.rest.GffDataPoint;
-import uk.ac.cranfield.bix.controllers.rest.IndGff;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.IndGff;
 import uk.ac.cranfield.bix.controllers.rest.IndGffProperties;
 
 /**
@@ -22,8 +22,13 @@ import uk.ac.cranfield.bix.controllers.rest.IndGffProperties;
  */
 public class Gff3Parser {
 
-    public ArrayList<String[]> GffParser(String Gff3filepath) {
-        ArrayList<String[]> Karyotype = new ArrayList();
+    /**
+     *
+     * @param Gff3filepath
+     * @return
+     */
+    public static List<String[]> GffParser(String Gff3filepath) {
+        List<String[]> Karyotype = new ArrayList();
         try (BufferedReader br = new BufferedReader(new FileReader(Gff3filepath))) {
             String line;
 
@@ -40,17 +45,18 @@ public class Gff3Parser {
         return Karyotype;
     }
 
-    public List<GffDataPoint> GffDataPoints(ArrayList<String[]> Karyotype) {
+    public static List<GffDataPoint> GffDataPoints(List<String[]> Karyotype) {
 
         List<GffDataPoint> Gff3Data = new ArrayList();
         for (int i = 0; i < Karyotype.size(); i++) {
-
+            
+            String geneName = Karyotype.get(i)[8].split(";")[2].split("=")[1];
             if (Karyotype.size() % 2 == 0) {
-                GffDataPoint ggfPoint = new GffDataPoint(Karyotype.get(i)[0], Integer.parseInt(Karyotype.get(i)[3]), Integer.parseInt(Karyotype.get(i)[4]), "rgb(255,255,255)");
+                GffDataPoint ggfPoint = new GffDataPoint(Karyotype.get(i)[0], Integer.parseInt(Karyotype.get(i)[3]), Integer.parseInt(Karyotype.get(i)[4]), "rgb(255,255,255)",geneName);
                 Gff3Data.add(ggfPoint);
                 Karyotype.remove(0);
             } else {
-                GffDataPoint ggfPoint = new GffDataPoint(Karyotype.get(i)[0], Integer.parseInt(Karyotype.get(i)[3]), Integer.parseInt(Karyotype.get(i)[4]), "rgb(0,0,0)");
+                GffDataPoint ggfPoint = new GffDataPoint(Karyotype.get(i)[0], Integer.parseInt(Karyotype.get(i)[3]), Integer.parseInt(Karyotype.get(i)[4]), "rgb(0,0,0)", geneName);
                 Gff3Data.add(ggfPoint);
                 Karyotype.remove(0);
             }
@@ -64,8 +70,8 @@ public class Gff3Parser {
         IndGff gff = new IndGff();
         
         IndGffProperties properties = new IndGffProperties();
-        properties.setInnerRadius(-100);
-        properties.setOuterRadius(-100);
+        properties.setInnerRadius(-10);
+        properties.setOuterRadius(-40);
 
         gff.setIndGffid("ARC_01");
         gff.setProperties(properties);
