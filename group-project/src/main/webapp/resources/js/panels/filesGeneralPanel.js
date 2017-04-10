@@ -4,10 +4,11 @@ var converter = new Showdown.converter();
 
 var FilesDropdownSequence = React.createClass({displayName: "FilesDropdownSequence",
     getInitialState: function getInitialState() {
-        return {activeFileSequence: this.props.filesList[0]}
+        return {activeFileSequence: this.props.filesList[0]};
     },
-    componentWillReceiveProps: function(newProperties) {
-      this.setState({ activeFileSequence: newProperties.filesList[0] });
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFileSequence = newProperties.filesList[0];
+        $('#sequenceBtn').children().first().text(this.state.activeFileSequence + ' ');
     },
     renderFilesBlockSequence: function renderBlockSequence(filesList, parent) {
 
@@ -20,22 +21,20 @@ var FilesDropdownSequence = React.createClass({displayName: "FilesDropdownSequen
                 parent.state.activeFileSequence = event.target.id;
                 $('#sequenceBtn').children().first().text(parent.state.activeFileSequence + ' ');
 
-            };
+            }
+            ;
 
             return (React.createElement("li", {onClick: handleFileChangeSequence, id: fileName}, fileName));
         })
     },
     render: function () {
-        var btnId = this.props.fileType + 'Btn';
-        console.log('Render state: ' + this.state.activeFileSequence);
-
         return React.createElement('div', {className: 'btn-group'},
                 React.createElement('button', {className: 'btn btn-default dropdown-toggle',
-                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: btnId},
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'sequenceBtn'},
                         this.state.activeFileSequence + ' ',
                         React.createElement('span', {className: 'caret'})),
                 React.createElement('ul', {className: 'dropdown-menu'},
-                        this.renderFilesBlockSequence(this.props.filesList, this))
+                        this.renderFilesBlockSequence(this.props.filesList, this))  
                 )
     }
 
@@ -43,12 +42,13 @@ var FilesDropdownSequence = React.createClass({displayName: "FilesDropdownSequen
 
 });
 
-var FilesDropdownAlignment = React.createClass({displayName: "FilesDropdownAlignment",
-    getInitialState: function(){
-        return {activeFileAlignment: this.props.filesList[0]};
+var FilesDropdownGenCoverage = React.createClass({displayName: "FilesDropdownGenCoverage",
+    getInitialState: function () {
+        return {activeFileGenCoverage: this.props.filesList[0]};
     },
-    componentWillReceiveProps: function(newProperties) {
-      this.setState({ activeFileAlignment: newProperties.filesList[0] });
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFileGenCoverage = newProperties.filesList[0];
+        $('#genCoverageBtn').children().first().text(this.state.activeFileGenCoverage + ' ');
     },
     renderFilesBlock: function renderBlock(filesList, parent) {
 
@@ -57,21 +57,20 @@ var FilesDropdownAlignment = React.createClass({displayName: "FilesDropdownAlign
             handleFileChange: function handleFileChange(event) {
 
                 event.preventDefault();
-                parent.setState({activeFileAlignment: event.target.id});
-                $('#alignmentBtn').children().first().text(parent.state.activeFileAlignment);
+                parent.setState({activeFileGenCoverage: event.target.id});
+                $('#genCoverageBtn').children().first().text(parent.state.activeFileGenCoverage);
 
-            };
+            }
+            ;
 
             return (React.createElement("li", {onClick: handleFileChange, id: fileName}, fileName));
         })
     },
     render: function () {
-        var btnId = this.props.fileType + 'Btn';
-
         return React.createElement('div', {className: 'btn-group'},
                 React.createElement('button', {className: 'btn btn-default dropdown-toggle',
-                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: btnId},
-                        this.state.activeFileAlignment + ' ',
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'genCoverageBtn'},
+                        this.state.activeFileGenCoverage + ' ',
                         React.createElement('span', {className: 'caret'})),
                 React.createElement('ul', {className: 'dropdown-menu'},
                         this.renderFilesBlock(this.props.filesList, this))
@@ -82,22 +81,23 @@ var FilesDropdownAlignment = React.createClass({displayName: "FilesDropdownAlign
 });
 
 var FilesDropdownVariants = React.createClass({displayName: "FilesDropdownVariants",
-    getInitialState: function(){
+    getInitialState: function () {
         return {activeFileVariants: this.props.filesList[0]};
     },
-    componentWillReceiveProps: function(newProperties) {
-      this.setState({ activeFileVariants: newProperties.filesList[0] });
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFileVariants = newProperties.filesList[0];
+        $('#variantsBtn').children().first().text(this.state.activeFileVariants + ' ');
     },
     renderFilesBlockVariants: function renderBlockVariants(filesList, parent) {
 
         return filesList.map(function (fileName)
         {
-            
+
             handleFileChangeVariants: function handleFileChangeVariants(eventVariants) {
 
                 event.preventDefault();
                 parent.state.activeFileVariants = eventVariants.target.id;
-                
+
                 $('#variantsBtn').children().first().text(parent.state.activeFileVariants + ' ');
 
             }
@@ -107,11 +107,9 @@ var FilesDropdownVariants = React.createClass({displayName: "FilesDropdownVarian
         })
     },
     render: function () {
-        var btnId = this.props.fileType + 'Btn';
-
         return React.createElement('div', {className: 'btn-group'},
                 React.createElement('button', {className: 'btn btn-default dropdown-toggle',
-                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: btnId},
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'variantsBtn'},
                         this.state.activeFileVariants + ' ',
                         React.createElement('span', {className: 'caret'})),
                 React.createElement('ul', {className: 'dropdown-menu'},
@@ -124,14 +122,15 @@ var FilesDropdownVariants = React.createClass({displayName: "FilesDropdownVarian
 });
 
 var FilesDropdownAnnotation = React.createClass({displayName: "FilesDropdownAnnotation",
-    getInitialState: function(){
+    getInitialState: function () {
         return {activeFileAnnotation: this.props.filesList[0]};
     },
-    componentWillReceiveProps: function(newProperties) {
-      this.setState({ activeFileAnnotation: newProperties.filesList[0] });
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFileAnnotation = newProperties.filesList[0];
+        $('#annotationBtn').children().first().text(this.state.activeFileAnnotation + ' ');
     },
-    renderFilesBlock: function renderFilesBlock(filesList, parent){
-      
+    renderFilesBlock: function renderFilesBlock(filesList, parent) {
+
         return filesList.map(function (fileName)
         {
             handleFileChange: function handleFileChange(event) {
@@ -147,11 +146,9 @@ var FilesDropdownAnnotation = React.createClass({displayName: "FilesDropdownAnno
         })
     },
     render: function () {
-        var btnId = this.props.fileType + 'Btn';
-
         return React.createElement('div', {className: 'btn-group'},
                 React.createElement('button', {className: 'btn btn-default dropdown-toggle',
-                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: btnId},
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'annotationBtn'},
                         this.state.activeFileAnnotation + ' ',
                         React.createElement('span', {className: 'caret'})),
                 React.createElement('ul', {className: 'dropdown-menu'},
@@ -163,12 +160,51 @@ var FilesDropdownAnnotation = React.createClass({displayName: "FilesDropdownAnno
 
 });
 
+var FilesDropdownTransCoverage = React.createClass({displayName: "FilesDropdownTransCoverage",
+    getInitialState: function () {
+        return {activeFileTransCoverage: this.props.filesList[0]};
+    },
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFileTransCoverage =  newProperties.filesList[0];
+        $('#transCoverageBtn').children().first().text(this.state.activeFileTransCoverage);
+    },
+    renderFilesBlock: function renderBlock(filesList, parent) {
+
+        return filesList.map(function (fileName)
+        {
+            handleFileChange: function handleFileChange(event) {
+
+                event.preventDefault();
+                parent.setState({activeFileTransCoverage: event.target.id});
+                $('#transCoverageBtn').children().first().text(parent.state.activeFileTransCoverage);
+
+            }
+            ;
+
+            return (React.createElement("li", {onClick: handleFileChange, id: fileName}, fileName));
+        })
+    },
+    render: function () {
+        return React.createElement('div', {className: 'btn-group'},
+                React.createElement('button', {className: 'btn btn-default dropdown-toggle',
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'transCoverageBtn'},
+                        this.state.activeFileTransCoverage + ' ',
+                        React.createElement('span', {className: 'caret'})),
+                React.createElement('ul', {className: 'dropdown-menu'},
+                        this.renderFilesBlock(this.props.filesList, this))
+                )
+    }
+
+
+});
+
 var FilesDropdownExpression = React.createClass({displayName: "FilesDropdownExpression",
-    getInitialState: function(){
+    getInitialState: function () {
         return {activeFileExpression: this.props.filesList[0]};
     },
-    componentWillReceiveProps: function(newProperties) {
-      this.setState({ activeFileExpression: newProperties.filesList[0] });
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFileExpression = newProperties.filesList[0];
+        $('#expressionBtn').children().first().text(this.state.activeFileExpression + ' ');
     },
     renderFilesBlock: function renderBlock(filesList, parent) {
 
@@ -188,11 +224,9 @@ var FilesDropdownExpression = React.createClass({displayName: "FilesDropdownExpr
         })
     },
     render: function () {
-        var btnId = this.props.fileType + 'Btn';
-
         return React.createElement('div', {className: 'btn-group'},
                 React.createElement('button', {className: 'btn btn-default dropdown-toggle',
-                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: btnId},
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'expressionBtn'},
                         this.state.activeFileExpression + ' ',
                         React.createElement('span', {className: 'caret'})),
                 React.createElement('ul', {className: 'dropdown-menu'},
@@ -205,11 +239,12 @@ var FilesDropdownExpression = React.createClass({displayName: "FilesDropdownExpr
 });
 
 var FilesDropdownDifExpression = React.createClass({displayName: "FilesDropdownDifExpression",
-    getInitialState: function(){
+    getInitialState: function () {
         return {activeFileDifExpression: this.props.filesList[0]};
     },
-    componentWillReceiveProps: function(newProperties) {
-      this.setState({ activeFileDifExpression: newProperties.filesList[0] });
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFileDifExpression = newProperties.filesList[0];
+        $('#difExpressionBtn').children().first().text(parent.state.activeFileDifExpression + ' ');
     },
     renderFilesBlock: function renderBlock(filesList, parent) {
 
@@ -229,11 +264,9 @@ var FilesDropdownDifExpression = React.createClass({displayName: "FilesDropdownD
         })
     },
     render: function () {
-        var btnId = this.props.fileType + 'Btn';
-
         return React.createElement('div', {className: 'btn-group'},
                 React.createElement('button', {className: 'btn btn-default dropdown-toggle',
-                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: btnId},
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'difExpressionBtn'},
                         this.state.activeFileDifExpression + ' ',
                         React.createElement('span', {className: 'caret'})),
                 React.createElement('ul', {className: 'dropdown-menu'},
@@ -244,8 +277,6 @@ var FilesDropdownDifExpression = React.createClass({displayName: "FilesDropdownD
 
 
 });
-
-
 
 var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
     getInitialState: function getInitialState() {
@@ -283,58 +314,66 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                         var filesSplited = filesList.split(",");
                         var n = filesSplited.length;
                         var list = [];
+                        list[0] = '---';
                         for (var i = 0; i < n; i++)
                         {
-                            list[i] = filesSplited[i];
+                            list[i+1] = filesSplited[i];
                         }
                     } else
                     {
                         var filesSplited = filesList.split("\t");
                         var list = [];
+                        list[0] = '---';
                         for (var i = 0; i < filesSplited.length; i++)
                         {
                             if (filesSplited[i] !== "")
                             {
                                 var filesSplited2 = filesSplited[i].split("/");
                                 var fileName = filesSplited2[filesSplited2.length - 1];
-                                list[i] = fileName;
+                                list[i+1] = fileName;
                             }
                         }
 
 
                     }
 
-                    if (list.length > 0){
+                    if (list.length > 0) {
                         if (type === "sequence")
                             return React.render(React.createElement('div', {className: 'container'},
                                     React.createElement(FilesDropdownSequence, {filesList: list, fileType: type})),
-                                    document.getElementById(type));
-
-                        if (type === "alignment")
-                            return React.render(React.createElement('div', {className: 'container'},
-                                    React.createElement(FilesDropdownAlignment, {filesList: list, fileType: type})),
-                                    document.getElementById(type));
+                                    document.getElementById('sequence'));
 
                         if (type === "variants")
-                            return React.render(React.createElement('div', {className: 'container'},
-                                    React.createElement(FilesDropdownVariants, {filesList: list, fileType: type})),
-                                    document.getElementById(type));
+                            return (React.createElement('div', null,
+                                    React.render(React.createElement('div', {className: 'container'},
+                                            React.createElement(FilesDropdownGenCoverage, {filesList: list, fileType: type})),
+                                            document.getElementById('genCoverage')),
+                                    React.render(React.createElement('div', {className: 'container'},
+                                            React.createElement(FilesDropdownVariants, {filesList: list, fileType: type})),
+                                            document.getElementById('variants'))));
 
-                        if (type === "annotation")
+                        if (type === "bedcov")
                             return React.render(React.createElement('div', {className: 'container'},
-                                    React.createElement(FilesDropdownAnnotation, {filesList: list, fileType: type})),
-                                    document.getElementById(type));
+                                    React.createElement(FilesDropdownTransCoverage, {filesList: list, fileType: type})),
+                                    document.getElementById('transCoverage'));
 
                         if (type === "expression")
                             return React.render(React.createElement('div', {className: 'container'},
                                     React.createElement(FilesDropdownExpression, {filesList: list, fileType: type})),
-                                    document.getElementById(type));      
+                                    document.getElementById('expression'));
 
                         if (type === "difExpression")
                             return React.render(React.createElement('div', {className: 'container'},
                                     React.createElement(FilesDropdownDifExpression, {filesList: list, fileType: type})),
-                                    document.getElementById(type)); 
-                }}
+                                    document.getElementById('difExpression'));
+
+                        if (type === "annotation")
+                            return React.render(React.createElement('div', {className: 'container'},
+                                    React.createElement(FilesDropdownAnnotation, {filesList: list, fileType: type})),
+                                    document.getElementById('annotation'));
+
+                    }
+                }
             },
             error: function (status, err) {
                 console.log("Panel not refreshed");
@@ -347,17 +386,16 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 React.createElement('div', {className: 'container', id: 'sequence'},
                         React.createElement(this.contentUpdateProject, {panelType: "sequence"})),
                 React.createElement('br'),
-                React.createElement('label', {for : 'alignmentBtn'}, 'Coverage depth: '),
-                React.createElement('div', {className: 'container', id: 'alignment'},
-                        React.createElement(this.contentUpdateProject, {panelType: "alignment"})),
-                React.createElement('br'),
-                React.createElement('label', {for : 'variantsBtn'}, 'SNP density: '),
-                React.createElement('div', {className: 'container', id: 'variants'},
+                React.createElement('label', {for : 'genCoverageBtn'}, 'Genomic coverage: '),
+                React.createElement('div', {className: 'container', id: 'genCoverage'},
                         React.createElement(this.contentUpdateProject, {panelType: "variants"})),
                 React.createElement('br'),
-                React.createElement('label', {for : 'annotationBtn'}, 'Annotation: '),
-                React.createElement('div', {className: 'container', id: 'annotation'},
-                        React.createElement(this.contentUpdateProject, {panelType: "annotation"})),
+                React.createElement('label', {for : 'variantsBtn'}, 'SNP density: '),
+                React.createElement('div', {className: 'container', id: 'variants'}),
+                React.createElement('br'),
+                React.createElement('label', {for : 'transCoverageBtn'}, 'Transcriptiomic coverage: '),
+                React.createElement('div', {className: 'container', id: 'transCoverage'},
+                        React.createElement(this.contentUpdateProject, {panelType: "bedcov"})),
                 React.createElement('br'),
                 React.createElement('label', {for : 'expressionBtn'}, 'Genes expression: '),
                 React.createElement('div', {className: 'container', id: 'expression'},
@@ -365,7 +403,11 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 React.createElement('br'),
                 React.createElement('label', {for : 'difExpressionBtn'}, 'Differential expression: '),
                 React.createElement('div', {className: 'container', id: 'difExpression'},
-                        React.createElement(this.contentUpdateProject, {panelType: "difExpression"})))
+                        React.createElement(this.contentUpdateProject, {panelType: "difExpression"})),
+                React.createElement('br'),
+                React.createElement('label', {for : 'annotationBtn'}, 'Annotation: '),
+                React.createElement('div', {className: 'container', id: 'annotation'},
+                        React.createElement(this.contentUpdateProject, {panelType: "annotation"})))
                 );
     }
 });

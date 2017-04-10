@@ -15,8 +15,12 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import uk.ac.cranfield.bix.controllers.rest.GffDataPoint;
+import uk.ac.cranfield.bix.controllers.rest.HeatMapDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
+import uk.ac.cranfield.bix.controllers.rest.LineDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
+import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.CoverageData;
+import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.CoverageDataTranscriptomics;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffDataPoints;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistogramData;
 
@@ -36,9 +40,9 @@ public class SerializeDeserialize {
             System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -53,9 +57,9 @@ public class SerializeDeserialize {
             System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -70,24 +74,68 @@ public class SerializeDeserialize {
             System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void SerializeVcfCoverageGenomics(ArrayList<Object[]> list, String filepath) {
+        try {
+            List<LineDataPoint> lineData = CoverageData(list);
+            try (FileOutputStream fileOut = new FileOutputStream(filepath); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+                out.writeObject(lineData);
+            }
+            System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void SerializeTranscriptomicCov(ArrayList<Object[]> list, String filepath) {
+        try {
+            List<LineDataPoint> linePoints = CoverageDataTranscriptomics(list);
+            try (FileOutputStream fileOut = new FileOutputStream(filepath); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+                out.writeObject(linePoints);
+            }
+            System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public static void SerializeExpression(List<HeatMapDataPoint> list, String filepath) {
+        try {
+            try (FileOutputStream fileOut = new FileOutputStream(filepath); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+                out.writeObject(list);
+            }
+            System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     public static Object Deserialize(String filename) throws ClassNotFoundException {
         try {
-            FileInputStream fileIn = new FileInputStream(new File (filename));
+            FileInputStream fileIn = new FileInputStream(new File(filename));
             ObjectInputStream in = new ObjectInputStream(fileIn);
             Object readObject = in.readObject();
             in.close();
             fileIn.close();
             return readObject;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return null;
     }

@@ -18,13 +18,15 @@ public class HistogramDataPoint implements Serializable{
     private Integer end;
     private String name;
     private double value;
+    private String snpCount;
 
-    public HistogramDataPoint(String chr, Integer start, Integer end, String name, double value) {
+    public HistogramDataPoint(String chr, Integer start, Integer end, String name, double value, String snpCount) {
         this.chr = chr;
         this.start = start;
         this.end = end;
         this.name = name;
         this.value = value;
+        this.snpCount = snpCount;
     }
 
     public HistogramDataPoint() {
@@ -69,10 +71,19 @@ public class HistogramDataPoint implements Serializable{
     public void setValue(double value) {
         this.value = value;
     }
+
+    public String getSnpCount() {
+        return snpCount;
+    }
+
+    public void setSnpCount(String snpCount) {
+        this.snpCount = snpCount;
+    }
+    
     
     @Override
     public String toString(){
-        return "[" + chr +","+ start+ end + name + value +"]";
+        return "[" + chr +","+ start + end + name + value + snpCount +"]";
     }
     
 }
