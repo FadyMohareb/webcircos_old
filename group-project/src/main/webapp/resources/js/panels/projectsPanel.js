@@ -28,18 +28,6 @@ var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
                                 React.createElement('span', {className: 'caret'})),
                         React.createElement('ul', {className: 'dropdown-menu'},
                                 this.renderBlock(this.props.projectsList, this))
-//                                this.props.projectsList.map(function (projectName)
-//                                {
-//                                    handleProjectChange: function handleProjectChange(event) {
-//                                        event.preventDefault();
-//                                        $('#projectButton').children().first().text(projectName + ' ');
-//                                        React.render(React.createElement(FilesPanel, { projectName: event.target.id }), document.getElementById('filesContainer'));
-//                                    
-//                                    };
-//                                    
-//                                    return (React.createElement("li",{onClick: handleProjectChange, id: projectName}, projectName));
-//                                })
-//                        )
                 )
     }
 

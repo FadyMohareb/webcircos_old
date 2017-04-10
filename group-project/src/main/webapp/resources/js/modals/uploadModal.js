@@ -119,38 +119,6 @@ var UploadModal = React.createClass({className: "uploadModal",
                 console.error(status, err.toString());
             }});
         }
-//        {
-//            var newFile = {};
-//            newFile.fileType=fileType;
-//            newFile.filePath=filePath;
-//            newFile.fileName=file.name;
-//            console.log(file.name+" "+fileType);
-//            $.ajax({
-//            url: "/controller/upload",
-//            type: 'POST',
-//            dataType: 'json',
-//            contentType: "application/json; charset=utf-8",
-//            data: JSON.stringify(newFile),
-//            success: function (data) {
-//                if(data.errors === null)
-//                {
-//                    location = '/home';
-//                }else
-//                {
-//                    alert("Error with passing file");
-//                }
-//            },
-//            error: function (status, err) {
-//                console.log("File not sended");
-//                console.error(status, err.toString());
-//            }
-//        }); 
-//        }
-//        else
-//        {
-//            alert("File cannot be read");
-//        }
-
     },
     render: function () {
         this.isSequence = false;

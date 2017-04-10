@@ -101,10 +101,12 @@ public class UpdateFilesController {
         
 //            System.out.println("User is LOGGED");
                 path = new PathFinder().getEntireFilePathLogged();
+                newPath=(path+"/"+projectName);
+                
                 try {
                     Project project, project2;
                     //newPath with added FileType
-                    newPath=(path+"/"+projectName);
+                    
                     dir1 = new File(newPath);
                     if (!dir1.exists())
                     {

@@ -98,11 +98,10 @@ public class FileController {
             
 //            System.out.println("User is LOGGED");
             PathFinder pathFinder = new PathFinder();
-            path = pathFinder.getEntireFilePathLogged();
+            path = pathFinder.getEntireFilePathLogged() + '/' + projectName;
             try
             {
                 //newPath with added ProjectName
-                path=(path+"/"+projectName);
                 dir1_5 = new File(path);
                 if (!dir1_5.exists())
                     dir1_5.mkdir();

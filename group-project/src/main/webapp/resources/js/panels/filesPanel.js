@@ -19,7 +19,7 @@ var FilesPanel = React.createClass({displayName: "FilesPanel",
                 React.createElement('div', {className: "panel-body", id: 'filesTabsContainer'},
                         React.createElement(FilesTabsComponent, {projectName: this.props.projectName})),
                         
-                this.state.view.showUploadModal ? React.createElement(UploadModal, {handleHideUploadModal: this.handleHideUploadModal}) : null)
+                this.state.view.showUploadModal ? React.createElement(UploadModal, {handleHideUploadModal: this.handleHideUploadModal, projectName: this.props.projectName}) : null)
                 );
     }
 });
