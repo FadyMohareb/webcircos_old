@@ -23,7 +23,7 @@
         <script src="${contextPath}/resources/js/panels/filesPanel.js"></script>
         <script src="${contextPath}/resources/js/panels/projectsPanel.js"></script>
          <script src="${contextPath}/resources/js/tools/d3.js"></script>
-        <script src="${contextPath}/resources/js//tools/biocircos-1.1.1.js"></script> 
+        <script src="${contextPath}/resources/js//tools/biocircos-1.1.0.js"></script> 
         <script src="${contextPath}/resources/js/panels/circosPanel.js"></script>
         <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>

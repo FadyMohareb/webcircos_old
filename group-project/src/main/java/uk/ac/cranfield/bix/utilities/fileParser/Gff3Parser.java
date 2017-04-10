@@ -49,13 +49,14 @@ public class Gff3Parser {
 
         List<GffDataPoint> Gff3Data = new ArrayList();
         for (int i = 0; i < Karyotype.size(); i++) {
-
+            
+            String geneName = Karyotype.get(i)[8].split(";")[2].split("=")[1];
             if (Karyotype.size() % 2 == 0) {
-                GffDataPoint ggfPoint = new GffDataPoint(Karyotype.get(i)[0], Integer.parseInt(Karyotype.get(i)[3]), Integer.parseInt(Karyotype.get(i)[4]), "rgb(255,255,255)");
+                GffDataPoint ggfPoint = new GffDataPoint(Karyotype.get(i)[0], Integer.parseInt(Karyotype.get(i)[3]), Integer.parseInt(Karyotype.get(i)[4]), "rgb(255,255,255)",geneName);
                 Gff3Data.add(ggfPoint);
                 Karyotype.remove(0);
             } else {
-                GffDataPoint ggfPoint = new GffDataPoint(Karyotype.get(i)[0], Integer.parseInt(Karyotype.get(i)[3]), Integer.parseInt(Karyotype.get(i)[4]), "rgb(0,0,0)");
+                GffDataPoint ggfPoint = new GffDataPoint(Karyotype.get(i)[0], Integer.parseInt(Karyotype.get(i)[3]), Integer.parseInt(Karyotype.get(i)[4]), "rgb(0,0,0)", geneName);
                 Gff3Data.add(ggfPoint);
                 Karyotype.remove(0);
             }

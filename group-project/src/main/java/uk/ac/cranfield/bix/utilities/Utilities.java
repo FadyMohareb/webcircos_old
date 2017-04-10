@@ -100,25 +100,25 @@ public class Utilities {
                 SerializeSequence(fastaParser, fileWithoutExtension+".txt");
                 break;
             case "annotation":
-//                //Genes
-//                List<String[]> GffParser = GffParser(filePath);
-//                SerializeGff(GffParser, fileWithoutExtension+".txt");
-//                
-//                //Coverage
-//                List<List<String[]>> listTranscriptomicCoverage = GffParser2(filePath);
-//                ArrayList<Object[]> coverageData = CoverageParser(listTranscriptomicCoverage ,"/home/vmuser/Downloads/bedfiles/MT_Leaf12.bedcov" );
-//                ArrayList<Object[]> sortedBinsTCov = SortToBinsTranscriptomics(listTranscriptomicCoverage, coverageData);
-//                SerializeTranscriptomicCov(sortedBinsTCov, fileWithoutExtension+"transcriptomicCov.txt");
+                //Genes
+                List<String[]> GffParser = GffParser(filePath);
+                SerializeGff(GffParser, fileWithoutExtension+".txt");
                 
-                //Gene DE
-//                List<List<String[]>> genesAndMetadataForDExpr = GffParserExpression(filePath);
-//                ArrayList<String[]> ebseqData =  EbSeqParser("/home/vmuser/Downloads/GeneMat.results.sorted");
-//                ArrayList<String[]> sortedgff =  gffSorter(genesAndMetadataForDExpr);
-//                ArrayList<Object[]> data = EbseqData(genesAndMetadataForDExpr, sortedgff);
-//                List<HistogramDataPoint> dataToSerialize = DiffJavascriptWriter(ebseqData, data, "differential Expression");                
-//                SerializeExpression(dataToSerialize, fileWithoutExtension+"DExpression.txt");
+                //Coverage
+                List<List<String[]>> listTranscriptomicCoverage = GffParser2(filePath);
+                ArrayList<Object[]> coverageData = CoverageParser(listTranscriptomicCoverage ,"/home/vmuser/Downloads/bedfiles/MT_Leaf12.bedcov" );
+                ArrayList<Object[]> sortedBinsTCov = SortToBinsTranscriptomics(listTranscriptomicCoverage, coverageData);
+                SerializeTranscriptomicCov(sortedBinsTCov, fileWithoutExtension+"transcriptomicCov.txt");
                 
-                //Gene Expression
+//                Gene DE
+                List<List<String[]>> genesAndMetadataForDExpr = GffParserExpression(filePath);
+                ArrayList<String[]> ebseqData =  EbSeqParser("/home/vmuser/Downloads/GeneMat.results.sorted");
+                ArrayList<String[]> sortedgff =  gffSorter(genesAndMetadataForDExpr);
+                ArrayList<Object[]> data = EbseqData(genesAndMetadataForDExpr, sortedgff);
+                List<HistogramDataPoint> dataToSerialize = DiffJavascriptWriter(ebseqData, data, "differential Expression");                
+                SerializeExpression(dataToSerialize, fileWithoutExtension+"DExpression.txt");
+                
+//                Gene Expression
                 List<List<String[]>> genesAndMetadataForExpr = GffParserExpression(filePath);
                 ArrayList<String[]> ExprData =  RsemGenesResultsParser("/home/vmuser/Downloads/Downloads.genes.results");
                 ArrayList<String[]> sortedgffExpr =  gffSorter(genesAndMetadataForExpr);
