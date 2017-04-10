@@ -35,7 +35,7 @@
         <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
         <script src="${contextPath}/resources/js/panels/centerTabs.js"></script>
         <script src="${contextPath}/resources/js/modals/newProjectModal.js"></script>
-
+        <script src="${contextPath}/resources/js/datastructures/FileListStructure.js"></script>
 
 
         <%--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -47,6 +47,12 @@
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     </head>
     <body>
+        <script type="text/javascript">
+            var Structure = {};
+            $(function () {
+                Structure = new FileListStructure();
+            });
+        </script>
         <div class="row">  
             <security:authorize acess="isAuthenticated"></security>
                 <c:if test="${pageContext.request.userPrincipal.name != null}">

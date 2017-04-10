@@ -1,5 +1,6 @@
 var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
     getInitialState: function getInitialState() {
+        Structure.projectName = this.props.projectsList[0];
         React.render(React.createElement(FilesPanel, { projectName: this.props.projectsList[0] }), document.getElementById('filesContainer'));
         return {activeProject: this.props.projectsList[0]}
     },
@@ -14,6 +15,7 @@ var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
                     event.preventDefault();
                     parent.state.activeProject = event.target.id;
                     $('#projectButton').children().first().text(parent.state.activeProject + ' ');
+                    Structure.projectName = parent.state.activeProject;
                     React.render(React.createElement(FilesPanel, { projectName: parent.state.activeProject }), document.getElementById('filesContainer'));
 
                 };

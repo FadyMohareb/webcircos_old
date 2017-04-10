@@ -314,9 +314,8 @@ var CircosPanel = React.createClass({className: "circosPanel",
     render: function () {
 
         return (
-                React.createElement('div', {id: "blabla"}),
-                        React.createElement('button', {className: 'btn btn-primary'},
-                                'Circos tab test')
+                React.createElement('div', {id: "blabla"})
+                        
                 );
 
 

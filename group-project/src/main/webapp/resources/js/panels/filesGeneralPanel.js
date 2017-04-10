@@ -1,7 +1,7 @@
 /* global React, Showdown, SecurityContextHolder, RequestContextHolder, UploadModal */
 
 var converter = new Showdown.converter();
-
+ 
 var FilesDropdownSequence = React.createClass({displayName: "FilesDropdownSequence",
     getInitialState: function getInitialState() {
         return {activeFileSequence: this.props.filesList[0]};
@@ -19,6 +19,7 @@ var FilesDropdownSequence = React.createClass({displayName: "FilesDropdownSequen
 
                 event.preventDefault();
                 parent.state.activeFileSequence = event.target.id;
+                Structure.referenceSequence = event.target.id;
                 $('#sequenceBtn').children().first().text(parent.state.activeFileSequence + ' ');
 
             }
@@ -57,6 +58,7 @@ var FilesDropdownGenCoverage = React.createClass({displayName: "FilesDropdownGen
             handleFileChange: function handleFileChange(event) {
 
                 event.preventDefault();
+                Structure.genomicCoverage = event.target.id;
                 parent.setState({activeFileGenCoverage: event.target.id});
                 $('#genCoverageBtn').children().first().text(parent.state.activeFileGenCoverage);
 
@@ -97,7 +99,7 @@ var FilesDropdownVariants = React.createClass({displayName: "FilesDropdownVarian
 
                 event.preventDefault();
                 parent.state.activeFileVariants = eventVariants.target.id;
-
+                Structure.SNPDensity = eventVariants.target.id;
                 $('#variantsBtn').children().first().text(parent.state.activeFileVariants + ' ');
 
             }
@@ -137,6 +139,7 @@ var FilesDropdownAnnotation = React.createClass({displayName: "FilesDropdownAnno
 
                 event.preventDefault();
                 parent.state.activeFileAnnotation = event.target.id;
+                Structure.annotation = event.target.id;
                 $('#annotationBtn').children().first().text(parent.state.activeFileAnnotation + ' ');
 
             }
@@ -176,6 +179,7 @@ var FilesDropdownTransCoverage = React.createClass({displayName: "FilesDropdownT
 
                 event.preventDefault();
                 parent.setState({activeFileTransCoverage: event.target.id});
+                Structure.transcriptiomicCoverage = event.target.id;
                 $('#transCoverageBtn').children().first().text(parent.state.activeFileTransCoverage);
 
             }
@@ -214,6 +218,7 @@ var FilesDropdownExpression = React.createClass({displayName: "FilesDropdownExpr
 
                 event.preventDefault();
                 parent.state.activeFileExpression = event.target.id;
+                Structure.genesExpresion = event.target.id;
                 console.log('Active file: ' + parent.state.activeFileExpression);
                 $('#expressionBtn').children().first().text(parent.state.activeFileExpression + ' ');
 
@@ -255,6 +260,7 @@ var FilesDropdownDifExpression = React.createClass({displayName: "FilesDropdownD
                 event.preventDefault();
                 parent.state.activeFileDifExpression = event.target.id;
                 console.log('Active file: ' + parent.state.activeFileDifExpression);
+                Structure.differentialExpression = event.target.id;
                 $('#difExpressionBtn').children().first().text(parent.state.activeFileDifExpression + ' ');
 
             }
@@ -380,6 +386,12 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 console.error(status, err.toString());
             }});
     },
+    sendData: function(){
+        
+        // DZIWKI KOKS I ZAPYTANIA
+        alert(JSON.stringify(Structure));
+        
+    },
     render: function () {
         return (React.createElement('div', {className: "container"},
                 React.createElement('label', {for : 'sequenceBtn'}, 'Reference sequence: '),
@@ -407,7 +419,9 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 React.createElement('br'),
                 React.createElement('label', {for : 'annotationBtn'}, 'Annotation: '),
                 React.createElement('div', {className: 'container', id: 'annotation'},
-                        React.createElement(this.contentUpdateProject, {panelType: "annotation"})))
+                        React.createElement(this.contentUpdateProject, {panelType: "annotation"})),
+                        React.createElement('button', {className: 'btn btn-primary', onClick: this.sendData},
+                                'Send files'))
                 );
     }
 });
