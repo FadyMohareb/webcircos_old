@@ -31,7 +31,7 @@ var CircosContent = React.createClass({displayName: 'CircosContent',
         return (
                 React.createElement('div', null,
                         this.props.activeTab.name === 'Overview' ? React.createElement('section', {className: 'panel panel-primary'},
-                                React.createElement('div', {className: 'panel-body', id: 'circos'},
+                                React.createElement('div', {className: 'panel-body', id: 'circos', style: {height: "100%"}},
                                         React.createElement(CircosPanel))) : null,
                         this.props.activeTab.name === 'Parent-pool' ? React.createElement('section', {className: 'panel panel-primary'},
                                 React.createElement('div', {className: 'panel-body', id: 'parentPool'},
