@@ -30,6 +30,7 @@
         <script src="${contextPath}/resources/js//tools/biocircos-1.1.1.js"></script> 
         <script src="${contextPath}/resources/js/panels/circosPanel.js"></script>
         <script src="${contextPath}/resources/js/panels/parentPoolPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/circosDisplayRoutines.js"></script>     
         <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>
         <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>

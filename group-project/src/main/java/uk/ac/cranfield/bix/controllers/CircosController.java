@@ -52,6 +52,7 @@ public class CircosController {
     @RequestMapping(value = "/circos.data", method = RequestMethod.POST)
     public @ResponseBody
     CircosOutput sendData(@RequestBody CircosInput circosInput) throws IOException, ClassNotFoundException {
+        circosInput.removeExtensions();
         String userID = "", currentPath;
         String path;
         File dirSequence;
@@ -63,15 +64,15 @@ public class CircosController {
 //            path = "C:/Users/agata/Desktop/WebCircos/temp/" + userID + "/";
         } else {
 //            path = new PathFinder().getEntireFilePathNotLogged()+"/";
-            path = new PathFinder().getCurrentPath();
+            path = new PathFinder().getEntireFilePathLogged(circosInput.getProjectName());
 //            userID = SecurityContextHolder.getContext().getAuthentication().getName();
 //            path = "C:/Users/agata/Desktop/WebCircos/user/" + userID + "/";
         }
         
-        if (new File(path + "sequence/S_lycopersicum_chromosomes.2.50.txt").exists()) {
+        if (new File(path + "/sequence/" + circosInput.getReferenceSequence() + ".txt").exists()) {
 
             //Create BiocircosGenome variable
-            List<Sequence> seq = (List<Sequence>) Deserialize(path + "sequence/S_lycopersicum_chromosomes.2.50.txt");
+            List<Sequence> seq = (List<Sequence>) Deserialize(path + "/sequence/"+ circosInput.getReferenceSequence() +".txt");
             List<Object[]> obj = createBiocircosGenomeObject(seq);
 
             //Create Histogram
@@ -82,8 +83,8 @@ public class CircosController {
             circosOutput.setGenomes(obj);  
         }
 
-        if (new File(path + "annotation/ITAG2.4_gene_models.txt").exists()) {
-            List<GffDataPoint> gff = (List<GffDataPoint>) Deserialize(path + "annotation/ITAG2.4_gene_models.txt");
+        if (new File(path + "/annotation/" + circosInput.getAnnotation() + ".txt").exists()) {
+            List<GffDataPoint> gff = (List<GffDataPoint>) Deserialize(path + "/annotation/" + circosInput.getAnnotation() + ".txt");
             IndGff GffWriter = GffWriter(gff);
             circosOutput.setArc(GffWriter);
         }
@@ -91,3 +92,4 @@ public class CircosController {
         return circosOutput;
     }
 }
+
