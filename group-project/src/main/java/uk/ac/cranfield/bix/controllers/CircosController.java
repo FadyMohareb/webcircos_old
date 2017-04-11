@@ -34,6 +34,7 @@ import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.GenomeCo
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.TranscriptomicCovWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.DifferentialExpression.HeatMapWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffWriter;
+import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistWriter;
 import static uk.ac.cranfield.bix.utilities.fileParser.fastaParsers.createBiocircosGenomeObject;
 
 /**
@@ -59,7 +60,7 @@ public class CircosController {
         CircosOutput circosOutput = new CircosOutput();
         //For tomorrow meeting I need to know where to find data. So I retrieve the session id to set the proper path. 
         if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
-            path = new PathFinder().getEntireFilePathNotLogged()+"/";
+            path = new PathFinder().getEntireFilePathNotLogged() + "/";
 //            userID = RequestContextHolder.currentRequestAttributes().getSessionId();
 //            path = "C:/Users/agata/Desktop/WebCircos/temp/" + userID + "/";
         } else {
@@ -68,19 +69,31 @@ public class CircosController {
 //            userID = SecurityContextHolder.getContext().getAuthentication().getName();
 //            path = "C:/Users/agata/Desktop/WebCircos/user/" + userID + "/";
         }
-        
+
         if (new File(path + "/sequence/" + circosInput.getReferenceSequence() + ".txt").exists()) {
 
             //Create BiocircosGenome variable
-            List<Sequence> seq = (List<Sequence>) Deserialize(path + "/sequence/"+ circosInput.getReferenceSequence() +".txt");
+            List<Sequence> seq = (List<Sequence>) Deserialize(path + "/sequence/" + circosInput.getReferenceSequence() + ".txt");
             List<Object[]> obj = createBiocircosGenomeObject(seq);
 
-            //Create Histogram
-//        List<HistogramDataPoint> vcf = (List<HistogramDataPoint>) Deserialize("C:/Users/solene/Documents/temp/vcf2.txt");
-//        Histogram h = HistWriter(vcf);
-
             //Create ARC_01
-            circosOutput.setGenomes(obj);  
+            circosOutput.setGenomes(obj);
+        }
+
+        if (new File(path + "/variants/" + circosInput.getSnpdensity() + ".txt").exists()) {
+
+            //Create Histogram
+            List<HistogramDataPoint> vcf = (List<HistogramDataPoint>) Deserialize(path + "/variants/" + circosInput.getSnpdensity() + ".txt");
+            Histogram h = HistWriter(vcf);
+            circosOutput.setHisto(h);
+
+        }
+
+        if (new File(path + "/variants/" + circosInput.getSnpdensity() + "coverage.txt").exists()) {
+            List<LineDataPoint> point = (List<LineDataPoint>) Deserialize(path + "/variants/" + circosInput.getSnpdensity() + "coverage.txt");
+            Line l = GenomeCoverageWriter(point);
+            circosOutput.setGenomicCoverage(l);
+
         }
 
         if (new File(path + "/annotation/" + circosInput.getAnnotation() + ".txt").exists()) {
@@ -88,8 +101,25 @@ public class CircosController {
             IndGff GffWriter = GffWriter(gff);
             circosOutput.setArc(GffWriter);
         }
+        
+          if (new File(path + "/annotation/" + circosInput.getAnnotation() + "transcriptomicCov.txt").exists()) {
+            List<LineDataPoint> trans = (List<LineDataPoint>) Deserialize(path + "/annotation/" + circosInput.getAnnotation() + "transcriptomicCov.txt");
+            Line l = TranscriptomicCovWriter(trans);
+            circosOutput.setTranscriptomicCoverage(l);
+        }
+
+        if (new File(path + "/annotation/" + circosInput.getAnnotation() + "Expression.txt").exists()) {
+            List<HeatMapDataPoint> eHeatMap = (List<HeatMapDataPoint>) Deserialize(path + "/annotation/" + circosInput.getAnnotation() + "Expression.txt");
+            HeatMap eMap = HeatMapWriter(eHeatMap, -45, -85);
+            circosOutput.setGeneExpressionHeatMap(eMap);
+        }
+
+        if (new File(path + "/annotation/" + circosInput.getAnnotation() + "DExpression.txt").exists()) {
+            List<HeatMapDataPoint> eHeatMap = (List<HeatMapDataPoint>) Deserialize(path + "/annotation/" + circosInput.getAnnotation() + "DExpression.txt");
+            HeatMap eMap = HeatMapWriter(eHeatMap, -25, -65);
+            circosOutput.setdEHeatMap(eMap);
+        }
 
         return circosOutput;
     }
 }
-

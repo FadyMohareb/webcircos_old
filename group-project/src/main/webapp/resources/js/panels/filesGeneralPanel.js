@@ -95,11 +95,11 @@ var FilesDropdownVariants = React.createClass({displayName: "FilesDropdownVarian
         return filesList.map(function (fileName)
         {
 
-            handleFileChangeVariants: function handleFileChangeVariants(eventVariants) {
+            handleFileChangeVariants: function handleFileChangeVariants(event) {
 
                 event.preventDefault();
-                parent.state.activeFileVariants = eventVariants.target.id;
-                Structure.SNPDensity = eventVariants.target.id;
+                parent.state.activeFileVariants = event.target.id;
+                Structure.snpdensity= event.target.id;
                 $('#variantsBtn').children().first().text(parent.state.activeFileVariants + ' ');
 
             }
@@ -387,6 +387,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
             }});
     },
    sendData: function(){
+       Structure.validateValues();
        $("#bioCircos").html("");
 
          $.ajax({
@@ -479,6 +480,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 React.createElement('label', {for : 'annotationBtn'}, 'Annotation: '),
                 React.createElement('div', {className: 'container', id: 'annotation'},
                         React.createElement(this.contentUpdateProject, {panelType: "annotation"})),
+                React.createElement('br'),
                         React.createElement('button', {className: 'btn btn-primary', onClick: this.sendData},
                                 'Display circos'))
                 );

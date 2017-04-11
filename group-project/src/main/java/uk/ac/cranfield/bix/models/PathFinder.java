@@ -8,7 +8,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 public class PathFinder {
 
     //current path THE ONE OF TWO TO CHANGE AT DIFFERENT COMPUTERS
-    private final String constantPath = ("/home/vmuser/");
+    private final String constantPath = ("/home/vmuser/WebCircos/");
     private String currentPath;
 
     public PathFinder() {

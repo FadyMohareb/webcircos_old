@@ -96,55 +96,62 @@ public class Utilities {
             case "sequence":
                 //Parse and Serialize fasta file (only FASTA file)
                 List<Sequence> fastaParser = fastaParser(filePath);
-                SerializeSequence(fastaParser, fileWithoutExtension+".txt");
+                SerializeSequence(fastaParser, fileWithoutExtension + ".txt");
                 break;
             case "annotation":
                 //Genes (only ANNOTATION file)
                 List<String[]> GffParser = GffParser(filePath);
-                SerializeGff(GffParser, fileWithoutExtension+".txt");
-                break;
-                
-            case "bedcov":    
+                SerializeGff(GffParser, fileWithoutExtension + ".txt");
+
+                //                Gene Expression (GFF and RSEM files)
+                List<List<String[]>> genesAndMetadataForExpr = GffParserExpression(filePath);
+                ArrayList<String[]> ExprData = RsemGenesResultsParser("/home/vmuser/Downloads/Downloads.genes.results");
+                ArrayList<String[]> sortedgffExpr = gffSorter(genesAndMetadataForExpr);
+                ArrayList<Object[]> dataExpr = EbseqData(genesAndMetadataForExpr, sortedgffExpr);
+                List<HeatMapDataPoint> dataToSerializeExpr = DiffJavascriptWriter(ExprData, dataExpr, "Expression");
+                SerializeExpression(dataToSerializeExpr, fileWithoutExtension + "Expression.txt");
+
                 //Transcriptomic Coverage (GFF and BEDCOV files)
                 List<List<String[]>> listTranscriptomicCoverage = GffParser2(filePath);
-                ArrayList<Object[]> coverageData = CoverageParser(listTranscriptomicCoverage ,"/home/vmuser/Downloads/bedfiles/MT_Leaf12.bedcov" );
+                ArrayList<Object[]> coverageData = CoverageParser(listTranscriptomicCoverage, "/home/vmuser/Downloads/bedfiles/MT_Leaf12.bedcov");
                 ArrayList<Object[]> sortedBinsTCov = SortToBinsTranscriptomics(listTranscriptomicCoverage, coverageData);
-                SerializeTranscriptomicCov(sortedBinsTCov, fileWithoutExtension+"transcriptomicCov.txt");
-                break;
-            
-            case "difExpression":
-//                Gene DE (GFF and EBSEQ files)
+                SerializeTranscriptomicCov(sortedBinsTCov, fileWithoutExtension + "transcriptomicCov.txt");
+
+                //                Gene DE (GFF and EBSEQ files)
                 List<List<String[]>> genesAndMetadataForDExpr = GffParserExpression(filePath);
-                ArrayList<String[]> ebseqData =  EbSeqParser("/home/vmuser/Downloads/GeneMat.results.sorted");
-                ArrayList<String[]> sortedgff =  gffSorter(genesAndMetadataForDExpr);
+                ArrayList<String[]> ebseqData = EbSeqParser("/home/vmuser/Downloads/GeneMat.results.sorted");
+                ArrayList<String[]> sortedgff = gffSorter(genesAndMetadataForDExpr);
                 ArrayList<Object[]> data = EbseqData(genesAndMetadataForDExpr, sortedgff);
-                List<HeatMapDataPoint> dataToSerialize = DiffJavascriptWriter(ebseqData, data, "differential Expression");                
-                SerializeExpression(dataToSerialize, fileWithoutExtension+"DExpression.txt");
+                List<HeatMapDataPoint> dataToSerialize = DiffJavascriptWriter(ebseqData, data, "differential Expression");
+                SerializeExpression(dataToSerialize, fileWithoutExtension + "DExpression.txt");
+
                 break;
-            
+
+            case "bedcov":
+
+                break;
+
+            case "difExpression":
+
+                break;
+
             case "expression":
-//                Gene Expression (GFF and RSEM files)
-                List<List<String[]>> genesAndMetadataForExpr = GffParserExpression(filePath);
-                ArrayList<String[]> ExprData =  RsemGenesResultsParser("/home/vmuser/Downloads/Downloads.genes.results");
-                ArrayList<String[]> sortedgffExpr =  gffSorter(genesAndMetadataForExpr);
-                ArrayList<Object[]> dataExpr = EbseqData(genesAndMetadataForExpr, sortedgffExpr);
-                List<HeatMapDataPoint> dataToSerializeExpr = DiffJavascriptWriter(ExprData, dataExpr, "Expression");                
-                SerializeExpression(dataToSerializeExpr, fileWithoutExtension+"Expression.txt");
+
                 break;
-                
+
             case "variants":
-                    // (only VCF file)
+                // (only VCF file)
                 String VcfToolsSNPS = VcfToolsSNPS(filePath);
                 String VcfToolsSNPDensity = VcfToolsSNPDensity(VcfToolsSNPS);
                 ArrayList<String[]> VCFHistParser = VCFHistParser(VcfToolsSNPDensity);
-                SerializeVcf(VCFHistParser, fileWithoutExtension+".txt");
-                
+                SerializeVcf(VCFHistParser, fileWithoutExtension + ".txt");
+
                 List<List<String[]>> lists = VCFLineParser(filePath);
                 ArrayList<Object[]> depth = VCFDepthExtract(lists);
-                ArrayList<Object[]>  sortedBins = SortToBins(lists, depth);
-                SerializeVcfCoverageGenomics(sortedBins, fileWithoutExtension+"coverage.txt");
+                ArrayList<Object[]> sortedBins = SortToBins(lists, depth);
+                SerializeVcfCoverageGenomics(sortedBins, fileWithoutExtension + "coverage.txt");
                 break;
-                
+
             default:
                 break;
 
@@ -160,8 +167,9 @@ public class Utilities {
     }
 
     /**
-     * Check if a folder with this name already exist for this user.  
-     * @return if the folder exist or not.  
+     * Check if a folder with this name already exist for this user.
+     *
+     * @return if the folder exist or not.
      */
     public static boolean folderExist(String folderPath) {
         File userFolder = new File(folderPath);

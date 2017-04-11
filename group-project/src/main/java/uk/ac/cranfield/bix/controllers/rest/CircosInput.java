@@ -14,7 +14,7 @@ public class CircosInput {
     private String projectName;
     private String referenceSequence;
     private String genomicCoverage;
-    private String SNPDensity;
+    private String snpdensity;
     private String transcriptiomicCoverage;
     private String genesExpresion;
     private String differentialExpression;
@@ -44,13 +44,14 @@ public class CircosInput {
         this.genomicCoverage = genomicCoverage;
     }
 
-    public String getSNPDensity() {
-        return SNPDensity;
+    public String getSnpdensity() {
+        return snpdensity;
     }
 
-    public void setSNPDensity(String SNPDensity) {
-        this.SNPDensity = SNPDensity;
+    public void setSnpdensity(String snpdensity) {
+        this.snpdensity = snpdensity;
     }
+
 
     public String getTranscriptiomicCoverage() {
         return transcriptiomicCoverage;
@@ -96,7 +97,7 @@ public class CircosInput {
         //projectName = removeSingleExtension(projectName);
         referenceSequence = removeSingleExtension(referenceSequence);
         genomicCoverage = removeSingleExtension(genomicCoverage);
-        SNPDensity = removeSingleExtension(SNPDensity);
+        snpdensity = removeSingleExtension(snpdensity);
         transcriptiomicCoverage = removeSingleExtension(transcriptiomicCoverage);
         genesExpresion = removeSingleExtension(genesExpresion);
         differentialExpression = removeSingleExtension(differentialExpression);
