@@ -34,10 +34,91 @@ public class FileRecognitionController {
     @Autowired
     private FileService fileService;
     
-    @RequestMapping(value = "/recognizeFile", method = RequestMethod.POST)
+    @RequestMapping(value = "/recognizeFileName", method = RequestMethod.POST)
     public
     @ResponseBody
-    RestResponse recognizeFile(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName") String projectName) throws Exception
+    RestResponse recognizeFileName(@RequestParam("fileName") String fileName, @RequestParam("projectName") String projectName) throws Exception
+    {
+        String fileType="", fileExtension;
+        String[] splittedFileName;
+        boolean isGFF;
+
+        try {
+            splittedFileName = fileName.split("\\\\");
+            if (splittedFileName.length>1)
+                fileName = splittedFileName[splittedFileName.length-1];
+            splittedFileName = fileName.split("\\.");
+            fileExtension = splittedFileName[splittedFileName.length-1];
+            if (fileExtension.equals("gz") || fileExtension.equals("zip") || fileExtension.equals("7z"))
+            {
+                fileType="zipped";
+                return new RestResponse(fileType, "Please unzip file and then upload again");
+            }
+            else
+            {
+                if (fileExtension.equals("fasta") || fileExtension.equals("fa") || fileExtension.equals("frn") || fileExtension.equals("ffn") || fileExtension.equals("fas") || fileExtension.equals("fna") || fileExtension.equals("faa"))
+                {
+                    fileType="sequence";
+                    return new RestResponse(fileType, "");
+                }
+                else if (fileExtension.equals("gff") || fileExtension.equals("gtf") || fileExtension.equals("gff2") || fileExtension.equals("gff3"))
+                {
+                    fileType = "annotation";
+                    isGFF = checkIfGFF(projectName);
+                    if (isGFF)
+                        return new RestResponse(fileType, "If you upload new annotation file, old one will be overwritten and expression, differencial expression and transcriptomic coverage files will be removed.");
+                    else
+                        return new RestResponse(fileType, "");
+                }
+                else if (fileExtension.equals("vcf"))
+                {
+                    fileType = "variants";
+                    return new RestResponse(fileType, "");
+                }
+                else if (fileExtension.equals("results.sorted"))
+                {
+                    fileType = "difExpression";
+                    isGFF = checkIfGFF(projectName);
+                    if (isGFF)
+                        return new RestResponse(fileType, "");
+                    else
+                        return new RestResponse(fileType, "Please upload gff file first");
+                }
+                else if (fileExtension.equals("results"))
+                {
+                    fileType = "expression";
+                    isGFF = checkIfGFF(projectName);
+                    if (isGFF)
+                        return new RestResponse(fileType, "");
+                    else
+                        return new RestResponse(fileType, "Please upload gff file first");
+                }
+                else if (fileExtension.equals("bedcov"))
+                {
+                    fileType = "bedcov";
+                    isGFF = checkIfGFF(projectName);
+                    if (isGFF)
+                        return new RestResponse(fileType, "");
+                    else
+                        return new RestResponse(fileType, "Please upload gff file first");
+                }
+                else
+                {
+                    fileType="unrecognized";
+                    return new RestResponse(fileType, "");
+                }
+            }
+        }
+        catch (IOException ex) 
+        {
+            return new RestResponse(ex.getMessage(), null);
+        }
+    }
+    
+    @RequestMapping(value = "/recognizeFileType", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    RestResponse recognizeFileType(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName") String projectName) throws Exception
     {
         String fileType="", fileName, fileExtension;
         int i;

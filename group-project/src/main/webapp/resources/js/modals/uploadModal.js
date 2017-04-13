@@ -19,19 +19,39 @@ var UploadModal = React.createClass({className: "uploadModal",
     {
         return {fileType: null};
     },
-    recognizeFileType: function (e)
+    recognizeFileByLine: function()
     {
-        $('input:checkbox').prop('checked', false);
         var ajaxSuccess = this.ajaxSuccess;
-
-        e.preventDefault();
         var file = this.refs.fileUpload.getDOMNode().files[0];
         var projectName = this.props.projectName;
         var fd = new FormData();
         fd.append('file', file);
         fd.append('projectName', projectName);
         $.ajax({
-            url: "/recognizeFile",
+            url: "/recognizeFileType",
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: fd,
+            success: ajaxSuccess,
+            error: function (status, err) {
+                console.error(status, err.toString());
+            }
+        });
+    },
+    recognizeFileType: function (e)
+    {
+        $('input:checkbox').prop('checked', false);
+        var ajaxSuccess = this.ajaxSuccess;
+        e.preventDefault();
+        var file = this.refs.fileUpload.getDOMNode().files[0];
+        var projectName = this.props.projectName;
+        var fileName = file.name;
+        var fd = new FormData();
+        fd.append('fileName', fileName);
+        fd.append('projectName', projectName);
+        $.ajax({
+            url: "/recognizeFileName",
             type: 'POST',
             processData: false,
             contentType: false,
@@ -44,31 +64,32 @@ var UploadModal = React.createClass({className: "uploadModal",
     },
     ajaxSuccess: function (e) {
         this.state.fileType = e.errors;
-        if (e.message !== "") {
+        if (e.message !== "" && e.message !== null) {
             React.render(React.createElement('div', {className: 'alert alert-warning', role: 'alert'}, 
             React.createElement('strong', null, 'Warning! '), e.message), document.getElementById('annotationFileWarning'));
             $('#annotationFileWarning').width($('#annotationFileWarning').parents().first().width()-20);
         }
-        if (this.state.fileType === "sequence") {
+        if (this.state.fileType === "sequence") 
             $('#sequenceChbox').prop('checked', true);
-        } else if (this.state.fileType === "annotation") {
+        else if (this.state.fileType === "annotation") 
             $('#annotationChbox').prop('checked', true);
-        } else if (this.state.fileType === "variants") {
+        else if (this.state.fileType === "variants") 
             $('#variantsChbox').prop('checked', true);
-        } else if (this.state.fileType === "expression") {
+        else if (this.state.fileType === "expression") 
             $('#expressionChbox').prop('checked', true);
-        } else if (this.state.fileType === "difExpression") {
+        else if (this.state.fileType === "difExpression") 
             $('#difExpressionChbox').prop('checked', true);
-
+        else if (this.state.fileType === "unrecognized") 
+            this.recognizeFileByLine();
+        else
+        {
+            React.render(React.createElement('div', {className: 'alert alert-warning', role: 'alert'}, 
+            React.createElement('strong', null, 'Warning! '), "File not recognized!"), document.getElementById('annotationFileWarning'));
+            $('#annotationFileWarning').width($('#annotationFileWarning').parents().first().width()-20);
         }
     },
     handleSubmit: function (e) {
         e.preventDefault();
-        console.log('test state: ' + this.state.fileType)
-        if (this.state.fileType === "")
-        {
-            this.recognizeFileType();
-        }
         if (this.state.fileType !== "unrecognized")
         {
             var file = this.refs.fileUpload.getDOMNode().files[0];
@@ -139,10 +160,7 @@ var UploadModal = React.createClass({className: "uploadModal",
                                         React.createElement('input', {type: 'file', ref: 'fileUpload', onChange: this.recognizeFileType}),
                                         React.createElement("hr"),
                                         React.createElement('h4', {className: 'modal-title'}, 'What is file content? '),
-//                                        React.createElement('button', {className: 'btn btn-primary', bsSize: "small", onClick: this.recognizeFileType}, 'Recognize file type'),
-//                                        React.createElement('br'),
                                         React.createElement('div', {className: 'container', id: 'annotationFileWarning'}),
-                                        React.createElement('br'),
                                         React.createElement('input', {type: "checkbox", id: 'sequenceChbox', onChange: this.changeSeqChbox}, " Sequence"),
                                         React.createElement('br'),
                                         React.createElement('input', {type: "checkbox", id: 'annotationChbox', onChange: this.changeAnnotChbox}, " Annotation"),

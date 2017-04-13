@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                     //.antMatchers(HttpMethod.POST,"/comments.json").permitAll()
-                    .antMatchers("/resources/**","/recognizeFile", "/registrationReact", "/loginReact", "/loginReactAction", "/manageAccount", "/home", "/controller/upload", "/refresh", "/circos.data").permitAll()
+                    .antMatchers("/resources/**","/recognizeFileName","/recognizeFileType", "/registrationReact", "/loginReact", "/loginReactAction", "/manageAccount", "/home", "/controller/upload", "/refresh", "/circos.data").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()

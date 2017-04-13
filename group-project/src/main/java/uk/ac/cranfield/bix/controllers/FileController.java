@@ -1,9 +1,12 @@
 package uk.ac.cranfield.bix.controllers;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +41,7 @@ public class FileController {
     @RequestMapping(value = "/controller/upload", method = RequestMethod.POST)
     public
     @ResponseBody
-    RestResponse upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName")String projectName, @RequestParam("fileType") String fileType) 
+    RestResponse upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName")String projectName, @RequestParam("fileType") String fileType) throws Exception 
     {
         
         //initializations
@@ -54,6 +57,16 @@ public class FileController {
             path = new PathFinder().getUserPathNotLogged();
             try
             {
+                if ("annotation".equals(fileType))
+                {
+                    if (checkIfGFF(projectName))
+                    {
+                        new File(path+"/annotation").delete();
+                        new File(path+"/difExpression").delete();
+                        new File(path+"/expression").delete();
+                        new File(path+"/bedcov").delete();
+                    }
+                }
                 //newPath with added FileType
                 path=(path+"/"+fileType);
                 dir2 = new File(path);
@@ -99,6 +112,21 @@ public class FileController {
             
             PathFinder pathFinder = new PathFinder();
             path = pathFinder.getUserPathLogged() + '/' + projectName;
+            
+            if ("annotation".equals(fileType))
+                {
+                    if (checkIfGFF(projectName))
+                    {
+                        new File(path+"/annotation").delete();
+                        //remove from database
+                        new File(path+"/difExpression").delete();
+                        //remove from database
+                        new File(path+"/expression").delete();
+                        //remove from database
+                        new File(path+"/bedcov").delete();
+                        //remove from database
+                    }
+                }
             try
             {
                 //newPath with added ProjectName
@@ -138,5 +166,44 @@ public class FileController {
                 return new RestResponse(e.getMessage(), null);
             }
         }
+    }
+    @SuppressWarnings("empty-statement")
+    private boolean checkIfGFF(String projectName) throws Exception
+    {
+        if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
+        {
+//            System.out.println("User is ANONYMOUS");
+            String path, result; FileReader fileReader; BufferedReader bufferedReader;
+            
+            path = new PathFinder().getGffPath();
+            fileReader = new FileReader(path+"/contentOfFolder.txt");
+            bufferedReader = new BufferedReader(fileReader);
+            result = bufferedReader.readLine();
+            bufferedReader.close();
+            fileReader.close();
+            return result!=null;
+        }
+        else
+        {
+//            System.out.println("User is LOGGED");
+            Project project;
+            boolean flag =false;
+            //Find user
+            String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userService.findByUsername(userLogin);
+
+            //Check if project allready exist
+            project = projectService.findByProjectName(projectName, user);
+
+            List<FileInput> findAll = fileService.findAll(project);
+
+            for (FileInput file : findAll)
+            {
+                String fileType = file.getF_type();
+                if ("annotation".equals(fileType))
+                    flag = true;
+            };
+            return flag;
+    }
     }
 }
