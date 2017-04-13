@@ -70,7 +70,7 @@ public class FileRecognitionController {
                     fileType = "annotation";
                     isGFF = checkIfGFF(projectName);
                     if (isGFF)
-                        return new RestResponse(fileType, "If you upload new annotation file, old one will be removed with expression, differencial expression and transcriptomic coverage files");
+                        return new RestResponse(fileType, "If you upload new annotation file, old one will be overwritten and expression, differencial expression and transcriptomic coverage files will be removed.");
                     else
                         return new RestResponse(fileType, "");
                 }
