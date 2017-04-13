@@ -40,6 +40,7 @@ public class FileController {
     @ResponseBody
     RestResponse upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName")String projectName, @RequestParam("fileType") String fileType) 
     {
+        
         //initializations
         String fileName, path, userID;
         File dir1, dir2, dir1_5;
@@ -50,7 +51,7 @@ public class FileController {
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         {
 //          System.out.println("User is ANONYMOUS");
-            path = new PathFinder().getEntireFilePathNotLogged();
+            path = new PathFinder().getUserPathNotLogged();
             try
             {
                 //newPath with added FileType
@@ -87,6 +88,7 @@ public class FileController {
         }
         else
         {
+//            System.out.println("User is LOGGED");
             //Find user
             String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(userLogin);
@@ -95,13 +97,11 @@ public class FileController {
             Project project = projectService.findByProjectName(projectName, user);
             Integer projectId = project.getId();
             
-//            System.out.println("User is LOGGED");
             PathFinder pathFinder = new PathFinder();
-            path = pathFinder.getEntireFilePathLogged();
+            path = pathFinder.getUserPathLogged() + '/' + projectName;
             try
             {
                 //newPath with added ProjectName
-                path=(path+"/"+projectName);
                 dir1_5 = new File(path);
                 if (!dir1_5.exists())
                     dir1_5.mkdir();

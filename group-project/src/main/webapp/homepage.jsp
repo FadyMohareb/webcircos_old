@@ -1,10 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%-- 
-    Document   : MainWindow
-    Created on : 15-Mar-2017, 10:25:14
-    Author     : s262012
---%>
-
 <html>
     <head>
         <title>WebCircos</title>
@@ -16,33 +10,39 @@
         <script src="${contextPath}/resources/js/vendor/react.js"></script>
         <script src="${contextPath}/resources/js/vendor/showdown.min.js"></script>
         <script src="${contextPath}/resources/js/home.js"></script>
+        <script src="${contextPath}/resources/css/font-awesome.min.css"></script>
         <script src="${contextPath}/resources/js/modals/loginModal.js"></script>
         <script src="${contextPath}/resources/js/modals/registrationModal.js"></script>
         <script src="${contextPath}/resources/js/modals/resetPswdModal.js"></script>
         <script src="${contextPath}/resources/js/dynamic/accountDropdown.js"></script>
-        <script src="${contextPath}/resources/js/panels/filesPanel.js"></script>
         <script src="${contextPath}/resources/js/panels/projectsPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/filesPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/filesGeneralPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/filesTabContainer.js"></script>
+        <script src="${contextPath}/resources/js/panels/filesParentPoolPanel.js"></script>
         <script src="${contextPath}/resources/js/panels/projectsPanelAnon.js"></script>
         <script src="${contextPath}/resources/js/tools/d3.js"></script>
         <script src="${contextPath}/resources/js//tools/biocircos-1.1.1.js"></script> 
         <script src="${contextPath}/resources/js/panels/circosPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/parentPoolPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/circosDisplayRoutines.js"></script>     
         <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>
         <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
-        <script src="${contextPath}/resources/js/panels/viewPanel.js"></script>
+        <script src="${contextPath}/resources/js/panels/centerTabs.js"></script>
         <script src="${contextPath}/resources/js/modals/newProjectModal.js"></script>
-
-
-
-        <%--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <!-- one of the properties available; the maximum file size in bytes (2097152 B = 2 MB) -->
-        <property name="maxUploadSize" value="4 000 000 000"/>
-        </bean>--%>
+        <script src="${contextPath}/resources/js/datastructures/FileListStructure.js"></script>
 
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     </head>
     <body>
+        <script type="text/javascript">
+            var Structure = {};
+            $(function () {
+                Structure = new FileListStructure();
+            });
+        </script>
         <div class="row">  
             <security:authorize acess="isAuthenticated"></security>
                 <c:if test="${pageContext.request.userPrincipal.name != null}">
@@ -91,16 +91,10 @@
                         });
                     </script>
                 </div>
-                <div id="centerContainer" class="col-lg-6" style="float:left;margin:0px 10px 0px 10px;width:50%">${centerContainer}</div>
+                <div id="centerContainer" class="col-lg-6" style="float:left;margin:0px 10px 0px 10px;width:72%">${centerContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderCircosPanel();
-                    });
-                </script>
-                <div id="rightContainer" class="col-lg-2" style="float:right;margin:0px 5px 0px 5px;width:20%">${rightContainer}</div>
-                <script type="text/javascript">
-                    $(function () {
-                        renderViewPanel();
+                        renderCircosTabsComponent();
                     });
                 </script>
             </div>

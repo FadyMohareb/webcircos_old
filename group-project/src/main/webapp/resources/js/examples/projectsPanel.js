@@ -1,47 +1,39 @@
-var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
+var converter = new Showdown.converter();
+
+var CircosTabData = [{name: 'Overview', isActive: true}, {name: 'Parent-pool', isActive: false}];
+
+var ProperListRender = React.createClass({displayName: "ProperListRender",
     getInitialState: function getInitialState() {
-        Structure.projectName = this.props.projectsList[0];
-        React.render(React.createElement(FilesPanel, { projectName: this.props.projectsList[0] }), document.getElementById('filesContainer'));
-        return {activeProject: this.props.projectsList[0]}
-    },
-    renderBlock: function renderBlock(projectsList, parent){
-        console.log(projectsList)
-        console.log(parent)
-        
-        console.log(parent.state.activeProject)
-        return projectsList.map(function (projectName)
-            {
-                handleProjectChange: function handleProjectChange(event) {
-                    event.preventDefault();
-                    parent.state.activeProject = event.target.id;
-                    $('#projectButton').children().first().text(parent.state.activeProject + ' ');
-                    Structure.projectName = parent.state.activeProject;
-                    React.render(React.createElement(FilesPanel, { projectName: parent.state.activeProject }), document.getElementById('filesContainer'));
-
-                };
-
-                return (React.createElement("li",{onClick: handleProjectChange, id: projectName}, projectName));
-            })
+        return { currProj: this.props.list[0] }; // need a method to check whether user is logged or not
     },
     render: function () {
-
-        return React.createElement('div', {className: 'btn-group'},
-                        React.createElement('button', {className: 'btn btn-default dropdown-toggle', 'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'projectButton'}, this.state.activeProject + ' ',
+        return (
+                React.createElement('div', {className: 'btn-group'},
+                        React.createElement('button', {className: 'btn btn-default dropdown-toggle', 'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false'}, this.state.currProj,
                                 React.createElement('span', {className: 'caret'})),
                         React.createElement('ul', {className: 'dropdown-menu'},
-                                this.renderBlock(this.props.projectsList, this))
+                                
+                                this.props.list.map(function (projectName)
+                                {
+                                    handleProjectChange: function handleProjectChange(event) {
+                                        this.state.currProj = event.target.id;
+                                        event.preventDefault();
+                                        console.log('CURR PROJ TEST: ' + this.state.currProj );
+                                        React.render(React.createElement(FilesPanel, { projectName: this.state.currProj }), document.getElementById('filesContainer'));
+                                    
+                                    };
+                                    
+                                    return (React.createElement("li",{onClick: handleProjectChange, id: projectName}, projectName));
+                                })
+                        )
                 )
+                );
     }
-
-
-
 });
-
-
 
 var ProjectsPanel = React.createClass({displayName: "projectsPanel",
     getInitialState: function getInitialState() {
-        return {view: {showNewProjModal: false}}; // need a method to check whether user is logged or not
+        return {view: {showNewProjModal: false } }; // need a method to check whether user is logged or not
     },
     handleShowNewProjModal: function handleShowNewProjModal() {
         this.setState({view: {showNewProjModal: true}});
@@ -51,11 +43,11 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
         $(".modal-backdrop.in").remove();
     },
 //    used to define any props accessed by this.props
-
+    
     getProjects: function getProjects()
     {
-
-
+        
+        
         $.ajax({
             url: "/project/getProjects",
             type: 'GET',
@@ -69,17 +61,16 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
                 if (ProjectList[0].length !== 0)
                 {
                     var n = ProjectList.length;
-
+                    
                     for (var i = 0; i < n; i++)
                     {
                         var ProjectName = ProjectList[i];
                         list[i] = ProjectName;
                     }
-
-                    React.render(React.createElement(ProjectsDropdown, {projectsList: list}), document.getElementById('projects'));
-
+                    React.render(React.createElement(ProperListRender, {list: list}), document.getElementById('projects'));
+                    
                 }
-
+                 
             },
             error: function (status, err) {
                 console.error(status, err.toString());
@@ -97,7 +88,7 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
                                 React.createElement('span', {className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true'}))),
                 React.createElement('div', {className: "panel-body"},
                         React.createElement("div", {id: 'projects'}, 'Create your first project'),
-                        
+
                         this.state.view.showNewProjModal ? React.createElement(NewProjModal, {handleHideNewProjModal: this.handleHideNewProjModal}) : null))
 
                 );
@@ -110,3 +101,5 @@ var renderProjectsPanel = function () {
             document.getElementById("projectsContainer")
             );
 };
+
+

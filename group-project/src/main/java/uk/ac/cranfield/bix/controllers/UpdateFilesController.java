@@ -56,7 +56,7 @@ public class UpdateFilesController {
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         {
 //          System.out.println("User is ANONYMOUS");
-            path = new PathFinder().getEntireFilePathNotLogged();
+            path = new PathFinder().getUserPathNotLogged();
             try
             {
                 //newPath with added FileType
@@ -98,49 +98,47 @@ public class UpdateFilesController {
         }
         else
         {
-        
+            Project project;
 //            System.out.println("User is LOGGED");
-                path = new PathFinder().getEntireFilePathLogged();
-                try {
-                    Project project, project2;
-                    //newPath with added FileType
-                    newPath=(path+"/"+projectName);
-                    dir1 = new File(newPath);
-                    if (!dir1.exists())
-                    {
-                        dir1.mkdir();
-                    }
-                    new PathFinder().setCurrentPath(newPath);
-                    //newPath with added FileType
-                    newPath=(newPath+"/"+type);
-                    dir2 = new File(newPath);
-                    if (!dir2.exists())
-                    {
-                        dir2.mkdir();
-                    }
-                    //Find user
-                    String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
-                    User user = userService.findByUsername(userLogin);
+            newPath = new PathFinder().getUserPathLogged(projectName);                
+            try 
+            {              
+                dir1 = new File(newPath);
+                if (!dir1.exists())
+                {
+                    dir1.mkdir();
+                }
+                new PathFinder().setCurrentPath(newPath);
+                //newPath with added FileType
+                newPath=(newPath+"/"+type);
+                dir2 = new File(newPath);
+                if (!dir2.exists())
+                {
+                    dir2.mkdir();
+                }
+                //Find user
+                String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+                User user = userService.findByUsername(userLogin);
 
-                    //Check if project allready exist
-                    project = projectService.findByProjectName(projectName, user);
-                    Integer projectId = project.getId();
+                //Check if project allready exist
+                project = projectService.findByProjectName(projectName, user);
+                Integer projectId = project.getId();
 
-                    List<FileInput> findAll = fileService.findAll(project);
-                    List<String> toString = new ArrayList<>();
+                List<FileInput> findAll = fileService.findAll(project);
+                List<String> toString = new ArrayList<>();
 
-                    for (FileInput file : findAll)
-                    {
-                        String fileType = file.getF_type();
-                        if (type.matches(fileType))
-                            toString.add(file.getF_name());
-                    };
+                for (FileInput file : findAll)
+                {
+                    String fileType = file.getF_type();
+                    if (type.matches(fileType))
+                        toString.add(file.getF_name());
+                };
 //                    File[] fileArray = dir2.listFiles();
 //                    fileList = Arrays.toString(fileArray);
 
-    //                return toString; 
-                    return new RestResponse(toString.toString(), null); 
-                }
+//                return toString; 
+                return new RestResponse(toString.toString(), null); 
+            }
                 catch(Exception e)
                 {
                     System.out.println(e);
@@ -181,7 +179,7 @@ public class UpdateFilesController {
 //        if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
 //        {
 ////          System.out.println("User is ANONYMOUS");
-//            path = new PathFinder().getEntireFilePathNotLogged();
+//            path = new PathFinder().getUserPathNotLogged();
 //            try
 //            {
 //                //newPath with added FileType
@@ -238,7 +236,7 @@ public class UpdateFilesController {
 //        type = panelType.replaceAll("[^a-zA-Z]","");
 //        
 ////            System.out.println("User is LOGGED");
-//            path = new PathFinder().getEntireFilePathLogged();
+//            path = new PathFinder().getUserPathLogged();
 //            try {
 //                //newPath with added FileType
 //                newPath=(path+"/"+projectName);
