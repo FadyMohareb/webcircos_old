@@ -33,8 +33,11 @@ public class ProjectDao {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Project> getAll() {
-        return getSession().createQuery("from Project").list();
+    public List<Project> getAll(User user) {
+        return (List<Project>) getSession()
+                .createQuery("Select p from Project p where p.user=:user")
+                .setParameter("user", user)
+                .list();
     }
 
     public Project getById(long id) {
@@ -53,5 +56,4 @@ public class ProjectDao {
                 .setParameter("user", user)
                 .uniqueResult();
     }
-
 } // class ProjectDao

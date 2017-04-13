@@ -6,6 +6,7 @@
 package uk.ac.cranfield.bix.services;
 
 import java.util.List;
+import uk.ac.cranfield.bix.models.FileInput;
 import uk.ac.cranfield.bix.models.Project;
 import uk.ac.cranfield.bix.models.User;
 
@@ -13,8 +14,8 @@ import uk.ac.cranfield.bix.models.User;
  *
  * @author solene
  */
-public interface ProjectService {
-    Project findByProjectName(String projectName, User user);
-    void save(Project project);
-    List<Project> findAll(User user);
+public interface FileService {
+    void save(FileInput file, int projectId);
+    List<FileInput> findAll(Project project);
+    FileInput findByFileType(String fileType, Project p);
 }

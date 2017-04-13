@@ -12,6 +12,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import uk.ac.cranfield.bix.models.FileInput;
+import uk.ac.cranfield.bix.models.Project;
+import uk.ac.cranfield.bix.models.User;
 
 /**
  *
@@ -22,34 +24,57 @@ import uk.ac.cranfield.bix.models.FileInput;
 public class FileDao {
     
     @Autowired
-  private SessionFactory _sessionFactory;
-  
-  private Session getSession() {
-    return _sessionFactory.getCurrentSession();
-  }
-  
-  public void save(FileInput file) {
-    getSession().save(file);
-    return;
-  }
-  
-  public void delete(FileInput file) {
-    getSession().delete(file);
-    return;
-  }
-  
-  @SuppressWarnings("unchecked")
-  public List<FileInput> getAll() {
-    return getSession().createQuery("from File").list();
-  }
-  
-  public FileInput getById(long id) {
-    return (FileInput) getSession().load(FileInput.class, id);
-  }
-  
-  public void update(FileInput file) {
-    getSession().update(file);
-    return;
-  }
+    private SessionFactory _sessionFactory;
+
+    private Session getSession() {
+      return _sessionFactory.getCurrentSession();
+    }
     
+    public void save(FileInput file, int projectId) {
+      getSession().save(file);
+      return;
+    }
+
+    public void delete(FileInput file) {
+      getSession().delete(file);
+      return;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<FileInput> getAll(Project project) {
+      return (List<FileInput>) getSession()
+              .createQuery("Select f from FileInput f where f.project=:project")
+              .setParameter("project", project)
+              .list(); 
+    }
+    
+//        public Project getByName(String projectName, User user) {
+//        return (Project) getSession()
+//                .createQuery("Select p from Project p where p.p_name=:project and p.user=:user")
+//                .setParameter("project", projectName)
+//                .setParameter("user", user)
+//                .uniqueResult();
+//        @SuppressWarnings("unchecked")
+//    public List<Project> getAll(User user) {
+//        return (List<Project>) getSession()
+//                .createQuery("Select p from Project p where p.user=:user")
+//                .setParameter("user", user)
+//                .list();
+
+    public FileInput getById(long id) {
+      return (FileInput) getSession().load(FileInput.class, id);
+    }
+
+    public void update(FileInput file) {
+      getSession().update(file);
+      return;
+    }
+    
+    public FileInput getByFileType(String fileType, Project p){
+         return (FileInput) getSession()
+                 .createQuery("Select f from FileInput f where f.project=:project and f.f_type=:type")
+                 .setParameter("project", p)
+                 .setParameter("type", fileType)
+                 .uniqueResult();
+    }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -15,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import uk.ac.cranfield.bix.controllers.rest.HeatMapDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
+import uk.ac.cranfield.bix.services.PathFinder;
 import uk.ac.cranfield.bix.models.User;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeExpression;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeGff;
@@ -90,64 +92,7 @@ public class Utilities {
 
     }
 
-    public static void parseFile(String filePath, String fileType) throws IOException, ClassNotFoundException, InterruptedException {
-        String fileWithoutExtension = filePath.substring(0, filePath.lastIndexOf("."));
-        switch (fileType) {
-            case "alignment":
-                break;
-            case "sequence":
-                //Parse and Serialize fasta file
-                List<Sequence> fastaParser = fastaParser(filePath);
-                SerializeSequence(fastaParser, fileWithoutExtension+".txt");
-                break;
-            case "annotation":
-                //Genes
-                List<String[]> GffParser = GffParser(filePath);
-                SerializeGff(GffParser, fileWithoutExtension+".txt");
-                
-                //Coverage
-                List<List<String[]>> listTranscriptomicCoverage = GffParser2(filePath);
-                ArrayList<Object[]> coverageData = CoverageParser(listTranscriptomicCoverage ,"/home/vmuser/Downloads/bedfiles/MT_Leaf12.bedcov" );
-                ArrayList<Object[]> sortedBinsTCov = SortToBinsTranscriptomics(listTranscriptomicCoverage, coverageData);
-                SerializeTranscriptomicCov(sortedBinsTCov, fileWithoutExtension+"transcriptomicCov.txt");
-                
-//                Gene DE
-                List<List<String[]>> genesAndMetadataForDExpr = GffParserExpression(filePath);
-                ArrayList<String[]> ebseqData =  EbSeqParser("/home/vmuser/Downloads/GeneMat.results.sorted");
-                ArrayList<String[]> sortedgff =  gffSorter(genesAndMetadataForDExpr);
-                ArrayList<Object[]> data = EbseqData(genesAndMetadataForDExpr, sortedgff);
-                List<HeatMapDataPoint> dataToSerialize = DiffJavascriptWriter(ebseqData, data, "differential Expression");                
-                SerializeExpression(dataToSerialize, fileWithoutExtension+"DExpression.txt");
-                
-//                Gene Expression
-                List<List<String[]>> genesAndMetadataForExpr = GffParserExpression(filePath);
-                ArrayList<String[]> ExprData =  RsemGenesResultsParser("/home/vmuser/Downloads/Downloads.genes.results");
-                ArrayList<String[]> sortedgffExpr =  gffSorter(genesAndMetadataForExpr);
-                ArrayList<Object[]> dataExpr = EbseqData(genesAndMetadataForExpr, sortedgffExpr);
-                List<HeatMapDataPoint> dataToSerializeExpr = DiffJavascriptWriter(ExprData, dataExpr, "Expression");                
-                SerializeExpression(dataToSerializeExpr, fileWithoutExtension+"Expression.txt");
-                
-                
-                break;
-            case "variants":
-
-                String VcfToolsSNPS = VcfToolsSNPS(filePath);
-                String VcfToolsSNPDensity = VcfToolsSNPDensity(VcfToolsSNPS);
-                ArrayList<String[]> VCFHistParser = VCFHistParser(VcfToolsSNPDensity);
-                SerializeVcf(VCFHistParser, fileWithoutExtension+".txt");
-                
-                List<List<String[]>> lists = VCFLineParser(filePath);
-                ArrayList<Object[]> depth = VCFDepthExtract(lists);
-                ArrayList<Object[]>  sortedBins = SortToBins(lists, depth);
-                SerializeVcfCoverageGenomics(sortedBins, fileWithoutExtension+"coverage.txt");
-                
-                break;
-            default:
-                break;
-
-        }
-    }
-
+   
     public static boolean isUserAuthenticated() {
         if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
             return true;
@@ -157,8 +102,9 @@ public class Utilities {
     }
 
     /**
-     * Check if a folder with this name already exist for this user.  
-     * @return if the folder exist or not.  
+     * Check if a folder with this name already exist for this user.
+     *
+     * @return if the folder exist or not.
      */
     public static boolean folderExist(String folderPath) {
         File userFolder = new File(folderPath);

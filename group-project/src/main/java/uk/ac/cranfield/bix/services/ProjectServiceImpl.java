@@ -5,6 +5,7 @@
  */
 package uk.ac.cranfield.bix.services;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.ac.cranfield.bix.models.Project;
@@ -31,4 +32,8 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.save(project);
     }
 
+    @Override
+    public List<Project> findAll(User user){
+        return projectRepository.getAll(user);
+    }
 }
