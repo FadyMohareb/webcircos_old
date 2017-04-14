@@ -105,7 +105,7 @@ public class Utilities {
 
                 //                Gene Expression (GFF and RSEM files)
                 List<List<String[]>> genesAndMetadataForExpr = GffParserExpression(filePath);
-                ArrayList<String[]> ExprData = RsemGenesResultsParser(filePath+"/Downloads/Downloads.genes.results");
+                ArrayList<String[]> ExprData = RsemGenesResultsParser("/home/vmuser/Downloads/Downloads.genes.results");
                 ArrayList<String[]> sortedgffExpr = gffSorter(genesAndMetadataForExpr);
                 ArrayList<Object[]> dataExpr = EbseqData(genesAndMetadataForExpr, sortedgffExpr);
                 List<HeatMapDataPoint> dataToSerializeExpr = DiffJavascriptWriter(ExprData, dataExpr, "Expression");
@@ -113,13 +113,13 @@ public class Utilities {
 
                 //Transcriptomic Coverage (GFF and BEDCOV files)
                 List<List<String[]>> listTranscriptomicCoverage = GffParser2(filePath);
-                ArrayList<Object[]> coverageData = CoverageParser(listTranscriptomicCoverage, filePath+"/bedfiles/MT_Leaf12.bedcov");
+                ArrayList<Object[]> coverageData = CoverageParser(listTranscriptomicCoverage, "/home/vmuser/Downloads/bedfiles/MT_Leaf12.bedcov");
                 ArrayList<Object[]> sortedBinsTCov = SortToBinsTranscriptomics(listTranscriptomicCoverage, coverageData);
                 SerializeTranscriptomicCov(sortedBinsTCov, fileWithoutExtension + "transcriptomicCov.txt");
 
                 //                Gene DE (GFF and EBSEQ files)
                 List<List<String[]>> genesAndMetadataForDExpr = GffParserExpression(filePath);
-                ArrayList<String[]> ebseqData = EbSeqParser(filePath+"/Downloads/GeneMat.results.sorted");
+                ArrayList<String[]> ebseqData = EbSeqParser("/home/vmuser/Downloads/GeneMat.results.sorted");
                 ArrayList<String[]> sortedgff = gffSorter(genesAndMetadataForDExpr);
                 ArrayList<Object[]> data = EbseqData(genesAndMetadataForDExpr, sortedgff);
                 List<HeatMapDataPoint> dataToSerialize = DiffJavascriptWriter(ebseqData, data, "differential Expression");
