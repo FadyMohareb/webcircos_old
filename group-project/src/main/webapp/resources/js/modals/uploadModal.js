@@ -81,6 +81,8 @@ var UploadModal = React.createClass({className: "uploadModal",
             $('#difExpressionChbox').prop('checked', true);
         else if (this.state.fileType === "unrecognized") 
             this.recognizeFileByLine();
+        else if (this.state.fileType === "existing") 
+        {}
         else
         {
             React.render(React.createElement('div', {className: 'alert alert-warning', role: 'alert'}, 
@@ -107,13 +109,10 @@ var UploadModal = React.createClass({className: "uploadModal",
                 data: fd,
                 success: function (data)
                 {
-                    if (data.errors === null)
-                    {
+                    if (data.message !== "" && data.message !== null)
+                        alert(data.message);
+                    else
                         location = '/home';
-                    } else
-                    {
-                        alert("Error with pasing file");
-                    }
                 },
                 error: function (status, err) {
                     alert("File not sended");

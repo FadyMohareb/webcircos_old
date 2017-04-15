@@ -122,7 +122,6 @@ public class UpdateFilesController {
 
                 //Check if project allready exist
                 project = projectService.findByProjectName(projectName, user);
-                Integer projectId = project.getId();
 
                 List<FileInput> findAll = fileService.findAll(project);
                 List<String> toString = new ArrayList<>();

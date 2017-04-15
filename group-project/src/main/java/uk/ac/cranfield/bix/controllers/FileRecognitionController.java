@@ -54,6 +54,11 @@ public class FileRecognitionController {
                 fileType="zipped";
                 return new RestResponse(fileType, "Please unzip file and then upload again");
             }
+            else if (checkIfFileExists(projectName, fileName, fileType))
+            {
+                fileType="existing";
+                return new RestResponse(fileType, "File with this name already exists");
+            }
             else
             {
                 if (fileExtension.equals("fasta") || fileExtension.equals("fa") || fileExtension.equals("frn") || fileExtension.equals("ffn") || fileExtension.equals("fas") || fileExtension.equals("fna") || fileExtension.equals("faa"))
@@ -223,6 +228,69 @@ public class FileRecognitionController {
         }
     }
     @SuppressWarnings("empty-statement")
+    private boolean checkIfFileExists(String projectName, String fileName, String fileType) throws Exception
+    {
+        String path, result, newpath="", fileNameFromFile;
+        FileReader fileReader;
+        BufferedReader bufferedReader;
+        Boolean flag=false;
+        String [] fileTypes = new String[6], splittedFileName;
+        
+        if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
+        {
+//            System.out.println("User is ANONYMOUS");
+            //path
+            path = new PathFinder().getUserPathNotLogged();
+            fileTypes[0]="sequence";
+            fileTypes[1]="variants";
+            fileTypes[2]="bedcov";
+            fileTypes[3]="expression";
+            fileTypes[4]="difExpression";
+            fileTypes[5]="annotation";
+            
+            for (int i=0;i<fileTypes.length;i++)
+            {
+                newpath = path+"/"+fileTypes[i];
+                //check if file with the same name already exists
+                fileReader = new FileReader(newpath+"/contentOfFolder.txt");
+                bufferedReader = new BufferedReader(fileReader);
+                result=bufferedReader.readLine();
+                while (result!=null)
+                {
+                    splittedFileName = result.split("/");
+                    fileNameFromFile = splittedFileName[splittedFileName.length-1];
+                    if (fileNameFromFile.compareTo(fileName)>0)
+                        flag=true;
+                    result=bufferedReader.readLine();
+                }
+                bufferedReader.close();
+                fileReader.close();
+            }
+            return flag;
+        }
+        else
+        {
+//            System.out.println("User is LOGGED");
+            path = new PathFinder().getUserPathLogged() + '/' + projectName;
+            Project project;
+            //Find user
+            String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userService.findByUsername(userLogin);
+
+            //Check if project allready exist
+            project = projectService.findByProjectName(projectName, user);
+            //check if file with the same name already exists
+            List<FileInput> findAll = fileService.findAll(project);
+
+            for (FileInput file : findAll)
+            {
+                if(fileName.equals(file.getF_name()))
+                    flag=true;
+            }
+            return flag;
+        }
+    }
+    @SuppressWarnings("empty-statement")
     private boolean checkIfGFF(String projectName) throws Exception
     {
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
@@ -242,7 +310,7 @@ public class FileRecognitionController {
         {
 //            System.out.println("User is LOGGED");
             Project project;
-            boolean flag =false;
+            boolean flag = false;
             //Find user
             String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(userLogin);

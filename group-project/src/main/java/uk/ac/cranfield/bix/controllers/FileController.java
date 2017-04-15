@@ -45,11 +45,14 @@ public class FileController {
     {
         
         //initializations
-        String fileName, path, userID;
+        String fileName, path, userID, result;
         File dir1, dir2, dir1_5;
         FileWriter fileWriter;
         BufferedWriter bufferedWriter;
         String[] splittedFileName;
+        FileReader fileReader;
+        BufferedReader bufferedReader;
+        boolean flag=false;
         
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         {
@@ -57,6 +60,7 @@ public class FileController {
             path = new PathFinder().getUserPathNotLogged();
             try
             {
+                //GFF files
                 if ("annotation".equals(fileType))
                 {
                     if (checkIfGFF(projectName))
@@ -73,13 +77,15 @@ public class FileController {
                 if (!dir2.exists())
                     dir2.mkdir();
 
+                //filename
                 fileName = multipartFile.getOriginalFilename();
                 splittedFileName = fileName.split("\\\\");
                 if (splittedFileName.length>1)
                     fileName = splittedFileName[splittedFileName.length-1];
 
+                //copy file
                 FileCopyUtils.copy(multipartFile.getBytes(), new FileOutputStream(path+"/"+fileName));
-                
+
                 //new file
                 fileWriter = new FileWriter(path+"/contentOfFolder.txt",true);
                 bufferedWriter = new BufferedWriter(fileWriter);
@@ -88,10 +94,10 @@ public class FileController {
     //            bufferedWriter.newLine();
                 bufferedWriter.close();
                 fileWriter.close();
-                
+
                 // Parse and serialize files
                 parseFile(path+"/"+fileName, fileType);
-                
+
                 return new RestResponse(null, null);
             }
             catch (Exception e)
@@ -108,7 +114,6 @@ public class FileController {
             
             //Check if project allready exist
             Project project = projectService.findByProjectName(projectName, user);
-            Integer projectId = project.getId();
             
             PathFinder pathFinder = new PathFinder();
             path = pathFinder.getUserPathLogged() + '/' + projectName;
@@ -117,14 +122,24 @@ public class FileController {
                 {
                     if (checkIfGFF(projectName))
                     {
+                        List<FileInput> findAll = fileService.findAll(project);
+                        for (FileInput file : findAll)
+                        {
+                            if ("annotation".equals(file.getF_type()))
+                                fileService.delete(file);
+                            else if ("difExpression".equals(file.getF_type()))
+                                fileService.delete(file);
+                            else if ("expression".equals(file.getF_type()))
+                                fileService.delete(file);
+                            else if ("bedcov".equals(file.getF_type()))
+                                fileService.delete(file);
+                            else
+                            {}
+                        };
                         new File(path+"/annotation").delete();
-                        //remove from database
                         new File(path+"/difExpression").delete();
-                        //remove from database
                         new File(path+"/expression").delete();
-                        //remove from database
                         new File(path+"/bedcov").delete();
-                        //remove from database
                     }
                 }
             try
@@ -140,30 +155,32 @@ public class FileController {
                 dir2 = new File(path);
                 if (!dir2.exists())
                     dir2.mkdir();
-
+                
+                //filename
                 fileName = multipartFile.getOriginalFilename();
                 splittedFileName = fileName.split("\\\\");
                 if (splittedFileName.length>1)
                     fileName = splittedFileName[splittedFileName.length-1];
                 
+                //copy file
                 FileCopyUtils.copy(multipartFile.getBytes(), new FileOutputStream(path+"/"+fileName));
-                
+
                 // Parse and serialize files
                 parseFile(path+"/"+fileName, fileType);
-                
+
                 FileInput file = new FileInput();
                 file.setF_name(fileName);
                 file.setF_path(path+"/"+fileName);
                 file.setF_type(fileType);
                 file.setProject(project);
-                
-                fileService.save(file, projectId);
-                
+
+                fileService.save(file);
+
                 return new RestResponse(null, null);
             }
             catch(Exception e)
             {
-                return new RestResponse(e.getMessage(), null);
+                return new RestResponse("fileError", e.getMessage());
             }
         }
     }
