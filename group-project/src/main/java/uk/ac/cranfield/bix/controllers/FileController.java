@@ -1,9 +1,12 @@
 package uk.ac.cranfield.bix.controllers;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,35 +41,51 @@ public class FileController {
     @RequestMapping(value = "/controller/upload", method = RequestMethod.POST)
     public
     @ResponseBody
-    RestResponse upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName")String projectName, @RequestParam("fileType") String fileType) 
+    RestResponse upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName")String projectName, @RequestParam("fileType") String fileType) throws Exception 
     {
         
         //initializations
-        String fileName, path, userID;
+        String fileName, path, userID, result;
         File dir1, dir2, dir1_5;
         FileWriter fileWriter;
         BufferedWriter bufferedWriter;
         String[] splittedFileName;
+        FileReader fileReader;
+        BufferedReader bufferedReader;
+        boolean flag=false;
         
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         {
 //          System.out.println("User is ANONYMOUS");
-            path = new PathFinder().getEntireFilePathNotLogged();
+            path = new PathFinder().getUserPathNotLogged();
             try
             {
+                //GFF files
+                if ("annotation".equals(fileType))
+                {
+                    if (checkIfGFF(projectName))
+                    {
+                        new File(path+"/annotation").delete();
+                        new File(path+"/difExpression").delete();
+                        new File(path+"/expression").delete();
+                        new File(path+"/bedcov").delete();
+                    }
+                }
                 //newPath with added FileType
                 path=(path+"/"+fileType);
                 dir2 = new File(path);
                 if (!dir2.exists())
                     dir2.mkdir();
 
+                //filename
                 fileName = multipartFile.getOriginalFilename();
                 splittedFileName = fileName.split("\\\\");
                 if (splittedFileName.length>1)
                     fileName = splittedFileName[splittedFileName.length-1];
 
+                //copy file
                 FileCopyUtils.copy(multipartFile.getBytes(), new FileOutputStream(path+"/"+fileName));
-                
+
                 //new file
                 fileWriter = new FileWriter(path+"/contentOfFolder.txt",true);
                 bufferedWriter = new BufferedWriter(fileWriter);
@@ -75,10 +94,10 @@ public class FileController {
     //            bufferedWriter.newLine();
                 bufferedWriter.close();
                 fileWriter.close();
-                
+
                 // Parse and serialize files
                 parseFile(path+"/"+fileName, fileType);
-                
+
                 return new RestResponse(null, null);
             }
             catch (Exception e)
@@ -88,17 +107,41 @@ public class FileController {
         }
         else
         {
+//            System.out.println("User is LOGGED");
             //Find user
             String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(userLogin);
             
             //Check if project allready exist
             Project project = projectService.findByProjectName(projectName, user);
-            Integer projectId = project.getId();
             
-//            System.out.println("User is LOGGED");
             PathFinder pathFinder = new PathFinder();
-            path = pathFinder.getEntireFilePathLogged() + '/' + projectName;
+            path = pathFinder.getUserPathLogged() + '/' + projectName;
+            
+            if ("annotation".equals(fileType))
+                {
+                    if (checkIfGFF(projectName))
+                    {
+                        List<FileInput> findAll = fileService.findAll(project);
+                        for (FileInput file : findAll)
+                        {
+                            if ("annotation".equals(file.getF_type()))
+                                fileService.delete(file);
+                            else if ("difExpression".equals(file.getF_type()))
+                                fileService.delete(file);
+                            else if ("expression".equals(file.getF_type()))
+                                fileService.delete(file);
+                            else if ("bedcov".equals(file.getF_type()))
+                                fileService.delete(file);
+                            else
+                            {}
+                        };
+                        new File(path+"/annotation").delete();
+                        new File(path+"/difExpression").delete();
+                        new File(path+"/expression").delete();
+                        new File(path+"/bedcov").delete();
+                    }
+                }
             try
             {
                 //newPath with added ProjectName
@@ -112,31 +155,72 @@ public class FileController {
                 dir2 = new File(path);
                 if (!dir2.exists())
                     dir2.mkdir();
-
+                
+                //filename
                 fileName = multipartFile.getOriginalFilename();
                 splittedFileName = fileName.split("\\\\");
                 if (splittedFileName.length>1)
                     fileName = splittedFileName[splittedFileName.length-1];
                 
+                //copy file
                 FileCopyUtils.copy(multipartFile.getBytes(), new FileOutputStream(path+"/"+fileName));
-                
+
                 // Parse and serialize files
                 parseFile(path+"/"+fileName, fileType);
-                
+
                 FileInput file = new FileInput();
                 file.setF_name(fileName);
                 file.setF_path(path+"/"+fileName);
                 file.setF_type(fileType);
                 file.setProject(project);
-                
-                fileService.save(file, projectId);
-                
+
+                fileService.save(file);
+
                 return new RestResponse(null, null);
             }
             catch(Exception e)
             {
-                return new RestResponse(e.getMessage(), null);
+                return new RestResponse("fileError", e.getMessage());
             }
         }
+    }
+    @SuppressWarnings("empty-statement")
+    private boolean checkIfGFF(String projectName) throws Exception
+    {
+        if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
+        {
+//            System.out.println("User is ANONYMOUS");
+            String path, result; FileReader fileReader; BufferedReader bufferedReader;
+            
+            path = new PathFinder().getGffPath();
+            fileReader = new FileReader(path+"/contentOfFolder.txt");
+            bufferedReader = new BufferedReader(fileReader);
+            result = bufferedReader.readLine();
+            bufferedReader.close();
+            fileReader.close();
+            return result!=null;
+        }
+        else
+        {
+//            System.out.println("User is LOGGED");
+            Project project;
+            boolean flag =false;
+            //Find user
+            String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userService.findByUsername(userLogin);
+
+            //Check if project allready exist
+            project = projectService.findByProjectName(projectName, user);
+
+            List<FileInput> findAll = fileService.findAll(project);
+
+            for (FileInput file : findAll)
+            {
+                String fileType = file.getF_type();
+                if ("annotation".equals(fileType))
+                    flag = true;
+            };
+            return flag;
+    }
     }
 }

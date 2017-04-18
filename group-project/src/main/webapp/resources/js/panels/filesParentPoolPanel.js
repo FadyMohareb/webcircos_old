@@ -3,16 +3,325 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+var FilesDropdownParent1 = React.createClass({displayName: "FilesDropdownParent1",
+    getInitialState: function () {
+        return {activeFileParent1: this.props.filesList[0]};
+    },
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFileParent1 = newProperties.filesList[0];
+        $('#parent1Btn').children().first().text(this.state.activeFileParent1 + ' ');
+    },
+    renderFilesBlockParent1: function renderBlockParent1(filesList, parent) {
+
+        return filesList.map(function (fileName)
+        {
+
+            handleFileChangeParent1: function handleFileChangeParent1(event) {
+
+                event.preventDefault();
+                parent.state.activeFileParent1 = event.target.id;
+                BSAstructure.parent1= event.target.id;
+                console.log('Parent 1: ' + BSAstructure.parent1);
+                $('#parent1Btn').children().first().text(parent.state.activeFileParent1 + ' ');
+
+            }
+            ;
+
+            return (React.createElement("li", {onClick: handleFileChangeParent1, id: fileName}, fileName));
+        })
+    },
+    render: function () {
+        return React.createElement('div', {className: 'btn-group'},
+                React.createElement('button', {className: 'btn btn-default dropdown-toggle',
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'parent1Btn'},
+                        this.state.activeFileParent1 + ' ',
+                        React.createElement('span', {className: 'caret'})),
+                React.createElement('ul', {className: 'dropdown-menu'},
+                        this.renderFilesBlockParent1(this.props.filesList, this))
+                )
+    }
 
 
-var FilesParentPoolPanel = React.createClass({className: "FilesGeneralPanel",
-    
+
+});
+
+var FilesDropdownParent2 = React.createClass({displayName: "FilesDropdownParent2",
+    getInitialState: function () {
+        return {activeFileParent2: this.props.filesList[0]};
+    },
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFileParent2 = newProperties.filesList[0];
+        $('#parent2Btn').children().first().text(this.state.activeFileParent2 + ' ');
+    },
+    renderFilesBlockParent2: function renderBlockParent2(filesList, parent) {
+
+        return filesList.map(function (fileName)
+        {
+
+            handleFileChangeParent2: function handleFileChangeParent2(event) {
+
+                event.preventDefault();
+                parent.state.activeFileParent2 = event.target.id;
+                BSAstructure.parent2= event.target.id;
+                console.log('Parent 2: ' + BSAstructure.parent2);
+                $('#parent2Btn').children().first().text(parent.state.activeFileParent2 + ' ');
+
+            }
+            ;
+
+            return (React.createElement("li", {onClick: handleFileChangeParent2, id: fileName}, fileName));
+        })
+    },
+    render: function () {
+        return React.createElement('div', {className: 'btn-group'},
+                React.createElement('button', {className: 'btn btn-default dropdown-toggle',
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'parent2Btn'},
+                        this.state.activeFileParent2 + ' ',
+                        React.createElement('span', {className: 'caret'})),
+                React.createElement('ul', {className: 'dropdown-menu'},
+                        this.renderFilesBlockParent2(this.props.filesList, this))
+                )
+    }
+
+
+
+});
+
+var FilesDropdownPool1 = React.createClass({displayName: "FilesDropdownPool1",
+    getInitialState: function () {
+        return {activeFilePool1: this.props.filesList[0]};
+    },
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFilePool1 = newProperties.filesList[0];
+        $('#pool1Btn').children().first().text(this.state.activeFilePool1 + ' ');
+    },
+    renderFilesBlockPool1: function renderBlockPool1(filesList, parent) {
+
+        return filesList.map(function (fileName)
+        {
+
+            handleFileChangePool1: function handleFileChangePool1(event) {
+
+                event.preventDefault();
+                parent.state.activeFilePool1 = event.target.id;
+                BSAstructure.pool1= event.target.id;
+                console.log('Pool 1: ' + BSAstructure.pool1);
+                $('#pool1Btn').children().first().text(parent.state.activeFilePool1 + ' ');
+
+            }
+            ;
+
+            return (React.createElement("li", {onClick: handleFileChangePool1, id: fileName}, fileName));
+        })
+    },
+    render: function () {
+        return React.createElement('div', {className: 'btn-group'},
+                React.createElement('button', {className: 'btn btn-default dropdown-toggle',
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'pool1Btn'},
+                        this.state.activeFilePool1 + ' ',
+                        React.createElement('span', {className: 'caret'})),
+                React.createElement('ul', {className: 'dropdown-menu'},
+                        this.renderFilesBlockPool1(this.props.filesList, this))
+                )
+    }
+
+});
+
+var FilesDropdownPool2 = React.createClass({displayName: "FilesDropdownPool2",
+    getInitialState: function () {
+        return {activeFilePool2: this.props.filesList[0]};
+    },
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFilePool2 = newProperties.filesList[0];
+        $('#pool2Btn').children().first().text(this.state.activeFilePool2 + ' ');
+    },
+    renderFilesBlockPool2: function renderBlockPool2(filesList, parent) {
+
+        return filesList.map(function (fileName)
+        {
+
+            handleFileChangePool2: function handleFileChangePool2(event) {
+
+                event.preventDefault();
+                parent.state.activeFilePool2 = event.target.id;
+                BSAstructure.pool2= event.target.id;
+                console.log('Pool 2: ' + BSAstructure.pool2);
+                $('#pool2Btn').children().first().text(parent.state.activeFilePool2 + ' ');
+
+            }
+            ;
+
+            return (React.createElement("li", {onClick: handleFileChangePool2, id: fileName}, fileName));
+        })
+    },
+    render: function () {
+        return React.createElement('div', {className: 'btn-group'},
+                React.createElement('button', {className: 'btn btn-default dropdown-toggle',
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'pool2Btn'},
+                        this.state.activeFilePool2 + ' ',
+                        React.createElement('span', {className: 'caret'})),
+                React.createElement('ul', {className: 'dropdown-menu'},
+                        this.renderFilesBlockPool2(this.props.filesList, this))
+                )
+    }
+
+
+
+});
+
+var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
+    contentUpdate: function (panelType)
+    {
+        var projectName = this.props.projectName;
+        var fd = new FormData();
+        var type = panelType.panelType;
+        fd.append('panelType', type);
+        fd.append('projectName', projectName);
+        $.ajax({
+            url: "/refresh",
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: fd,
+            success: function (data)
+            {
+                var filesList = data.errors;
+                if (filesList !== "" && filesList !== null)
+                {
+                    var substring0 = filesList.substring(0, 1);
+                    if (substring0 === "[")
+                    {
+                        filesList = filesList.substring(1, filesList.length - 1);
+                        var filesSplited = filesList.split(",");
+                        var n = filesSplited.length;
+                        var list = [];
+                        list[0] = '---';
+                        for (var i = 0; i < n; i++)
+                        {
+                            list[i + 1] = filesSplited[i];
+                        }
+                    } else
+                    {
+                        var filesSplited = filesList.split("\t");
+                        var list = [];
+                        list[0] = '---';
+                        for (var i = 0; i < filesSplited.length; i++)
+                        {
+                            if (filesSplited[i] !== "")
+                            {
+                                var filesSplited2 = filesSplited[i].split("/");
+                                var fileName = filesSplited2[filesSplited2.length - 1];
+                                list[i + 1] = fileName;
+                            }
+                        }
+
+
+                    }
+
+                        
+                        React.render(React.createElement(FilesDropdownParent1, {filesList: list, fileType: type}),
+                                        document.getElementById('parent1'));
+                        React.render(React.createElement(FilesDropdownParent2, {filesList: list, fileType: type}),
+                                        document.getElementById('parent2'));
+                        React.render(React.createElement(FilesDropdownPool1, {filesList: list, fileType: type}),
+                                        document.getElementById('pool1'));
+                        React.render(React.createElement(FilesDropdownPool2, {filesList: list, fileType: type}),
+                                        document.getElementById('pool2'));
+
+                }
+            },
+            error: function (status, err) {
+                console.log("Panel not refreshed");
+                console.error(status, err.toString());
+            }});
+    },
+    sendData: function(){
+       BSAstructure.validateValues();
+       $("#bsaCircos").html("");
+
+         $.ajax({
+            url: "/circos.data",
+            dataType: 'json',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(BSAstructure),
+            success: function (data) {
+                alert("Button Test");
+//                var ARC_01;
+//                var HISTOGRAM01;
+//                var LINE01;
+//                var LINE02;
+//                var HEATMAP01;
+//                var HEATMAP02;
+//                console.log(data);
+//
+//                if (data.histo !== null) {
+//                    HISTOGRAM01 = [data.histo.histId, data.histo.properties, data.histo.histDataPoint];
+//                } else {
+//                    HISTOGRAM01 = [];
+//                }
+//
+//                if (data.arc !== null) {
+//                    ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint];
+//                } else {
+//                    ARC_01 = [];
+//                }
+//
+//                if (data.genomicCoverage !== null) {
+//                    LINE01 = [data.genomicCoverage.lineId, data.genomicCoverage.properties, data.genomicCoverage.linePoints];
+//                } else {
+//                    LINE01 = [];
+//                }
+//
+//                if (data.transcriptomicCoverage !== null) {
+//
+//                    LINE02 = [data.transcriptomicCoverage.lineId, data.transcriptomicCoverage.properties, data.transcriptomicCoverage.linePoints];
+//                } else {
+//                    LINE02 = [];
+//                }
+//
+//                if (data.dEHeatMap !== null) {
+//                    HEATMAP01 = [data.dEHeatMap.heatMapId, data.dEHeatMap.properties, data.dEHeatMap.heatMapDataPoint];
+//                } else {
+//                    HEATMAP01 = [];
+//                }
+//
+//                if (data.geneExpressionHeatMap !== null) {
+//                    HEATMAP02 = [data.geneExpressionHeatMap.heatMapId, data.geneExpressionHeatMap.properties, data.geneExpressionHeatMap.heatMapDataPoint];
+//                } else {
+//                    HEATMAP02 = [];
+//                }
+//                
+//                renderCircos(data.genomes, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02);
+            },
+            error: function () {
+                alert("Wrong data");
+                console.error(status, err.toString());
+            }
+
+        });
+        
+    },
     render: function () {
 
-        return (
-                React.createElement('div', {id: "blabla"}),
-                        React.createElement('button', {className: 'btn btn-primary'},
-                                'Parent-pool tab test')
+        return (React.createElement('div', {className: 'container'},
+                React.createElement('label', {for : 'parent1'}, 'Parent 1: '),
+                React.createElement('div', {className: 'container', id: 'parent1'},
+                        React.createElement(this.contentUpdate, {panelType: "variants"})),
+                React.createElement('br'),
+                React.createElement('label', {for : 'parent2'}, 'Parent 2: '),
+                React.createElement('div', {className: 'container', id: 'parent2'},
+                        React.createElement(this.contentUpdate, {panelType: "variants"})),
+                React.createElement('br'),
+                React.createElement('label', {for : 'pool1'}, 'Pool 1: '),
+                React.createElement('div', {className: 'container', id: 'pool1'},
+                        React.createElement(this.contentUpdate, {panelType: "variants"})),
+                React.createElement('br'),
+                React.createElement('label', {for : 'pool2'}, 'Pool 2: '),
+                React.createElement('div', {className: 'container', id: 'pool2'},
+                        React.createElement(this.contentUpdate, {panelType: "variants"})),
+                React.createElement('br'),
+                React.createElement('button', {className: 'btn btn-primary', onClick: this.sendData}, 'Display BSA circos'))
                 );
 
 

@@ -1,6 +1,7 @@
 function renderCircos(BioCircosGenome, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02) {
 
-            BioCircos01 = new BioCircos(ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02, BioCircosGenome, {// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
+            BioCircos01 = new BioCircos(ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02, BioCircosGenome, {
+                //// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
                 //Main configuration
                 target: 'bioCircos', // Main configuration "target"
                 svgWidth: 1350, // Main configuration "svgWidth"

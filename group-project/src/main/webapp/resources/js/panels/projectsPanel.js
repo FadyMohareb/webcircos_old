@@ -16,6 +16,7 @@ var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
                     parent.state.activeProject = event.target.id;
                     $('#projectButton').children().first().text(parent.state.activeProject + ' ');
                     Structure.projectName = parent.state.activeProject;
+                    BSAstructure.projectName = parent.state.activeProject;
                     React.render(React.createElement(FilesPanel, { projectName: parent.state.activeProject }), document.getElementById('filesContainer'));
 
                 };

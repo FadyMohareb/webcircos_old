@@ -60,12 +60,12 @@ public class CircosController {
         CircosOutput circosOutput = new CircosOutput();
         //For tomorrow meeting I need to know where to find data. So I retrieve the session id to set the proper path. 
         if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
-            path = new PathFinder().getEntireFilePathNotLogged() + "/";
+            path = new PathFinder().getUserPathNotLogged() + "/";
 //            userID = RequestContextHolder.currentRequestAttributes().getSessionId();
 //            path = "C:/Users/agata/Desktop/WebCircos/temp/" + userID + "/";
         } else {
-//            path = new PathFinder().getEntireFilePathNotLogged()+"/";
-            path = new PathFinder().getEntireFilePathLogged(circosInput.getProjectName());
+//            path = new PathFinder().getUserPathNotLogged()+"/";
+            path = new PathFinder().getUserPathLogged(circosInput.getProjectName());
 //            userID = SecurityContextHolder.getContext().getAuthentication().getName();
 //            path = "C:/Users/agata/Desktop/WebCircos/user/" + userID + "/";
         }

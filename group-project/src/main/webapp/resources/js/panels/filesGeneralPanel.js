@@ -249,7 +249,7 @@ var FilesDropdownDifExpression = React.createClass({displayName: "FilesDropdownD
     },
     componentWillReceiveProps: function (newProperties) {
         this.state.activeFileDifExpression = newProperties.filesList[0];
-        $('#difExpressionBtn').children().first().text(parent.state.activeFileDifExpression + ' ');
+        $('#difExpressionBtn').children().first().text(this.state.activeFileDifExpression + ' ');
     },
     renderFilesBlock: function renderBlock(filesList, parent) {
 
@@ -311,7 +311,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
             success: function (data)
             {
                 var filesList = data.errors;
-                if (filesList !== "")
+                if (filesList !== "" && filesList !== null)
                 {
                     var substring0 = filesList.substring(0, 1);
                     if (substring0 === "[")
@@ -453,7 +453,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
         
     },
     render: function () {
-        return (React.createElement('div', {className: "container"},
+        return (React.createElement('div', {className: 'container'},
                 React.createElement('label', {for : 'sequenceBtn'}, 'Reference sequence: '),
                 React.createElement('div', {className: 'container', id: 'sequence'},
                         React.createElement(this.contentUpdateProject, {panelType: "sequence"})),
@@ -481,7 +481,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 React.createElement('div', {className: 'container', id: 'annotation'},
                         React.createElement(this.contentUpdateProject, {panelType: "annotation"})),
                 React.createElement('br'),
-                        React.createElement('button', {className: 'btn btn-primary', onClick: this.sendData},
+                        React.createElement('button', {className: 'btn btn-primary', style:{'text-align': 'center'}, onClick: this.sendData},
                                 'Display circos'))
                 );
     }

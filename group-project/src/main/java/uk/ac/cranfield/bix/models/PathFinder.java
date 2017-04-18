@@ -1,14 +1,13 @@
 package uk.ac.cranfield.bix.models;
 
 import java.io.File;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 
 public class PathFinder {
 
     //current path THE ONE OF TWO TO CHANGE AT DIFFERENT COMPUTERS
-    private final String constantPath = ("/home/vmuser/WebCircos/");
+    private final String constantPath = ("Z:/ProfileData/s260533/Desktop/");
     private String currentPath;
 
     public PathFinder() {
@@ -25,12 +24,19 @@ public class PathFinder {
     public String getSimpeUserPath() {
         return constantPath + "user/";
     }
+    
+    public String getGffPath()
+    {
+        String path;
+        path = getUserPathNotLogged();
+        return path+"/annotation";
+    }
 
-    public String getEntireFilePathNotLogged() {
+    public String getUserPathNotLogged() {
         String userID, path;
         File dir1, dir1_5, dir2;
 
-        System.out.println("User is ANONYMOUS");
+//        System.out.println("User is ANONYMOUS");
         userID = RequestContextHolder.currentRequestAttributes().getSessionId();
         //newPath with added userID
         path = constantPath + "temp/" + userID;
@@ -43,7 +49,7 @@ public class PathFinder {
         return path;
     }
 
-    public String getEntireFilePathLogged() {
+    public String getUserPathLogged() {
         String userID, path;
         File dir1, dir1_5, dir2;
 
@@ -60,7 +66,7 @@ public class PathFinder {
         return path;
     }
 
-    public String getEntireFilePathLogged(String projectName) {
+    public String getUserPathLogged(String projectName) {
         String userID, path;
         File dir1, dir2;
 
