@@ -28,9 +28,11 @@ var FilesPanel = React.createClass({displayName: "FilesPanel",
         return (React.createElement('div', {className: "panel panel-primary"},
                 React.createElement('div', {className: "panel-heading"}, "Files  ",
                         React.createElement('button', {type: 'button', className: 'btn btn-primary btn-sm', onClick: this.handleShowUploadModal},
-                            React.createElement('span', {className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true'})),
-                        React.createElement('button', {type: 'button', className: 'btn btn-primary btn-sm', onClick: this.handleShowImportModal},
-                            React.createElement('span', {className: 'glyphicon glyphicon-import', 'aria-hidden': 'true'}))),
+                            React.createElement('span', {className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true'}))
+//                            ,
+//                        React.createElement('button', {type: 'button', className: 'btn btn-primary btn-sm', onClick: this.handleShowImportModal},
+//                            React.createElement('span', {className: 'glyphicon glyphicon-import', 'aria-hidden': 'true'}))
+                                    ),
                 React.createElement('div', {className: "panel-body", id: 'filesTabsContainer'},
                         React.createElement(FilesTabsComponent, {projectName: this.props.projectName})),
                         
