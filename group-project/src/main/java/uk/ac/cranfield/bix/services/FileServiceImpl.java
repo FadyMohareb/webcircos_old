@@ -28,4 +28,10 @@ public class FileServiceImpl implements FileService {
     public List<FileInput> findAll(Project project){
         return FileRepository.getAll(project);
     }
+    
+    @Override
+    public FileInput getByName(String f_name, Project project)
+    {
+        return FileRepository.getByName(f_name, project);
+    }
 }

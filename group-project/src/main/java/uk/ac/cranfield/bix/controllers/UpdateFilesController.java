@@ -49,8 +49,6 @@ public class UpdateFilesController {
         FileReader fileReader;
         BufferedReader bufferedReader;
         
-        
-        
         //file type needs to consist only letters
         type = panelType.replaceAll("[^a-zA-Z]","");
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)

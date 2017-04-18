@@ -10,7 +10,6 @@
         <script src="${contextPath}/resources/js/vendor/react.js"></script>
         <script src="${contextPath}/resources/js/vendor/showdown.min.js"></script>
         <script src="${contextPath}/resources/js/home.js"></script>
-        <script src="${contextPath}/resources/css/font-awesome.min.css"></script>
         <script src="${contextPath}/resources/js/modals/loginModal.js"></script>
         <script src="${contextPath}/resources/js/modals/registrationModal.js"></script>
         <script src="${contextPath}/resources/js/modals/resetPswdModal.js"></script>
@@ -29,6 +28,7 @@
         <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>
         <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
+        <script src="${contextPath}/resources/js/modals/importModal.js"></script>
         <script src="${contextPath}/resources/js/panels/centerTabs.js"></script>
         <script src="${contextPath}/resources/js/modals/newProjectModal.js"></script>
         <script src="${contextPath}/resources/js/datastructures/FileListStructure.js"></script>
