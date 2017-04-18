@@ -1326,7 +1326,7 @@ var BioCircos;
                     .style("font-size", self.genomeTextSize)
                     .each(function (d, i) {
                         d.angle = (d.startAngle + d.endAngle) / 2 - self.genomeTextDx;
-                        d.name = self.genomeLabel[i].substring(self.genomeLabel[i].length - 2,self.genomeLabel[i].length);
+                        d.name = self.genomeLabel[i].substring(self.genomeLabel[i].length - 4,self.genomeLabel[i].length);
                     })
                     .attr("dy", self.genomeTextDy)
                     .attr("transform", function (d) {
@@ -5027,14 +5027,14 @@ var BioCircos;
                                     .style("font-size", self.genomeTextSize)
                                     .each(function (d, i) {
                                         d.angle = (d.startAngle + d.endAngle) / 2 - self.genomeTextDx;
-                                        d.name = self.genomeLabel[labelno];
+                                        d.name = self.genomeLabel[labelno].substring(self.genomeLabel[labelno].length -4,self.genomeLabel[labelno].length);
                                     })
                                     .attr("dy", self.genomeTextDy)
-                                    .attr("transform", function (d) {
-                                        return "rotate(" + (d.angle * 180 / Math.PI) + ")" +
-                                                "translate(0," + -1.0 * (outerRadius + 10) + ")" +
-                                                ((d.angle > Math.PI * 2 && d.angle < Math.PI * 0) ? "rotate(180)" : "");
-                                    })
+//                                    .attr("transform", function (d) {
+//                                        return "rotate(" + (d.angle * 180 / Math.PI) + ")" +
+//                                                "translate(0," + -1.0 * (outerRadius + 10) + ")" +
+//                                                ((d.angle > Math.PI * 2 && d.angle < Math.PI * 0) ? "rotate(180)" : "");
+//                                    })
                                     .text(function (d, i) {
                                         return d.name
                                     });
