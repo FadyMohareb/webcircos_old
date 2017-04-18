@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
+import uk.ac.cranfield.bix.controllers.rest.BackProperties;
 import uk.ac.cranfield.bix.controllers.rest.CircosInput;
 import uk.ac.cranfield.bix.controllers.rest.CircosOutput;
 import uk.ac.cranfield.bix.controllers.rest.GffDataPoint;
@@ -25,6 +26,7 @@ import uk.ac.cranfield.bix.controllers.rest.HeatMapDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.LineDataPoint;
+import uk.ac.cranfield.bix.controllers.rest.finalObjects.BackgroundDisplay;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.HeatMap;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.IndGff;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Line;
@@ -90,7 +92,9 @@ public class CircosController {
             List<LineDataPoint> point = (List<LineDataPoint>) Deserialize(path + "/variants/" + circosInput.getSnpdensity() + "coverage.txt");
             Line l = GenomeCoverageWriter(point);
             circosOutput.setGenomicCoverage(l);
-
+            
+            BackgroundDisplay back = new BackgroundDisplay("BACKGROUND01", new BackProperties(150,120,"#F2F2F2","#000",0.3, "true",0.1,"#000",0.5,10));
+            circosOutput.setBackgroundGenoCov(back);
         }
 
         if (new File(path + "/annotation/" + circosInput.getAnnotation() + ".txt").exists()) {
@@ -103,6 +107,9 @@ public class CircosController {
             List<LineDataPoint> trans = (List<LineDataPoint>) Deserialize(path + "/bedcov/" + circosInput.getTranscriptiomicCoverage() + "transcriptomicCov.txt");
             Line l = TranscriptomicCovWriter(trans);
             circosOutput.setTranscriptomicCoverage(l);
+            
+            BackgroundDisplay backTC = new BackgroundDisplay("BACKGROUND02", new BackProperties(60,30,"#F2F2F2","#000",0.3, "true",0.2,"#000",0.5,5));
+            circosOutput.setBackgroundTranCov(backTC);
         }
 
         if (new File(path + "/expression/" + circosInput.getGenesExpresion() + "Expression.txt").exists()) {

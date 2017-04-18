@@ -1,7 +1,7 @@
 /* global React, Showdown, SecurityContextHolder, RequestContextHolder, UploadModal */
 
 var converter = new Showdown.converter();
- 
+
 var FilesDropdownSequence = React.createClass({displayName: "FilesDropdownSequence",
     getInitialState: function getInitialState() {
         return {activeFileSequence: this.props.filesList[0]};
@@ -35,7 +35,7 @@ var FilesDropdownSequence = React.createClass({displayName: "FilesDropdownSequen
                         this.state.activeFileSequence + ' ',
                         React.createElement('span', {className: 'caret'})),
                 React.createElement('ul', {className: 'dropdown-menu'},
-                        this.renderFilesBlockSequence(this.props.filesList, this))  
+                        this.renderFilesBlockSequence(this.props.filesList, this))
                 )
     }
 
@@ -99,7 +99,7 @@ var FilesDropdownVariants = React.createClass({displayName: "FilesDropdownVarian
 
                 event.preventDefault();
                 parent.state.activeFileVariants = event.target.id;
-                Structure.snpdensity= event.target.id;
+                Structure.snpdensity = event.target.id;
                 $('#variantsBtn').children().first().text(parent.state.activeFileVariants + ' ');
 
             }
@@ -168,7 +168,7 @@ var FilesDropdownTransCoverage = React.createClass({displayName: "FilesDropdownT
         return {activeFileTransCoverage: this.props.filesList[0]};
     },
     componentWillReceiveProps: function (newProperties) {
-        this.state.activeFileTransCoverage =  newProperties.filesList[0];
+        this.state.activeFileTransCoverage = newProperties.filesList[0];
         $('#transCoverageBtn').children().first().text(this.state.activeFileTransCoverage);
     },
     renderFilesBlock: function renderBlock(filesList, parent) {
@@ -323,7 +323,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                         list[0] = '---';
                         for (var i = 0; i < n; i++)
                         {
-                            list[i+1] = filesSplited[i];
+                            list[i + 1] = filesSplited[i];
                         }
                     } else
                     {
@@ -336,7 +336,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                             {
                                 var filesSplited2 = filesSplited[i].split("/");
                                 var fileName = filesSplited2[filesSplited2.length - 1];
-                                list[i+1] = fileName;
+                                list[i + 1] = fileName;
                             }
                         }
 
@@ -386,11 +386,11 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 console.error(status, err.toString());
             }});
     },
-   sendData: function(){
-       Structure.validateValues();
-       $("#bioCircos").html("");
+    sendData: function () {
+        Structure.validateValues();
+        $("#bioCircos").html("");
 
-         $.ajax({
+        $.ajax({
             url: "/circos.data",
             dataType: 'json',
             type: 'POST',
@@ -403,6 +403,8 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 var LINE02;
                 var HEATMAP01;
                 var HEATMAP02;
+                var BACKGROUND01;
+                var BACKGROUND02;
                 console.log(data);
 
                 if (data.histo !== null) {
@@ -441,8 +443,18 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 } else {
                     HEATMAP02 = [];
                 }
-                
-                renderCircos(data.genomes, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02);
+                if (data.backgroundGenoCov !== null) {
+                    BACKGROUND01 = [data.backgroundGenoCov.backId, data.backgroundGenoCov.properties];
+                } else {
+                    BACKGROUND01 = [];
+                }
+                if (data.backgroundTranCov !== null) {
+                    BACKGROUND02 = [data.backgroundTranCov.backId, data.backgroundTranCov.properties];
+                } else {
+                    BACKGROUND02 = [];
+                }
+
+                renderCircos(data.genomes, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02,BACKGROUND01,BACKGROUND02);
             },
             error: function () {
                 alert("Wrong data");
@@ -450,7 +462,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
             }
 
         });
-        
+
     },
     render: function () {
         return (React.createElement('div', {className: "container"},
@@ -481,8 +493,8 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 React.createElement('div', {className: 'container', id: 'annotation'},
                         React.createElement(this.contentUpdateProject, {panelType: "annotation"})),
                 React.createElement('br'),
-                        React.createElement('button', {className: 'btn btn-primary', onClick: this.sendData},
-                                'Display circos'))
+                React.createElement('button', {className: 'btn btn-primary', onClick: this.sendData},
+                        'Display circos'))
                 );
     }
 });

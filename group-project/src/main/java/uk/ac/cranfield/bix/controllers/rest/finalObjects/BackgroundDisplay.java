@@ -16,6 +16,11 @@ public class BackgroundDisplay {
     private String backId;
     private BackProperties properties;
 
+    public BackgroundDisplay(String backId, BackProperties backProperties) {
+        this.backId = backId;
+        this.properties = backProperties;
+    }
+
     public String getBackId() {
         return backId;
     }

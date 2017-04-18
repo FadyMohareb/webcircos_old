@@ -39,6 +39,10 @@ public class CircosOutput {
     private HeatMap dEHeatMap;
     
     private HeatMap geneExpressionHeatMap;
+    
+    private BackgroundDisplay backgroundGenoCov;
+    
+    private BackgroundDisplay backgroundTranCov;
 
     public List<Object[]> getGenomes() {
         return genomes;
@@ -119,5 +123,23 @@ public class CircosOutput {
     public void setGeneExpressionHeatMap(HeatMap geneExpressionHeatMap) {
         this.geneExpressionHeatMap = geneExpressionHeatMap;
     }
+
+    public BackgroundDisplay getBackgroundGenoCov() {
+        return backgroundGenoCov;
+    }
+
+    public void setBackgroundGenoCov(BackgroundDisplay backgroundGenoCov) {
+        this.backgroundGenoCov = backgroundGenoCov;
+    }
+
+    public BackgroundDisplay getBackgroundTranCov() {
+        return backgroundTranCov;
+    }
+
+    public void setBackgroundTranCov(BackgroundDisplay backgroundTranCov) {
+        this.backgroundTranCov = backgroundTranCov;
+    }
+    
+    
      
 }
