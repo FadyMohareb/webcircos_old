@@ -52,8 +52,6 @@ public class UpdateFilesController {
         FileReader fileReader;
         BufferedReader bufferedReader;
         
-        
-        
         //file type needs to consist only letters
         type = panelType.replaceAll("[^a-zA-Z]","");
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
@@ -101,7 +99,6 @@ public class UpdateFilesController {
         }
         else
         {
-        
 //            System.out.println("User is LOGGED");
                 path = pathFinder.getEntireFilePathLogged();
                 newPath=(path+"/"+projectName);
@@ -127,12 +124,11 @@ public class UpdateFilesController {
                     String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
                     User user = userService.findByUsername(userLogin);
 
-                    //Check if project allready exist
-                    project = projectService.findByProjectName(projectName, user);
-                    Integer projectId = project.getId();
+                //Check if project allready exist
+                project = projectService.findByProjectName(projectName, user);
 
-                    List<FileInput> findAll = fileService.findAll(project);
-                    List<String> toString = new ArrayList<>();
+                List<FileInput> findAll = fileService.findAll(project);
+                List<String> toString = new ArrayList<>();
 
                     for (FileInput file : findAll)
                     {

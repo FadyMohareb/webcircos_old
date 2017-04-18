@@ -18,14 +18,11 @@ public class LineDataPoint implements Serializable{
     private Integer pos;
     
     private Double value;
-    
-    
 
     public LineDataPoint(String chr, Integer pos, Double value) {
         this.chr = chr;
         this.pos = pos;
         this.value = value;
-        
     }
     
 
@@ -52,4 +49,7 @@ public class LineDataPoint implements Serializable{
     public void setValue(Double value) {
         this.value = value;
     }
+    
+   
+    
 }

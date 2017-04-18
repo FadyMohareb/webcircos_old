@@ -1,10 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%-- 
-    Document   : MainWindow
-    Created on : 15-Mar-2017, 10:25:14
-    Author     : s262012
---%>
-
 <html>
     <head>
         <title>WebCircos</title>
@@ -34,15 +28,10 @@
         <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>
         <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
+        <script src="${contextPath}/resources/js/modals/importModal.js"></script>
         <script src="${contextPath}/resources/js/panels/centerTabs.js"></script>
         <script src="${contextPath}/resources/js/modals/newProjectModal.js"></script>
         <script src="${contextPath}/resources/js/datastructures/FileListStructure.js"></script>
-
-
-        <%--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <!-- one of the properties available; the maximum file size in bytes (2097152 B = 2 MB) -->
-        <property name="maxUploadSize" value="4 000 000 000"/>
-        </bean>--%>
 
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">

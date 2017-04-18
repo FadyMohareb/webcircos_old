@@ -58,7 +58,7 @@ var HomePage = React.createClass({
 });
 
 var renderHomePage = function (asd) {
-    console.log("asdasd: " + asd);
+//    console.log("asdasd: " + asd);
     var logged = null;
     
     if (asd !== null)

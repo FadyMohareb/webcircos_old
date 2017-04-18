@@ -83,7 +83,7 @@ public class PathFinder {
         String userID, path;
         File dir1, dir1_5, dir2;
 
-        System.out.println("User is ANONYMOUS");
+//        System.out.println("User is ANONYMOUS");
         userID = RequestContextHolder.currentRequestAttributes().getSessionId();
         //newPath with added userID
         path = constantPath + "temp/" + userID;

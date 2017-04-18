@@ -1,19 +1,17 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/* global Showdown, React, ChangePswdModal */
+
 var converter = new Showdown.converter();
 
 var AccountDropdown = React.createClass({displayName: "accountDropdown",
-     handleSubmit: function (e) {
+    handleSubmit: function (e) {
         e.preventDefault();
         $.ajax({
             url: "/logOutAction",
             type: 'GET',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                if(data.errors == null) {
+                if(data.errors === null) 
+                {
                     location = '/home';
                 }else
                 {
@@ -24,26 +22,22 @@ var AccountDropdown = React.createClass({displayName: "accountDropdown",
                 console.error(status, err.toString());
             }
         });
-        return 
     },
-    
-  getInitialState: function getInitialState() {
-    return { view: { showModal: false } };
-  },
-  handleHideModal: function handleHideModal() {
-    this.setState({ view: { showModal: false } });
-    $( ".modal-backdrop.in" ).remove();
-  },
-  handleShowModal: function handleShowModal() {
-    this.setState({ view: { showModal: true } });
-  },
-    
+    getInitialState: function getInitialState() {
+      return { view: { showModal: false } };
+    },
+    handleHideModal: function handleHideModal() {
+      this.setState({ view: { showModal: false } });
+      $( ".modal-backdrop.in" ).remove();
+    },
+    handleShowModal: function handleShowModal() {
+      this.setState({ view: { showModal: true } });
+    },
     render: function () {
         return (
             React.createElement("div", { className: 'btn-group', style: { float: 'right', 'margin-top': '10px' } },
                 React.createElement("button", { type: 'button', className: "btn btn-primary dropdown-toggle",
-                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': "false"}, 
-                    "Account  ", 
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': "false"},"Account  ", 
                     React.createElement("span", { className: 'caret' }),
                     React.createElement("span", { className: 'sr-only' })),
                 React.createElement("ul", { className: 'dropdown-menu dropdown-menu-right' },
@@ -59,9 +53,8 @@ var AccountDropdown = React.createClass({displayName: "accountDropdown",
         );
     }
 });
-
 var renderAccountDropdown = function (asd) {
-    console.log(asd)
+//    console.log(asd);
     React.render(
         React.createElement(AccountDropdown),
         document.getElementById("upperRightContainer")

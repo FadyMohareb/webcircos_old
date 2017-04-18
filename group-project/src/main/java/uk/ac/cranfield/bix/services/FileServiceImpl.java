@@ -15,17 +15,28 @@ public class FileServiceImpl implements FileService {
     private FileDao FileRepository;
 
     @Override
-    public void save(FileInput file, int projectId) {
-        FileRepository.save(file, projectId);
+    public void save(FileInput file) {
+        FileRepository.save(file);
     }
 
     @Override
-    public List<FileInput> findAll(Project project){
+    public void delete(FileInput file) {
+        FileRepository.save(file);
+    }
+
+    @Override
+    public List<FileInput> findAll(Project project) {
         return FileRepository.getAll(project);
+    }
+
+    @Override
+    public FileInput getByName(String f_name, Project project) {
+        return FileRepository.getByName(f_name, project);
     }
     
     @Override
     public FileInput findByFileType(String fileType, Project p){
         return FileRepository.getByFileType(fileType, p);
     }
-}
+    
+    }

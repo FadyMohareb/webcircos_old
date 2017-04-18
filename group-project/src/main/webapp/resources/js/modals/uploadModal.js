@@ -1,151 +1,158 @@
+/* global React */
+
 var converter = new Showdown.converter();
 //funkcja dla IE
-String.prototype.endsWith = function(suffix) {
+String.prototype.endsWith = function (suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 var UploadModal = React.createClass({className: "uploadModal",
-    
-    componentDidMount: function componentDidMount() 
+    componentDidMount: function componentDidMount()
     {
         $(this.getDOMNode()).modal('show');
         $(this.getDOMNode()).on('hidden.bs.modal', this.props.handleHideUploadModal);
     },
-    setFileType: function(type)
+    setFileType: function (type)
     {
-        this.fileType = type;
+        this.state.fileType = type;
     },
-    getInitialState: function()
+    getInitialState: function ()
     {
-        
-        return { view: {
-                isSequence: false, 
-                isAnnotation: false, 
-                isVariants: false,
-                isBedcov: false,
-                isAlignment: false, 
-                isExpression: false, 
-                isDiffExpression: false }};
+        return {fileType: null};
     },
-    handleChboxClicked: function(){
-        this.state.view.isAnnotation = this.refs.isAnnot.getDOMNode().value;
-    },
-    recognizeFileType: function(e)
+    recognizeFileByLine: function()
     {
-        this.isSequence = false;
-        this.isAlignment = false;
-        this.isAnnotation = false;
-        this.isVariants = false;
-        this.isBedcov = false;
-        this.isExpression = false;
-        this.isDiffExpression = false;
-        this.fileType = "";
-//        e.preventDefault();
+        var ajaxSuccess = this.ajaxSuccess;
         var file = this.refs.fileUpload.getDOMNode().files[0];
-        
-        if (file.name.endsWith(".fasta") || file.name.endsWith(".fa") || file.name.endsWith(".frn") || file.name.endsWith(".ffn"))
-        {
-            this.fileType = "sequence";
-            this.isSequence=true;
-        }
-        else if (file.name.endsWith(".gff") || file.name.endsWith(".gtf") || file.name.endsWith(".gff2") || file.name.endsWith(".gff3"))
-        {
-            this.fileType = "annotation";
-            this.isAnnotation=true;
-        }
-        else if (file.name.endsWith(".bedcov"))
-        {
-            this.fileType = "bedcov";
-            this.isBedcov=true;
-        }
-        else if (file.name.endsWith(".vcf"))
-        {
-            this.fileType = "variants";
-            this.isVariants = true;
-        }
-        else if (file.name.endsWith(".bam") || file.name.endsWith(".sam"))
-        {
-            this.fileType = "alignment";
-            this.isAlignment = true;
-        }
-        else if (file.name.endsWith(".results.sorted"))
-        {
-            this.fileType = "difExpression";
-            this.isDiffExpression = true;
-        }
-        else if (file.name.endsWith(".results"))
-        {
-            this.fileType = "expression";
-            this.isExpression = true;
-        }
-        else
-        {
-            var fd = new FormData();    
-            fd.append('file', file);
-            
-            $.ajax({
-            url: "/recognizeFile",
+        var projectName = this.props.projectName;
+        var fd = new FormData();
+        fd.append('file', file);
+        fd.append('projectName', projectName);
+        $.ajax({
+            url: "/recognizeFileType",
             type: 'POST',
             processData: false,
             contentType: false,
             data: fd,
-            success: function (data) 
-            {
-                console.log(data.errors);
-                return (this.fileType = data.errors);
-            },
+            success: ajaxSuccess,
             error: function (status, err) {
                 console.error(status, err.toString());
-            }});
-        }
-        console.log("FileType inside: " + this.fileType + " seq: " + this.isSequence + " ano: "+ this.isAnnotation +" bedcov: "+ this.isBedcov + " var: " + this.isVariants + " ali: " + this.isAlignment);
+            }
+        });
     },
-    handleSubmit: function(e){
+    recognizeFileType: function (e)
+    {
+        $('input:checkbox').prop('checked', false);
+        var ajaxSuccess = this.ajaxSuccess;
         e.preventDefault();
-        if(this.fileType==="")
-        {    
-            this.recognizeFileType();
+        var file = this.refs.fileUpload.getDOMNode().files[0];
+        var projectName = this.props.projectName;
+        var fileName = file.name;
+        var fd = new FormData();
+        fd.append('fileName', fileName);
+        fd.append('projectName', projectName);
+        $.ajax({
+            url: "/recognizeFileName",
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: fd,
+            success: ajaxSuccess,
+            error: function (status, err) {
+                console.error(status, err.toString());
+            }
+        });
+    },
+    ajaxSuccess: function (e) {
+        this.state.fileType = e.errors;
+        if (e.message !== "" && e.message !== null) {
+            React.render(React.createElement('div', {className: 'alert alert-warning', role: 'alert'}, 
+            React.createElement('strong', null, 'Warning! '), e.message), document.getElementById('annotationFileWarning'));
+            $('#annotationFileWarning').width($('#annotationFileWarning').parents().first().width()-20);
         }
-//        console.log("FileType: " + this.fileType + " seq: " + this.isSequence + " ano: "+ this.isAnnotation + " var: " + this.isVariants + " ali: " + this.isAlignment);
-        if (this.fileType !== "unrecognized")
+        if (this.state.fileType === "sequence")
+            $('#sequenceChbox').prop('checked', true);
+        else if (this.state.fileType === "annotation")
+            $('#annotationChbox').prop('checked', true);
+        else if (this.state.fileType === "variants")
+            $('#variantsChbox').prop('checked', true);
+        else if (this.state.fileType === "expression")
+            $('#expressionChbox').prop('checked', true);
+        else if (this.state.fileType === "difExpression") 
+            $('#difExpressionChbox').prop('checked', true);
+        else if (this.state.fileType === "bedcov")
+            $('#bedcovChbox').prop('checked', true);
+        else if (this.state.fileType === "unrecognized")
+            this.recognizeFileByLine();
+        else if (this.state.fileType === "existing")
+        {}
+        else
+        {
+            React.render(React.createElement('div', {className: 'alert alert-warning', role: 'alert'}, 
+            React.createElement('strong', null, 'Warning! '), "File not recognized!"), document.getElementById('annotationFileWarning'));
+            $('#annotationFileWarning').width($('#annotationFileWarning').parents().first().width()-20);
+        }
+    },
+    handleSubmit: function (e) {
+        e.preventDefault();
+        if (this.state.fileType !== "unrecognized")
         {
             var file = this.refs.fileUpload.getDOMNode().files[0];
             var projectName = this.props.projectName;
-            
-            var fd = new FormData();    
+
+            var fd = new FormData();
             fd.append('file', file);
             fd.append('projectName', projectName);
-            fd.append('fileType', this.fileType);
+            fd.append('fileType', this.state.fileType);
             $.ajax({
-            url: "/controller/upload",
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            data: fd,
-            success: function (data) 
-            {
-                if(data.errors === null)
+                url: "/controller/upload",
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: fd,
+                success: function (data)
                 {
-                    location = '/home';
-                }else
-                {
-                    alert("Error with pasing file");
-                }
-            },
-            error: function (status, err) {
-                alert("File not sended");
-                console.error(status, err.toString());
-            }});
+                    if (data.message !== "" && data.message !== null)
+                        alert(data.message);
+                    else
+                        location = '/home';
+                },
+                error: function (status, err) {
+                    alert("File not sended");
+                    console.error(status, err.toString());
+                }});
         }
     },
+    changeSeqChbox: function () {
+        this.state.isSequence = $('#sequenceChbox').prop('checked');
+        $('input:checkbox').not('#sequenceChbox').prop('checked', false);
+        console.log('Is sequence? ' + this.state.isSequence);
+    },
+    changeBedcovChbox: function () {
+        this.state.isBedcov = $('#bedcovChbox').prop('checked');
+        $('input:checkbox').not('#bedcovChbox').prop('checked', false);
+        console.log('Is bedcov? ' + this.state.isBedcov);
+    },
+    changeAnnotChbox: function () {
+        this.state.isAnnotation = $('#annotationChbox').prop('checked');
+        $('input:checkbox').not('#annotationChbox').prop('checked', false);
+        console.log('Is annotation? ' + this.state.isAnnotation);
+    },
+    changeVarChbox: function () {
+        this.state.isVariants = $('#variantsChbox').prop('checked');
+        $('input:checkbox').not('#variantsChbox').prop('checked', false);
+        console.log('Is variants? ' + this.state.isVariants);
+    },
+    changeExprChbox: function () {
+        this.state.isExpression = $('#expressionChbox').prop('checked');
+        $('input:checkbox').not('#expressionChbox').prop('checked', false);
+        console.log('Is expression? ' + this.state.isExpression);
+    },
+    changeDifExprChbox: function () {
+        this.state.isDifExpression = $('#difExpressionChbox').prop('checked');
+        $('input:checkbox').not('#difExpressionChbox').prop('checked', false);
+        console.log('Is differential expression? ' + this.state.isDifExpression);
+    },
     render: function () {
-        this.isSequence = false;
-        this.isAlignment = false;
-        this.isAnnotation = false;
-        this.isVariants = false;
-        this.isBedcov = false;
-        this.isExpression = false;
-        this.isDiffExpression = false;
-        this.fileType = "";
         return (React.createElement('div', {className: 'modal fade'},
                 React.createElement('div', {className: 'modal-dialog'},
                         React.createElement('div', {className: 'modal-content'},
@@ -154,24 +161,24 @@ var UploadModal = React.createClass({className: "uploadModal",
                                             'data-dismiss': 'modal', 'aria-label': 'Close'},
                                                 React.createElement('span', {'aria-hidden': 'true'}, '\xD7')),
                                         React.createElement('h3', {className: 'modal-title'}, 'Upload file')),
-                                React.createElement('div', {className: 'modal-body'},
-                                React.createElement('div', null, this.props.projectName),
+                                React.createElement('div', {className: 'modal-body', id: 'uploadPanelBody'},
                                         React.createElement('h4', {className: 'modal-title'}, 'Choose file: '),
-                                        React.createElement('input', {type: 'file', ref: 'fileUpload'}),
+                                        React.createElement('input', {type: 'file', ref: 'fileUpload', onChange: this.recognizeFileType}),
                                         React.createElement("hr"),
                                         React.createElement('h4', {className: 'modal-title'}, 'What is file content? '),
-//                                        React.createElement('button', {className: 'btn btn-primary', bsSize: "small", onClick: this.recognizeFileType},'Recognize file type')),
-                                        React.createElement('input', {type: "checkbox", ref: 'isSeque'}, " Sequence"),
+                                        React.createElement('div', {className: 'container', id: 'annotationFileWarning'}),
+                                        React.createElement('input', {type: "checkbox", id: 'sequenceChbox', onChange: this.changeSeqChbox}, " Sequence"),
                                         React.createElement('br'),
-                                        React.createElement('input', {type: "checkbox", ref: 'isAlign'}, " Alignment"),
+                                        React.createElement('input', {type: "checkbox", id: 'annotationChbox', onChange: this.changeAnnotChbox}, " Annotation"),
                                         React.createElement('br'),
-                                        React.createElement('input', {type: "checkbox", ref: 'isVaria'}, " Variants"),
+                                        React.createElement('input', {type: "checkbox", id: 'bedcovChbox', onChange: this.changeBedcovChbox}, " Coverage"),
                                         React.createElement('br'),
-                                        React.createElement('input', {type: "checkbox", ref: 'isExpre'}, " Expression"),
+                                        React.createElement('input', {type: "checkbox", id: 'variantsChbox', onChange: this.changeVarChbox}, " Variants"),
                                         React.createElement('br'),
-                                        React.createElement('input', {type: "checkbox", ref: 'isDiffExpre'}, " Differential expression"),
+                                        React.createElement('input', {type: "checkbox", id: 'expressionChbox', onChange: this.changeExprChbox}, " Expression"),
                                         React.createElement('br'),
-                                        React.createElement('input', {type: "checkbox", ref: 'isAnnot', onClick: this.handleChboxClicked}, "  Annotation")),
+                                        React.createElement('input', {type: "checkbox", id: 'difExpressionChbox', onChange: this.changeDifExprChbox}, " Differential expression"),
+                                        React.createElement('br')),
                                 React.createElement('div', {className: 'modal-footer', 'float': 'left'},
                                         React.createElement('button', {className: 'btn btn-primary', onClick: this.handleSubmit},
                                                 'Upload file')))
