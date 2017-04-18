@@ -656,7 +656,7 @@ var BioCircos;
                 "textSize": 15,
                 "textColor": "#000",
                 "dx": 0.028,
-                "dy": "-0.55em"
+                "dy": "-10"
             }
         };
 
@@ -1178,13 +1178,6 @@ var BioCircos;
         }
 
 
-
-
-
-
-
-
-
         if (self.genomeBorderDisplay == true) {
             svg.append("g")
                     .attr("class", "BioCircosGenome")
@@ -1333,7 +1326,7 @@ var BioCircos;
                     .style("font-size", self.genomeTextSize)
                     .each(function (d, i) {
                         d.angle = (d.startAngle + d.endAngle) / 2 - self.genomeTextDx;
-                        d.name = self.genomeLabel[i];
+                        d.name = self.genomeLabel[i].substring(self.genomeLabel[i].length - 2,self.genomeLabel[i].length);
                     })
                     .attr("dy", self.genomeTextDy)
                     .attr("transform", function (d) {
@@ -1342,7 +1335,7 @@ var BioCircos;
                                 ((d.angle > Math.PI * 2 && d.angle < Math.PI * 0) ? "rotate(180)" : "");
                     })
                     .text(function (d, i) {
-                        return d.name
+                        return d.name;
                     });
         }
         if (self.ticksDisplay == true) {
@@ -4879,7 +4872,7 @@ var BioCircos;
 
                     }
 
-                    BioCircos.prototype.chromview = function (genome, d) {
+    BioCircos.prototype.chromview = function (genome, d) {
                         var self = this;
 
                         var labeli = 0;
