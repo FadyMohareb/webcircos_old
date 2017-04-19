@@ -46,19 +46,10 @@ var FilesDropdownSequenceBSA = React.createClass({displayName: "FilesDropdownSeq
 });
 
 var FilesDropdownAnnotationBSA = React.createClass({displayName: "FilesDropdownAnnotationBSA",
-    getInitialState: function () 
-    {
-        return {activeFileAnnotationBSA: this.props.filesList[1]};
-    },
-    componentWillReceiveProps: function (newProperties) 
-    {
-        this.state.activeFileAnnotationBSA = newProperties.filesList[1];
-        $('#annotationBsaBtn').children().first().text(this.state.activeFileAnnotationBSA + ' ');
-    },
     render: function () {
         return React.createElement('div', {className: 'btn-group'},
                 React.createElement('h5', {id: 'annotationBsaBtn'},
-                        this.state.activeFileAnnotationBSA));
+                        this.props.filesList[1]));
     }
 });
 
@@ -290,6 +281,7 @@ var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
                         React.render(React.createElement(FilesDropdownSequenceBSA, {filesList: list, fileType: type}),
                                 document.getElementById('sequenceBSA'));
                     } else if (type === "annotation") {
+                        BSAstructure.annotation = list[1];
                         React.render(React.createElement(FilesDropdownAnnotationBSA, {filesList: list, fileType: type}),
                                 document.getElementById('annotationBSA'));
                     }

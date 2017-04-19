@@ -120,14 +120,39 @@ public class FileController {
             
 //            System.out.println("User is LOGGED");
             path = pathFinder.getEntireFilePathLogged() + '/' + projectName;
+            
+            if ("annotation".equals(fileType))
+            {
+                if (checkIfGFF(projectName))
+                {
+                    List<FileInput> findAll = fileService.findAll(project);
+                    for (FileInput file : findAll)
+                    {
+                        if ("annotation".equals(file.getF_type()))
+                            fileService.delete(file);
+                        else if ("difExpression".equals(file.getF_type()))
+                            fileService.delete(file);
+                        else if ("expression".equals(file.getF_type()))
+                            fileService.delete(file);
+                        else if ("bedcov".equals(file.getF_type()))
+                            fileService.delete(file);
+                        else
+                        {}
+                    };
+                    FileUtils.deleteDirectory(new File(path+"/annotation"));
+                    FileUtils.deleteDirectory(new File(path+"/difExpression"));
+                    FileUtils.deleteDirectory(new File(path+"/expression"));
+                    FileUtils.deleteDirectory(new File(path+"/bedcov"));
+                }
+            }
+            
+            
             try
             {
                 //newPath with added ProjectName
                 dir1_5 = new File(path);
                 if (!dir1_5.exists())
                     dir1_5.mkdir();
-                //temporary solution
-                pathFinder.setCurrentPath(path);
                 //newPath with added FileType
                 path=(path+"/"+fileType);
                 dir2 = new File(path);

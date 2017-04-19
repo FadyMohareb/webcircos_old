@@ -88,12 +88,12 @@ public class CircosController {
 
         }
 
-        if (new File(path + "/variants/" + circosInput.getSnpdensity() + "coverage.txt").exists()) {
-            List<LineDataPoint> point = (List<LineDataPoint>) Deserialize(path + "/variants/" + circosInput.getSnpdensity() + "coverage.txt");
+        if (new File(path + "/variants/" + circosInput.getGenomicCoverage() + "coverage.txt").exists()) {
+            List<LineDataPoint> point = (List<LineDataPoint>) Deserialize(path + "/variants/" + circosInput.getGenomicCoverage() + "coverage.txt");
             Line l = GenomeCoverageWriter(point);
             circosOutput.setGenomicCoverage(l);
             
-            BackgroundDisplay back = new BackgroundDisplay("BACKGROUND01", new BackProperties(150,120,"#F2F2F2","#000",0.3, "true",0.1,"#000",0.5,10));
+            BackgroundDisplay back = new BackgroundDisplay("BACKGROUND01", new BackProperties(60,30,"#F2F2F2","#000",0.3, "true",0.1,"#000",0.5,10));
             circosOutput.setBackgroundGenoCov(back);
         }
 
@@ -108,7 +108,7 @@ public class CircosController {
             Line l = TranscriptomicCovWriter(trans);
             circosOutput.setTranscriptomicCoverage(l);
             
-            BackgroundDisplay backTC = new BackgroundDisplay("BACKGROUND02", new BackProperties(60,30,"#F2F2F2","#000",0.3, "true",0.2,"#000",0.5,5));
+            BackgroundDisplay backTC = new BackgroundDisplay("BACKGROUND02", new BackProperties(150,120,"#F2F2F2","#000",0.3, "true",0.2,"#000",0.5,5));
             circosOutput.setBackgroundTranCov(backTC);
         }
 

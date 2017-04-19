@@ -58,6 +58,6 @@ public class FileDao {
                  .createQuery("Select f from FileInput f where f.project=:project and f.f_type=:type")
                  .setParameter("project", p)
                  .setParameter("type", fileType)
-                 .uniqueResult();
+                 .uniqueResult();        
     }
 }

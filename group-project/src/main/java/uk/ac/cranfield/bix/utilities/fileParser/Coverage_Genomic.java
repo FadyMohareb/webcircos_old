@@ -163,8 +163,8 @@ public class Coverage_Genomic {
         
         //Create line properties
         LineProperties prop = new LineProperties();
-        prop.setMaxRadius(150);
-        prop.setMinRadius(120);
+        prop.setMaxRadius(60);
+        prop.setMinRadius(30);
         prop.setLineWidth(1);
         prop.setLineColor("#FF6666");
         //Set line properties

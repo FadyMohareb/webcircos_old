@@ -4,6 +4,7 @@ var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
     getInitialState: function getInitialState() {
         Structure.projectName = this.props.projectsList[0];
         React.render(React.createElement(FilesPanel, { projectName: this.props.projectsList[0] }), document.getElementById('filesContainer'));
+        
         return {activeProject: this.props.projectsList[0]};
     },
     renderBlock: function renderBlock(projectsList, parent)
@@ -27,7 +28,9 @@ var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
     render: function () 
     {
         return React.createElement('div', {className: 'btn-group'},
-                        React.createElement('button', {className: 'btn btn-default dropdown-toggle', 'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'projectButton'}, this.state.activeProject + ' ',
+                        React.createElement('button', {className: 'btn btn-default dropdown-toggle',
+                            'data-toggle': "dropdown", 'aria-haspopup': "true",
+                            'aria-expanded': 'false', id: 'projectButton'}, this.state.activeProject + ' ',
                                 React.createElement('span', {className: 'caret'})),
                         React.createElement('ul', {className: 'dropdown-menu'},
                                 this.renderBlock(this.props.projectsList, this))
@@ -66,8 +69,13 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
                     var ProjectName = ProjectList[i];
                     list[i] = ProjectName;
                 }
+                $('#uploadModalBtn').attr("disabled", false);
                 React.render(React.createElement(ProjectsDropdown, {projectsList: list}), document.getElementById('projects'));
             }
+            else {
+                $('#uploadModalBtn').attr("disabled", true);
+            }
+            list.length > 2 ? $('#importModalBtn').attr('disabled', false) : $('#importModalBtn').attr('disabled', true);
         },
         error: function (status, err) {
             console.error(status, err.toString());

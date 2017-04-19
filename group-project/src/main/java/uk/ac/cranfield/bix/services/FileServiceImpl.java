@@ -21,7 +21,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void delete(FileInput file) {
-        FileRepository.save(file);
+        FileRepository.delete(file);
     }
 
     @Override

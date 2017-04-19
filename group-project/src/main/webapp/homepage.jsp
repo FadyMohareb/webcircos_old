@@ -29,13 +29,14 @@
         <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>
         <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
-        <script src="${contextPath}/resources/js/modals/importModal.js"></script>
+        <script src="${contextPath}/resources/js/modals/importModalTest.js"></script>
         <script src="${contextPath}/resources/js/panels/centerTabs.js"></script>
         <script src="${contextPath}/resources/js/modals/newProjectModal.js"></script>
         <script src="${contextPath}/resources/js/datastructures/FileListStructure.js"></script>
         <script src="${contextPath}/resources/js/datastructures/BSAfileListStructure.js"></script>
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+        <script src="${contextPath}/resources/css/bootstrap.min.css"></script>
     </head>
     <body>
         <script type="text/javascript">
@@ -94,7 +95,7 @@
                     <div id="filesContainer" class="row">${filesContainer}</div>
                     <script type="text/javascript">
                         $(function () {
-                            renderFilesPanel();
+                            renderFilesPanel('${pageContext.request.userPrincipal.name}');
                         });
                     </script>
                 </div>

@@ -65,32 +65,55 @@ var UploadModal = React.createClass({className: "uploadModal",
     ajaxSuccess: function (e) {
         $('#annotationFileWarning').width($('#annotationFileWarning').parents().first().width()-20)
         this.state.fileType = e.errors;
-        e.message !== "" && e.message !== null ?
-            React.render(React.createElement('div', {className: 'alert alert-warning', role: 'alert'}, 
-            React.createElement('strong', null, 'Warning! '), e.message), document.getElementById('annotationFileWarning'))
-             : null;
         
-        if (this.state.fileType === "sequence")
+        if (this.state.fileType === "sequence") {
             $('#sequenceChbox').prop('checked', true);
-        else if (this.state.fileType === "annotation")
+            $('#uploadBtn').attr('disabled', false);
+        }
+        else if (this.state.fileType === "annotation") {
             $('#annotationChbox').prop('checked', true);
-        else if (this.state.fileType === "variants")
+            $('#uploadBtn').attr('disabled', false);
+        }
+        else if (this.state.fileType === "variants") {
             $('#variantsChbox').prop('checked', true);
-        else if (this.state.fileType === "expression")
+            $('#uploadBtn').attr('disabled', false);
+        }
+        else if (this.state.fileType === "expression") {
             $('#expressionChbox').prop('checked', true);
-        else if (this.state.fileType === "difExpression") 
+            $('#uploadBtn').attr('disabled', false);
+        }
+        else if (this.state.fileType === "difExpression") {
             $('#difExpressionChbox').prop('checked', true);
-        else if (this.state.fileType === "bedcov")
+            $('#uploadBtn').attr('disabled', false);
+        }
+        else if (this.state.fileType === "bedcov") {
             $('#bedcovChbox').prop('checked', true);
-        else if (this.state.fileType === "unrecognized")
+            $('#uploadBtn').attr('disabled', false);
+        }
+        else if (this.state.fileType === "") {
             this.recognizeFileByLine();
-        else if (this.state.fileType === "existing")
-        {}
+            $('#uploadBtn').attr('disabled', false);
+        }
+        else if (this.state.fileType === "existing" || this.state.fileType === "zipped")
+        {
+            $('#uploadBtn').attr('disabled', false);
+        }
         else
         {
-            React.render(React.createElement('div', {className: 'alert alert-warning', role: 'alert'}, 
-            React.createElement('strong', null, 'Warning! '), "File not recognized!"), document.getElementById('annotationFileWarning'));
+            React.render(React.createElement('div', {className: 'alert alert-danger', role: 'alert'}, 
+            React.createElement('strong', null, 'Warning! '), "File type not recognized!"), document.getElementById('annotationFileWarning'));
             $('#annotationFileWarning').width($('#annotationFileWarning').parents().first().width()-20);
+            $('#uploadBtn').attr('disabled', true);
+        }
+        
+        // next conditional
+        if(e.message !== "" && e.message !== null){
+            React.render(React.createElement('div', {className: 'alert alert-danger', role: 'alert'}, 
+            React.createElement('strong', null, 'Error! '), e.message), document.getElementById('annotationFileWarning'));
+            $('#uploadBtn').attr('disabled', true);
+        }
+        else {
+            $('#uploadBtn').attr('disabled', false);
         }
     },
     handleSubmit: function (e) {
@@ -181,7 +204,7 @@ var UploadModal = React.createClass({className: "uploadModal",
                                         React.createElement('input', {type: "checkbox", id: 'difExpressionChbox', onChange: this.changeDifExprChbox}, " Differential expression"),
                                         React.createElement('br')),
                                 React.createElement('div', {className: 'modal-footer', 'float': 'left'},
-                                        React.createElement('button', {className: 'btn btn-primary', onClick: this.handleSubmit},
+                                        React.createElement('button', {id: 'uploadBtn', className: 'btn btn-primary', onClick: this.handleSubmit},
                                                 'Upload file')))
                         ))
                 );
