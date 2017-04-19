@@ -1,6 +1,6 @@
 //'use strict';
 
-var CircosTabData = [{name: 'Overview', isActive: true}, {name: 'Parent-pool', isActive: false}];
+var CircosTabData = [{name: 'Overview', isActive: true}, {name: 'BSA', isActive: false}];
 
 var CircosTabs = React.createClass({displayName: 'CircosTabs',
     render: function render() {
@@ -33,8 +33,8 @@ var CircosContent = React.createClass({displayName: 'CircosContent',
                         this.props.activeTab.name === 'Overview' ? React.createElement('section', {className: 'panel panel-primary'},
                                 React.createElement('div', {className: 'panel-body', id: 'circos', style: {height: "100%"}},
                                         React.createElement(CircosPanel))) : null,
-                        this.props.activeTab.name === 'Parent-pool' ? React.createElement('section', {className: 'panel panel-primary'},
-                                React.createElement('div', {className: 'panel-body', id: 'parentPool'},
+                        this.props.activeTab.name === 'BSA' ? React.createElement('section', {className: 'panel panel-primary'},
+                                React.createElement('div', {className: 'panel-body', id: 'parentPool', style: {height: "100%"}},
                                         React.createElement(ParentPoolPanel))) : null)
                 )
     }

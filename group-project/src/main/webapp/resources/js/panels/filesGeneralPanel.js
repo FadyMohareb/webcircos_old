@@ -115,35 +115,17 @@ var FilesDropdownVariants = React.createClass({displayName: "FilesDropdownVarian
 var FilesDropdownAnnotation = React.createClass({displayName: "FilesDropdownAnnotation",
     getInitialState: function () 
     {
-        return {activeFileAnnotation: this.props.filesList[0]};
+        return {activeFileAnnotation: this.props.filesList[1]};
     },
     componentWillReceiveProps: function (newProperties) 
     {
-        this.state.activeFileAnnotation = newProperties.filesList[0];
+        this.state.activeFileAnnotation = newProperties.filesList[1];
         $('#annotationBtn').children().first().text(this.state.activeFileAnnotation + ' ');
-    },
-    renderFilesBlock: function renderFilesBlock(filesList, parent) 
-    {
-        return filesList.map(function (fileName)
-        {
-            handleFileChange: function handleFileChange(event) 
-            {
-                event.preventDefault();
-                parent.state.activeFileAnnotation = event.target.id;
-                Structure.annotation = event.target.id;
-                $('#annotationBtn').children().first().text(parent.state.activeFileAnnotation + ' ');
-            };
-            return (React.createElement("li", {onClick: handleFileChange, id: fileName}, fileName));
-        });
     },
     render: function () {
         return React.createElement('div', {className: 'btn-group'},
-                React.createElement('button', {className: 'btn btn-default dropdown-toggle',
-                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'annotationBtn'},
-                        this.state.activeFileAnnotation + ' ',
-                        React.createElement('span', {className: 'caret'})),
-                React.createElement('ul', {className: 'dropdown-menu'},
-                        this.renderFilesBlock(this.props.filesList, this)));
+                React.createElement('h5', {id: 'annotationBtn'},
+                        this.state.activeFileAnnotation));
     }
 });
 
@@ -405,6 +387,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
     sendData: function () {
         Structure.validateValues();
         $("#bioCircos").html("");
+console.log(JSON.stringify(Structure));
 
         $.ajax({
             url: "/circos.data",
@@ -413,6 +396,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(Structure),
             success: function (data) {
+                console.log(data);
                 var ARC_01;
                 var HISTOGRAM01;
                 var LINE01;
@@ -421,7 +405,9 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 var HEATMAP02;
                 var BACKGROUND01;
                 var BACKGROUND02;
-                console.log(data);
+                
+                console.log(data.genomes + ' ' + ARC_01 + ' ' + HISTOGRAM01 + ' ' + LINE01 + ' ' + LINE02 + ' ' + HEATMAP01 + ' ' + HEATMAP02 + ' ' + BACKGROUND01 + ' ' + BACKGROUND02)
+
 
                 if (data.histo !== null) {
                     HISTOGRAM01 = [data.histo.histId, data.histo.properties, data.histo.histDataPoint];
@@ -470,6 +456,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                     BACKGROUND02 = [];
                 }
 
+console.log(data.genomes + ' ' + ARC_01 + ' ' + HISTOGRAM01 + ' ' + LINE01 + ' ' + LINE02 + ' ' + HEATMAP01 + ' ' + HEATMAP02 + ' ' + BACKGROUND01 + ' ' + BACKGROUND02)
                 renderCircos(data.genomes, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02,BACKGROUND01,BACKGROUND02);
             },
             error: function () {
@@ -480,117 +467,104 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
         });
 
     },
-    sendData: function()
-    {
-        Structure.validateValues();
-        $("#bioCircos").html("");
-        $.ajax({
-            url: "/circos.data",
-            dataType: 'json',
-            type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(Structure),
-            success: function (data) {
-                var ARC_01;
-                var HISTOGRAM01;
-                var LINE01;
-                var LINE02;
-                var HEATMAP01;
-                var HEATMAP02;
-                var BACKGROUND01;
-                var BACKGROUND02;
-                console.log(data);
-            if (data.histo !== null)
-                HISTOGRAM01 = [data.histo.histId, data.histo.properties, data.histo.histDataPoint];
-            else
-                HISTOGRAM01 = [];
-            if (data.arc !== null)
-                ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint];
-            else
-                ARC_01 = [];
-            if (data.genomicCoverage !== null)
-                LINE01 = [data.genomicCoverage.lineId, data.genomicCoverage.properties, data.genomicCoverage.linePoints];
-            else
-                LINE01 = [];
-            
-            if (data.transcriptomicCoverage !== null)
-                LINE02 = [data.transcriptomicCoverage.lineId, data.transcriptomicCoverage.properties, data.transcriptomicCoverage.linePoints];
-            else
-                LINE02 = [];
-            
-            if (data.dEHeatMap !== null)
-                HEATMAP01 = [data.dEHeatMap.heatMapId, data.dEHeatMap.properties, data.dEHeatMap.heatMapDataPoint];
-            else
-                HEATMAP01 = [];
-            
-            if (data.geneExpressionHeatMap !== null)
-                HEATMAP02 = [data.geneExpressionHeatMap.heatMapId, data.geneExpressionHeatMap.properties, data.geneExpressionHeatMap.heatMapDataPoint];
-            else
-                HEATMAP02 = [];
-            if(data.backgroundGenoCov !== null){
-                BACKGROUND01=[data.geneExpressionHeatMap.backId,data.geneExpressionHeatMap.properties];
-            }else{
-                BACKGROUND01=[];
-            }
-            if(data.backgroundTranCov !== null){
-                BACKGROUND02 = [data.geneExpressionHeatMap.backId,data.geneExpressionHeatMap.properties];
-            }else{
-                BACKGROUND02 = [];
-            }
-            renderCircos(data.genomes, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02,BACKGROUND01,BACKGROUND02);
-            },
-            error: function (status, err) 
-            {
-                alert("Wrong data");
-                console.error(status, err.toString());
-            }
-        });
-    },
-    render: function () 
-    {
-        return (React.createElement('div', {className: "container"},
-                    React.createElement('div', {className: "Well", style: {backgroundColor: "#8CC152"}},
-                        React.createElement('label', {for : 'sequenceBtn'},"Reference sequence: "),
-                        React.createElement('div', {className: 'container', id: 'sequence'},
-                        React.createElement(this.contentUpdateProject, {panelType: "sequence"}))),
-//                    React.createElement('br'),
-                
-                    React.createElement('div', {className: "Well", style: {backgroundColor: "#8CC152"}},
-                        React.createElement('label', {for : 'genCoverageBtn'}, 'Genomic coverage: '),
-                        React.createElement('div', {className: 'container', id: 'genCoverage'},
-                        React.createElement(this.contentUpdateProject, {panelType: "variants"}))),
-//                    React.createElement('br'),
-                
-                    React.createElement('div', {className: "Well", style: {backgroundColor: "#8CC152"}},
-                        React.createElement('label', {for : 'variantsBtn'}, 'SNP density: '),
-                        React.createElement('div', {className: 'container', id: 'variants'})),
-                        
-                    React.createElement('div', {className: "Well", style: {backgroundColor: "#8CC152"}},    
-//                        React.createElement('br'),
-                        React.createElement('label', {for : 'transCoverageBtn'}, 'Transcriptiomic coverage: '),
-                        React.createElement('div', {className: 'container', id: 'transCoverage'},
-                        React.createElement(this.contentUpdateProject, {panelType: "bedcov"}))),
-//                    React.createElement('br'),
-                    
-                    React.createElement('div', {className: "Well", style: {backgroundColor: "#8CC152"}},
-                        React.createElement('label', {for : 'expressionBtn'}, 'Genes expression: '),
-                        React.createElement('div', {className: 'container', id: 'expression'},
-                        React.createElement(this.contentUpdateProject, {panelType: "expression"}))),
-//                    React.createElement('br'),
-
-                    React.createElement('div', {className: "Well", style: {backgroundColor: "#8CC152"}},
-                        React.createElement('label', {for : 'difExpressionBtn'}, 'Differential expression: '),
-                        React.createElement('div', {className: 'container', id: 'difExpression'},
-                        React.createElement(this.contentUpdateProject, {panelType: "difExpression"}))),
-//                    React.createElement('br'),
-                    
-                    React.createElement('div', {className: "Well", style: {backgroundColor: "#8CC152"}},
-                        React.createElement('label', {for : 'annotationBtn'}, 'Annotation: '),
-                        React.createElement('div', {className: 'container', id: 'annotation'},
-                        React.createElement(this.contentUpdateProject, {panelType: "annotation"}))),
-//                React.createElement('br'),
-
-                    React.createElement('button', {className: 'btn btn-primary', onClick: this.sendData},'Display circos'))
+//    sendData: function()
+//    {
+//        Structure.validateValues();
+//        $("#bioCircos").html("");
+//        $.ajax({
+//            url: "/circos.data",
+//            dataType: 'json',
+//            type: 'POST',
+//            contentType: "application/json; charset=utf-8",
+//            data: JSON.stringify(Structure),
+//            success: function (data) {
+//                var ARC_01;
+//                var HISTOGRAM01;
+//                var LINE01;
+//                var LINE02;
+//                var HEATMAP01;
+//                var HEATMAP02;
+//                var BACKGROUND01;
+//                var BACKGROUND02;
+//                console.log(data);
+//            if (data.histo !== null)
+//                HISTOGRAM01 = [data.histo.histId, data.histo.properties, data.histo.histDataPoint];
+//            else
+//                HISTOGRAM01 = [];
+//            if (data.arc !== null)
+//                ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint];
+//            else
+//                ARC_01 = [];
+//            if (data.genomicCoverage !== null)
+//                LINE01 = [data.genomicCoverage.lineId, data.genomicCoverage.properties, data.genomicCoverage.linePoints];
+//            else
+//                LINE01 = [];
+//            
+//            if (data.transcriptomicCoverage !== null)
+//                LINE02 = [data.transcriptomicCoverage.lineId, data.transcriptomicCoverage.properties, data.transcriptomicCoverage.linePoints];
+//            else
+//                LINE02 = [];
+//            
+//            if (data.dEHeatMap !== null)
+//                HEATMAP01 = [data.dEHeatMap.heatMapId, data.dEHeatMap.properties, data.dEHeatMap.heatMapDataPoint];
+//            else
+//                HEATMAP01 = [];
+//            
+//            if (data.geneExpressionHeatMap !== null)
+//                HEATMAP02 = [data.geneExpressionHeatMap.heatMapId, data.geneExpressionHeatMap.properties, data.geneExpressionHeatMap.heatMapDataPoint];
+//            else
+//                HEATMAP02 = [];
+//            if(data.backgroundGenoCov !== null){
+//                BACKGROUND01=[data.geneExpressionHeatMap.backId,data.geneExpressionHeatMap.properties];
+//            }else{
+//                BACKGROUND01=[];
+//            }
+//            if(data.backgroundTranCov !== null){
+//                BACKGROUND02 = [data.geneExpressionHeatMap.backId,data.geneExpressionHeatMap.properties];
+//            }else{
+//                BACKGROUND02 = [];
+//            }
+//            renderCircos(data.genomes, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02,BACKGROUND01,BACKGROUND02);
+//            },
+//            error: function (status, err) 
+//            {
+//                alert("Wrong data");
+//                console.error(status, err.toString());
+//            }
+//        });
+//    },
+//    
+    render: function () {
+        return (React.createElement('div', {className: 'container'},
+                React.createElement('label', {for : 'annotationBtn'}, 'Annotation: '),
+                React.createElement('div', {className: 'container', id: 'annotation'},
+                        React.createElement(this.contentUpdateProject, {panelType: "annotation"})),
+                React.createElement('br'),
+                React.createElement('label', {for : 'sequenceBtn'}, 'Reference sequence: '),
+                React.createElement('div', {className: 'container', id: 'sequence'},
+                        React.createElement(this.contentUpdateProject, {panelType: "sequence"})),
+                React.createElement('br'),
+                React.createElement('label', {for : 'genCoverageBtn'}, 'Genomic coverage: '),
+                React.createElement('div', {className: 'container', id: 'genCoverage'},
+                        React.createElement(this.contentUpdateProject, {panelType: "variants"})),
+                React.createElement('br'),
+                React.createElement('label', {for : 'variantsBtn'}, 'SNP density: '),
+                React.createElement('div', {className: 'container', id: 'variants'}),
+                React.createElement('br'),
+                React.createElement('label', {for : 'transCoverageBtn'}, 'Transcriptiomic coverage: '),
+                React.createElement('div', {className: 'container', id: 'transCoverage'},
+                        React.createElement(this.contentUpdateProject, {panelType: "bedcov"})),
+                React.createElement('br'),
+                React.createElement('label', {for : 'expressionBtn'}, 'Genes expression: '),
+                React.createElement('div', {className: 'container', id: 'expression'},
+                        React.createElement(this.contentUpdateProject, {panelType: "expression"})),
+                React.createElement('br'),
+                React.createElement('label', {for : 'difExpressionBtn'}, 'Differential expression: '),
+                React.createElement('div', {className: 'container', id: 'difExpression'},
+                        React.createElement(this.contentUpdateProject, {panelType: "difExpression"})),
+                React.createElement('br'),
+                        React.createElement('button', {className: 'btn btn-primary', style:{'text-align': 'center'}, onClick: this.sendData},
+                                'Display circos'))
                 );
     }
 });

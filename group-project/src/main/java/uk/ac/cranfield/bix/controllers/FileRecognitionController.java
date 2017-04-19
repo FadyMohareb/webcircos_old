@@ -132,25 +132,16 @@ public class FileRecognitionController {
     @RequestMapping(value = "/recognizeFileType", method = RequestMethod.POST)
     public
     @ResponseBody
-    RestResponse recognizeFileType(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName") String projectName) throws Exception
+    RestResponse recognizeFileType(@RequestParam("file") MultipartFile multipartFile) throws Exception
     {
-        String fileType="", fileName, fileExtension;
+        String fileType="";
         int i;
         InputStream inputStream;
         char c;
-        String[] splittedFileName;
-        boolean isGFF;
 
         try {
-            fileName = multipartFile.getOriginalFilename();
-            splittedFileName = fileName.split("\\\\");
-            if (splittedFileName.length>1)
-                fileName = splittedFileName[splittedFileName.length-1];
-            splittedFileName = fileName.split("\\.");
-            fileExtension = splittedFileName[splittedFileName.length-1];
-//            fileName = fileName.replaceFirst("."+fileExtension,"");
             inputStream = multipartFile.getInputStream();
-            while(((i = inputStream.read())!=-1) && (fileType==""))
+            while(((i = inputStream.read())!=-1))
             {
                 c = (char)i;
                 if (c=='>')
@@ -173,12 +164,13 @@ public class FileRecognitionController {
                 }
             }
             return new RestResponse(fileType, null);
-            }
+        }
         catch (IOException ex) 
         {
             return new RestResponse(ex.getMessage(), null);
         }
     }
+    
     @SuppressWarnings("empty-statement")
     private boolean checkIfFileExists(String projectName, String fileName, String fileType) throws Exception
     {

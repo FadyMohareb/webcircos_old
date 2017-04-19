@@ -40,7 +40,7 @@ var UploadModal = React.createClass({className: "uploadModal",
         });
     },
     recognizeFileType: function (e)
-    {
+    {   $('#annotationFileWarning').html("");
         $('input:checkbox').prop('checked', false);
         var ajaxSuccess = this.ajaxSuccess;
         e.preventDefault();
@@ -63,12 +63,13 @@ var UploadModal = React.createClass({className: "uploadModal",
         });
     },
     ajaxSuccess: function (e) {
+        $('#annotationFileWarning').width($('#annotationFileWarning').parents().first().width()-20)
         this.state.fileType = e.errors;
-        if (e.message !== "" && e.message !== null) {
+        e.message !== "" && e.message !== null ?
             React.render(React.createElement('div', {className: 'alert alert-warning', role: 'alert'}, 
-            React.createElement('strong', null, 'Warning! '), e.message), document.getElementById('annotationFileWarning'));
-            $('#annotationFileWarning').width($('#annotationFileWarning').parents().first().width()-20);
-        }
+            React.createElement('strong', null, 'Warning! '), e.message), document.getElementById('annotationFileWarning'))
+             : null;
+        
         if (this.state.fileType === "sequence")
             $('#sequenceChbox').prop('checked', true);
         else if (this.state.fileType === "annotation")
