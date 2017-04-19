@@ -64,13 +64,10 @@ var UploadModal = React.createClass({className: "uploadModal",
     },
     ajaxSuccess: function (e) {
         this.state.fileType = e.errors;
-        if (e.message !== "" && e.message !== null) {
-            React.render(React.createElement('div', {className: 'alert alert-warning', role: 'alert'}, 
-            React.createElement('strong', null, 'Warning! '), e.message), document.getElementById('annotationFileWarning'));
-            $('#annotationFileWarning').width($('#annotationFileWarning').parents().first().width()-20);
-        }
         if (this.state.fileType === "sequence")
             $('#sequenceChbox').prop('checked', true);
+        else if (this.state.fileType === "")
+            this.recognizeFileByLine();
         else if (this.state.fileType === "annotation")
             $('#annotationChbox').prop('checked', true);
         else if (this.state.fileType === "variants")
@@ -81,14 +78,19 @@ var UploadModal = React.createClass({className: "uploadModal",
             $('#difExpressionChbox').prop('checked', true);
         else if (this.state.fileType === "bedcov")
             $('#bedcovChbox').prop('checked', true);
-        else if (this.state.fileType === "unrecognized")
-            this.recognizeFileByLine();
         else if (this.state.fileType === "existing")
+        {}
+        else if (this.state.fileType === "zipped")
         {}
         else
         {
             React.render(React.createElement('div', {className: 'alert alert-warning', role: 'alert'}, 
             React.createElement('strong', null, 'Warning! '), "File not recognized!"), document.getElementById('annotationFileWarning'));
+            $('#annotationFileWarning').width($('#annotationFileWarning').parents().first().width()-20);
+        }
+        if (e.message !== "" && e.message !== null) {
+            React.render(React.createElement('div', {className: 'alert alert-warning', role: 'alert'}, 
+            React.createElement('strong', null, 'Warning! '), e.message), document.getElementById('annotationFileWarning'));
             $('#annotationFileWarning').width($('#annotationFileWarning').parents().first().width()-20);
         }
     },

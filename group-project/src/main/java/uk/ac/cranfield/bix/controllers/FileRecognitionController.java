@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -118,7 +119,7 @@ public class FileRecognitionController {
                 }
                 else
                 {
-                    fileType="unrecognized";
+                    fileType="";
                     return new RestResponse(fileType, "");
                 }
             }
@@ -134,45 +135,53 @@ public class FileRecognitionController {
     @ResponseBody
     RestResponse recognizeFileType(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName") String projectName) throws Exception
     {
-        String fileType="", fileName, fileExtension;
-        int i;
+        String fileType="", fileName, firstLine, message = "";
+        int i, j;
         InputStream inputStream;
         char c;
-        String[] splittedFileName;
         boolean isGFF;
+        BufferedReader bufferedReader;
 
         try {
             fileName = multipartFile.getOriginalFilename();
-            splittedFileName = fileName.split("\\\\");
-            if (splittedFileName.length>1)
-                fileName = splittedFileName[splittedFileName.length-1];
-            splittedFileName = fileName.split("\\.");
-            fileExtension = splittedFileName[splittedFileName.length-1];
-//            fileName = fileName.replaceFirst("."+fileExtension,"");
             inputStream = multipartFile.getInputStream();
-            while(((i = inputStream.read())!=-1) && (fileType==""))
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            firstLine = bufferedReader.readLine();
+            isGFF = checkIfGFF(projectName);
+            while(firstLine!=null && "".equals(fileType))
             {
-                c = (char)i;
-                if (c=='>')
-                {
+                if (firstLine.startsWith(">"))
                     fileType="sequence";
-                }
-                if (c=='#')
+                else if (firstLine.startsWith("##gff"))
                 {
-                    c=(char)inputStream.read();
-                    if (c=='#')
-                    {
-                        c=(char)inputStream.read();
-                        if (c=='g')
-                            fileType="annotation";
-                        else if(c=='v')
-                            fileType="variants";
-                        else
-                            fileType="unrecognized";
-                    }
+                    fileType="annotation";
+                    if (isGFF)
+                        message = "If you upload new annotation file, old one will be overwritten and expression, differencial expression and transcriptomic coverage files will be removed.";
                 }
+                else if(firstLine.startsWith("##fileformat=VCF"))
+                    fileType="variants";
+                else if(firstLine.startsWith("\"PPEE\""))
+                {
+                    fileType = "difExpression";
+                    if (!isGFF)
+                        message = "Please upload gff file first";
+                }
+                else if(firstLine.startsWith("gene_id"))
+                {
+                    fileType = "expression";
+                    if (!isGFF)
+                        message = "Please upload gff file first";
+                }
+                else if(firstLine.startsWith("mRNA:"))
+                {
+                    fileType = "bedcov";
+                    if (!isGFF)
+                        message = "Please upload gff file first";
+                }
+                else
+                    fileType="unrecognized";
             }
-            return new RestResponse(fileType, null);
+            return new RestResponse(fileType, message);
             }
         catch (IOException ex) 
         {
@@ -212,7 +221,6 @@ public class FileRecognitionController {
                     splittedFileName = result.split("/");
                     fileNameFromFile = splittedFileName[splittedFileName.length-1];
                     fileNameFromFile = fileNameFromFile.replaceAll("\t", "");
-                    int result2 = fileNameFromFile.compareTo(fileName);
                     if (fileNameFromFile.equals(fileName))
                         flag=true;
                     result=bufferedReader.readLine();

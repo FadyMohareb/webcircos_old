@@ -10,20 +10,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import uk.ac.cranfield.bix.controllers.rest.HeatMapDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import uk.ac.cranfield.bix.models.FileInput;
-import uk.ac.cranfield.bix.models.FileInput;
-import uk.ac.cranfield.bix.models.Project;
 import uk.ac.cranfield.bix.models.Project;
 import uk.ac.cranfield.bix.models.User;
-import uk.ac.cranfield.bix.models.User;
-import uk.ac.cranfield.bix.services.FileService;
-import uk.ac.cranfield.bix.services.ProjectService;
-import uk.ac.cranfield.bix.services.UserService;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeExpression;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeGff;
 import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeSequence;
@@ -61,7 +54,7 @@ public class PathFinder {
     private FileService fileService;
 
     //current path THE ONE OF TWO TO CHANGE AT DIFFERENT COMPUTERS
-    private final String constantPath = ("/home/vmuser/WebCircos/");
+    private final String constantPath = ("Z:/ProfileData/s260533/Desktop/");
     private String currentPath;
 
     public PathFinder() {
