@@ -1,6 +1,6 @@
 # WebCircos version 1.0 README 04/2017#
 
-This README would documents steps necessary to get your application up and running.
+This README documents all steps necessary to get application up and running.
 
 ### What is in this document ###
 
@@ -16,7 +16,7 @@ WebCircos is a third-tiers web based application using React.js library for the 
 
 1. Clone
 
-Clone the repository (if you haven't done it already). Originally, repository had been placed in bitbucket.org. To clone it, we recommend to familiarize yourself with the documentation (https://confluence.atlassian.com/bitbucket/clone-a-repository-223217891.html).
+Clone the repository (if you haven't done it already). Originally, repository had been placed in bitbucket.org. To clone it, we recommend to familiarize yourself with the documentation ([https://confluence.atlassian.com/bitbucket/clone-a-repository-223217891.html](Link URL)).
 
 2. Open repository in Java environment
 
@@ -26,7 +26,9 @@ Originally, the application was written in The NetBeans IDE but we do not recomm
 
 4. Database set up
 
-5. Starting the application
+5. Changing the path
+
+6. Starting the application
 
 a)
 b)
