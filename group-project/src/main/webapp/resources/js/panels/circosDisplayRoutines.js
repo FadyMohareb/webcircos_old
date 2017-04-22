@@ -1,7 +1,6 @@
-function renderCircos(BioCircosGenome, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02) {
+function renderCircos(BioCircosGenome, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02, BACKGROUND01, BACKGROUND02) {
 
-            BioCircos01 = new BioCircos(ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02, BioCircosGenome, {
-                //// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
+            BioCircos01 = new BioCircos(ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02,BACKGROUND01,BACKGROUND02, BioCircosGenome, {// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
                 //Main configuration
                 target: 'bioCircos', // Main configuration "target"
                 svgWidth: 1350, // Main configuration "svgWidth"
@@ -150,7 +149,7 @@ function renderCircos(BioCircosGenome, ARC_01, HISTOGRAM01, LINE01, LINE02, HEAT
                 LINEMouseMoveLineOpacity: 1, //"none"
                 LINEMouseMoveLineStrokeColor: "red", //"none"
                 LINEMouseMoveLineStrokeWidth: "none", //"none"
-                LINEMouseOutDisplay: false,
+                LINEMouseOutDisplay: true,
                 LINEMouseOutAnimationTime: 500,
                 LINEMouseOutLineOpacity: 1.0, //"none"
                 LINEMouseOutLineStrokeColor: "red", //"none"
@@ -163,7 +162,7 @@ function renderCircos(BioCircosGenome, ARC_01, HISTOGRAM01, LINE01, LINE02, HEAT
                 LINEMouseOverLineOpacity: 1, //"none"
                 LINEMouseOverLineStrokeColor: "red", //"none"
                 LINEMouseOverLineStrokeWidth: "none", //"none"
-                LINEMouseOverTooltipsHtml01: "Line",
+                LINEMouseOverTooltipsHtml01: "Coverage",
                 LINEMouseOverTooltipsPosition: "absolute",
                 LINEMouseOverTooltipsBackgroundColor: "white",
                 LINEMouseOverTooltipsBorderStyle: "solid",

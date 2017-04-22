@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -16,10 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import uk.ac.cranfield.bix.controllers.rest.RestResponse;
 import uk.ac.cranfield.bix.models.FileInput;
-import uk.ac.cranfield.bix.models.PathFinder;
+
 import uk.ac.cranfield.bix.models.Project;
 import uk.ac.cranfield.bix.models.User;
 import uk.ac.cranfield.bix.services.FileService;
+import uk.ac.cranfield.bix.services.PathFinder;
 import uk.ac.cranfield.bix.services.ProjectService;
 import uk.ac.cranfield.bix.services.UserService;
 
@@ -33,6 +35,9 @@ public class FileRecognitionController {
     
     @Autowired
     private FileService fileService;
+    
+    @Autowired
+    private PathFinder pathFinder;
     
     @RequestMapping(value = "/recognizeFileName", method = RequestMethod.POST)
     public
@@ -80,14 +85,19 @@ public class FileRecognitionController {
                     fileType = "variants";
                     return new RestResponse(fileType, "");
                 }
-                else if (fileExtension.equals("results.sorted"))
+                else if (fileExtension.equals("sorted"))
                 {
-                    fileType = "difExpression";
-                    isGFF = checkIfGFF(projectName);
-                    if (isGFF)
-                        return new RestResponse(fileType, "");
+                    if (splittedFileName[splittedFileName.length-2].equals("results"))
+                    {
+                        fileType = "difExpression";
+                        isGFF = checkIfGFF(projectName);
+                        if (isGFF)
+                            return new RestResponse(fileType, "");
+                        else
+                            return new RestResponse(fileType, "Please upload gff file first");
+                    }
                     else
-                        return new RestResponse(fileType, "Please upload gff file first");
+                        return new RestResponse("unrecognized", null);
                 }
                 else if (fileExtension.equals("results"))
                 {
@@ -109,7 +119,7 @@ public class FileRecognitionController {
                 }
                 else
                 {
-                    fileType="unrecognized";
+                    fileType="";
                     return new RestResponse(fileType, "");
                 }
             }
@@ -125,103 +135,54 @@ public class FileRecognitionController {
     @ResponseBody
     RestResponse recognizeFileType(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName") String projectName) throws Exception
     {
-        String fileType="", fileName, fileExtension;
-        int i;
+        String fileType="", fileName, firstLine, message = "";
+        int i, j;
         InputStream inputStream;
         char c;
-        String[] splittedFileName;
         boolean isGFF;
+        BufferedReader bufferedReader;
 
         try {
             fileName = multipartFile.getOriginalFilename();
-            splittedFileName = fileName.split("\\\\");
-            if (splittedFileName.length>1)
-                fileName = splittedFileName[splittedFileName.length-1];
-            splittedFileName = fileName.split("\\.");
-            fileExtension = splittedFileName[splittedFileName.length-1];
-            if (fileExtension.equals("gz") || fileExtension.equals("zip") || fileExtension.equals("7z"))
+            inputStream = multipartFile.getInputStream();
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            firstLine = bufferedReader.readLine();
+            isGFF = checkIfGFF(projectName);
+            while(firstLine!=null && "".equals(fileType))
             {
-                fileType="zipped";
-                return new RestResponse(fileType, "Please unzip file and then upload again");
-            }
-            else
-            {
-                if (fileExtension.equals("fasta") || fileExtension.equals("fa") || fileExtension.equals("frn") || fileExtension.equals("ffn") || fileExtension.equals("fas") || fileExtension.equals("fna") || fileExtension.equals("faa"))
-                {
+                if (firstLine.startsWith(">"))
                     fileType="sequence";
-                    return new RestResponse(fileType, "");
-                }
-                else if (fileExtension.equals("gff") || fileExtension.equals("gtf") || fileExtension.equals("gff2") || fileExtension.equals("gff3"))
+                else if (firstLine.startsWith("##gff"))
                 {
-                    fileType = "annotation";
-                    isGFF = checkIfGFF(projectName);
+                    fileType="annotation";
                     if (isGFF)
-                        return new RestResponse(fileType, "If you upload new annotation file, old one will be overwritten and expression, differencial expression and transcriptomic coverage files will be removed.");
-                    else
-                        return new RestResponse(fileType, "");
+                        message = "If you upload new annotation file, old one will be overwritten and expression, differencial expression and transcriptomic coverage files will be removed.";
                 }
-                else if (fileExtension.equals("vcf"))
-                {
-                    fileType = "variants";
-                    return new RestResponse(fileType, "");
-                }
-                else if (fileExtension.equals("results.sorted"))
+                else if(firstLine.startsWith("##fileformat=VCF"))
+                    fileType="variants";
+                else if(firstLine.startsWith("\"PPEE\""))
                 {
                     fileType = "difExpression";
-                    isGFF = checkIfGFF(projectName);
-                    if (isGFF)
-                        return new RestResponse(fileType, "");
-                    else
-                        return new RestResponse(fileType, "Please upload gff file first");
+                    if (!isGFF)
+                        message = "Please upload gff file first";
                 }
-                else if (fileExtension.equals("results"))
+                else if(firstLine.startsWith("gene_id"))
                 {
                     fileType = "expression";
-                    isGFF = checkIfGFF(projectName);
-                    if (isGFF)
-                        return new RestResponse(fileType, "");
-                    else
-                        return new RestResponse(fileType, "Please upload gff file first");
+                    if (!isGFF)
+                        message = "Please upload gff file first";
                 }
-                else if (fileExtension.equals("bedcov"))
+                else if(firstLine.startsWith("mRNA:"))
                 {
                     fileType = "bedcov";
-                    isGFF = checkIfGFF(projectName);
-                    if (isGFF)
-                        return new RestResponse(fileType, "");
-                    else
-                        return new RestResponse(fileType, "Please upload gff file first");
+                    if (!isGFF)
+                        message = "Please upload gff file first";
                 }
                 else
-                {
-//                    fileName = fileName.replaceFirst("."+fileExtension,"");
-                    inputStream = multipartFile.getInputStream();
-                    while(((i = inputStream.read())!=-1) && (fileType==""))
-                    {
-                        c = (char)i;
-                        if (c=='>')
-                        {
-                            fileType="sequence";
-                        }
-                        if (c=='#')
-                        {
-                            c=(char)inputStream.read();
-                            if (c=='#')
-                            {
-                                c=(char)inputStream.read();
-                                if (c=='g')
-                                    fileType="annotation";
-                                else if(c=='v')
-                                    fileType="variants";
-                                else
-                                    fileType="unrecognized";
-                            }
-                        }
-                    }
-                    return new RestResponse(fileType, null);
-                }
+                    fileType="unrecognized";
             }
-        }
+            return new RestResponse(fileType, message);
+            }
         catch (IOException ex) 
         {
             return new RestResponse(ex.getMessage(), null);
@@ -240,7 +201,7 @@ public class FileRecognitionController {
         {
 //            System.out.println("User is ANONYMOUS");
             //path
-            path = new PathFinder().getUserPathNotLogged();
+            path = pathFinder.getEntireFilePathNotLogged();
             fileTypes[0]="sequence";
             fileTypes[1]="variants";
             fileTypes[2]="bedcov";
@@ -259,7 +220,8 @@ public class FileRecognitionController {
                 {
                     splittedFileName = result.split("/");
                     fileNameFromFile = splittedFileName[splittedFileName.length-1];
-                    if (fileNameFromFile.compareTo(fileName)>0)
+                    fileNameFromFile = fileNameFromFile.replaceAll("\t", "");
+                    if (fileNameFromFile.equals(fileName))
                         flag=true;
                     result=bufferedReader.readLine();
                 }
@@ -271,7 +233,7 @@ public class FileRecognitionController {
         else
         {
 //            System.out.println("User is LOGGED");
-            path = new PathFinder().getUserPathLogged() + '/' + projectName;
+            
             Project project;
             //Find user
             String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -298,7 +260,8 @@ public class FileRecognitionController {
 //            System.out.println("User is ANONYMOUS");
             String path, result; FileReader fileReader; BufferedReader bufferedReader;
             
-            path = new PathFinder().getGffPath();
+            path = pathFinder.getEntireFilePathNotLogged()+"/annotation";
+//            path = pathFinder.getGffFilePath("");
             fileReader = new FileReader(path+"/contentOfFolder.txt");
             bufferedReader = new BufferedReader(fileReader);
             result = bufferedReader.readLine();

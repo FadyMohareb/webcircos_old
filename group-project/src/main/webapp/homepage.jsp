@@ -22,19 +22,22 @@
         <script src="${contextPath}/resources/js/panels/filesParentPoolPanel.js"></script>
         <script src="${contextPath}/resources/js/panels/projectsPanelAnon.js"></script>
         <script src="${contextPath}/resources/js/tools/d3.js"></script>
-        <script src="${contextPath}/resources/js//tools/biocircos-1.1.1.js"></script> 
+        <script src="${contextPath}/resources/js/tools/biocircos-1.1.0.js"></script> 
         <script src="${contextPath}/resources/js/panels/circosPanel.js"></script>
         <script src="${contextPath}/resources/js/panels/parentPoolPanel.js"></script>
         <script src="${contextPath}/resources/js/panels/circosDisplayRoutines.js"></script>     
         <script src="${contextPath}/resources/js/dynamic/welcomeHeader.js"></script>
         <script src="${contextPath}/resources/js/modals/changePswdModal.js"></script>
         <script src="${contextPath}/resources/js/modals/uploadModal.js"></script>
+        <script src="${contextPath}/resources/js/modals/importModalTest.js"></script>
         <script src="${contextPath}/resources/js/panels/centerTabs.js"></script>
         <script src="${contextPath}/resources/js/modals/newProjectModal.js"></script>
         <script src="${contextPath}/resources/js/datastructures/FileListStructure.js"></script>
         <script src="${contextPath}/resources/js/datastructures/BSAfileListStructure.js"></script>
+        <script src="${contextPath}/resources/js/datastructures/ImportFileStructure.js"></script>
         <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+        <script src="${contextPath}/resources/css/bootstrap.min.css"></script>
     </head>
     <body>
         <script type="text/javascript">
@@ -47,6 +50,12 @@
             var BSAstructure = {};
             $(function () {
                 BSAstructure = new BSAfileListStructure();
+            });
+        </script>
+        <script type="text/javascript">
+            var ImportStructure = {};
+            $(function () {
+                ImportStructure = new ImportFileStructure();
             });
         </script>
         <div class="row">  
@@ -93,7 +102,7 @@
                     <div id="filesContainer" class="row">${filesContainer}</div>
                     <script type="text/javascript">
                         $(function () {
-                            renderFilesPanel();
+                            renderFilesPanel('${pageContext.request.userPrincipal.name}');
                         });
                     </script>
                 </div>

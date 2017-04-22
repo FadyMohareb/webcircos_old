@@ -3,6 +3,56 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+var FilesDropdownSequenceBSA = React.createClass({displayName: "FilesDropdownSequenceBSA",
+    getInitialState: function () {
+        return {activeFileSequenceBSA: this.props.filesList[0]};
+    },
+    componentWillReceiveProps: function (newProperties) {
+        this.state.activeFileParent1 = newProperties.filesList[0];
+        $('#sequenceBsaBtn').children().first().text(this.state.activeFileSequenceBSA + ' ');
+    },
+    renderFilesBlockSequenceBSA: function renderBlockSequenceBSA(filesList, parent) {
+
+        return filesList.map(function (fileName)
+        {
+
+            handleFileChangeSequenceBSA: function handleFileChangeSequenceBSA(event) {
+
+                event.preventDefault();
+                parent.state.activeFileSequenceBSA = event.target.id;
+                BSAstructure.sequence = event.target.id;
+                console.log('SequenceBSA: ' + BSAstructure.sequence);
+                $('#sequenceBsaBtn').children().first().text(parent.state.activeFileSequenceBSA + ' ');
+
+            }
+            ;
+
+            return (React.createElement("li", {onClick: handleFileChangeSequenceBSA, id: fileName}, fileName));
+        })
+    },
+    render: function () {
+        return React.createElement('div', {className: 'btn-group'},
+                React.createElement('button', {className: 'btn btn-default dropdown-toggle',
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'sequenceBsaBtn'},
+                        this.state.activeFileSequenceBSA + ' ',
+                        React.createElement('span', {className: 'caret'})),
+                React.createElement('ul', {className: 'dropdown-menu'},
+                        this.renderFilesBlockSequenceBSA(this.props.filesList, this))
+                )
+    }
+
+
+
+});
+
+var FilesDropdownAnnotationBSA = React.createClass({displayName: "FilesDropdownAnnotationBSA",
+    render: function () {
+        return React.createElement('div', {className: 'btn-group'},
+                React.createElement('h5', {id: 'annotationBsaBtn'},
+                        this.props.filesList[1]));
+    }
+});
+
 var FilesDropdownParent1 = React.createClass({displayName: "FilesDropdownParent1",
     getInitialState: function () {
         return {activeFileParent1: this.props.filesList[0]};
@@ -20,7 +70,7 @@ var FilesDropdownParent1 = React.createClass({displayName: "FilesDropdownParent1
 
                 event.preventDefault();
                 parent.state.activeFileParent1 = event.target.id;
-                BSAstructure.parent1= event.target.id;
+                BSAstructure.parent1 = event.target.id;
                 console.log('Parent 1: ' + BSAstructure.parent1);
                 $('#parent1Btn').children().first().text(parent.state.activeFileParent1 + ' ');
 
@@ -62,7 +112,7 @@ var FilesDropdownParent2 = React.createClass({displayName: "FilesDropdownParent2
 
                 event.preventDefault();
                 parent.state.activeFileParent2 = event.target.id;
-                BSAstructure.parent2= event.target.id;
+                BSAstructure.parent2 = event.target.id;
                 console.log('Parent 2: ' + BSAstructure.parent2);
                 $('#parent2Btn').children().first().text(parent.state.activeFileParent2 + ' ');
 
@@ -104,7 +154,7 @@ var FilesDropdownPool1 = React.createClass({displayName: "FilesDropdownPool1",
 
                 event.preventDefault();
                 parent.state.activeFilePool1 = event.target.id;
-                BSAstructure.pool1= event.target.id;
+                BSAstructure.pool1 = event.target.id;
                 console.log('Pool 1: ' + BSAstructure.pool1);
                 $('#pool1Btn').children().first().text(parent.state.activeFilePool1 + ' ');
 
@@ -144,7 +194,7 @@ var FilesDropdownPool2 = React.createClass({displayName: "FilesDropdownPool2",
 
                 event.preventDefault();
                 parent.state.activeFilePool2 = event.target.id;
-                BSAstructure.pool2= event.target.id;
+                BSAstructure.pool2 = event.target.id;
                 console.log('Pool 2: ' + BSAstructure.pool2);
                 $('#pool2Btn').children().first().text(parent.state.activeFilePool2 + ' ');
 
@@ -218,15 +268,23 @@ var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
 
                     }
 
-                        
+                    if (type === "variants") {
                         React.render(React.createElement(FilesDropdownParent1, {filesList: list, fileType: type}),
-                                        document.getElementById('parent1'));
+                                document.getElementById('parent1'));
                         React.render(React.createElement(FilesDropdownParent2, {filesList: list, fileType: type}),
-                                        document.getElementById('parent2'));
+                                document.getElementById('parent2'));
                         React.render(React.createElement(FilesDropdownPool1, {filesList: list, fileType: type}),
-                                        document.getElementById('pool1'));
+                                document.getElementById('pool1'));
                         React.render(React.createElement(FilesDropdownPool2, {filesList: list, fileType: type}),
-                                        document.getElementById('pool2'));
+                                document.getElementById('pool2'));
+                    } else if (type === "sequence") {
+                        React.render(React.createElement(FilesDropdownSequenceBSA, {filesList: list, fileType: type}),
+                                document.getElementById('sequenceBSA'));
+                    } else if (type === "annotation") {
+                        BSAstructure.annotation = list[1];
+                        React.render(React.createElement(FilesDropdownAnnotationBSA, {filesList: list, fileType: type}),
+                                document.getElementById('annotationBSA'));
+                    }
 
                 }
             },
@@ -235,11 +293,11 @@ var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
                 console.error(status, err.toString());
             }});
     },
-    sendData: function(){
-       BSAstructure.validateValues();
-       $("#bsaCircos").html("");
+    sendData: function () {
+        BSAstructure.validateValues();
+        $("#bsaCircos").html("");
 
-         $.ajax({
+        $.ajax({
             url: "/circos.data",
             dataType: 'json',
             type: 'POST',
@@ -300,11 +358,19 @@ var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
             }
 
         });
-        
+
     },
     render: function () {
 
         return (React.createElement('div', {className: 'container'},
+                React.createElement('label', {for : 'annotationBsaBtn'}, 'Annotation: '),
+                React.createElement('div', {className: 'container', id: 'annotationBSA'},
+                        React.createElement(this.contentUpdate, {panelType: "annotation"})),
+                React.createElement('br'),
+                React.createElement('label', {for : 'sequenceBsaBtn'}, 'Reference sequence: '),
+                React.createElement('div', {className: 'container', id: 'sequenceBSA'},
+                        React.createElement(this.contentUpdate, {panelType: "sequence"})),
+                React.createElement('br'),
                 React.createElement('label', {for : 'parent1'}, 'Parent 1: '),
                 React.createElement('div', {className: 'container', id: 'parent1'},
                         React.createElement(this.contentUpdate, {panelType: "variants"})),

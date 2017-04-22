@@ -1,5 +1,6 @@
 package uk.ac.cranfield.bix.controllers;
 
+import uk.ac.cranfield.bix.services.PathFinder;
 import java.io.File;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.cranfield.bix.controllers.rest.RestResponse;
-import uk.ac.cranfield.bix.models.PathFinder;
 import uk.ac.cranfield.bix.models.Project;
 import uk.ac.cranfield.bix.models.User;
 import uk.ac.cranfield.bix.services.ProjectService;
@@ -29,6 +29,9 @@ public class ProjectController {
 
     @Autowired
     private UserService userService;
+    
+     @Autowired
+    private PathFinder pathFinder;
 
     @RequestMapping(value = "/project/newProject", method = RequestMethod.POST)
     public @ResponseBody
@@ -50,7 +53,7 @@ public class ProjectController {
                 projectService.save(p);
                 
                 //Check if user has a folder with his id
-                String path = new PathFinder().getSimpeUserPath();
+                String path = pathFinder.getSimpeUserPath();
                 String folderPath = path + user.getLogin();
                 boolean folderExist = folderExist(folderPath);
                 

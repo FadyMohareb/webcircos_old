@@ -5,17 +5,50 @@
  */
 package uk.ac.cranfield.bix.controllers.rest;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *
  * @author s262012
  */
 public class BackProperties {
     
+    @JsonProperty("BginnerRadius")
     private Integer BginnerRadius;
+    @JsonProperty("BgouterRadius")
     private Integer BgouterRadius;
+    @JsonProperty("BgFillColor")
     private String  BgFillColor;
+    @JsonProperty("BgborderColor")
     private String  BgborderColor;
+    @JsonProperty("BgborderSize")
     private double  BgborderSize;
+    @JsonProperty("axisShow")
+    private String axisShow;
+    @JsonProperty("axisWidth") 
+    private double axisWidth;
+    @JsonProperty("axisColor")
+    private String axisColor;
+    @JsonProperty("opacity")
+    private double opacity;
+    @JsonProperty("axisNum")
+    private Integer axisNum;
+
+    public BackProperties(Integer BginnerRadius, Integer BgouterRadius, String BgFillColor, String BgborderColor, double BgborderSize, String axisShow, double axisWidth, String axisColor, double opacity, Integer axisNum) {
+        this.BginnerRadius = BginnerRadius;
+        this.BgouterRadius = BgouterRadius;
+        this.BgFillColor = BgFillColor;
+        this.BgborderColor = BgborderColor;
+        this.BgborderSize = BgborderSize;
+        this.axisShow = axisShow;
+        this.axisWidth = axisWidth;
+        this.axisColor = axisColor;
+        this.opacity = opacity;
+        this.axisNum = axisNum;
+    }
+    
+
+  
 
     public Integer getBginnerRadius() {
         return BginnerRadius;
@@ -56,7 +89,44 @@ public class BackProperties {
     public void setBgborderSize(double BgborderSize) {
         this.BgborderSize = BgborderSize;
     }
-    
-    
-    
+
+    public String getAxisShow() {
+        return axisShow;
+    }
+
+    public void setAxisShow(String axisShow) {
+        this.axisShow = axisShow;
+    }
+
+    public double getAxisWidth() {
+        return axisWidth;
+    }
+
+    public void setAxisWidth(double axisWidth) {
+        this.axisWidth = axisWidth;
+    }
+
+    public String getAxisColor() {
+        return axisColor;
+    }
+
+    public void setAxisColor(String axisColor) {
+        this.axisColor = axisColor;
+    }
+
+    public double getOpacity() {
+        return opacity;
+    }
+
+    public void setOpacity(double opacity) {
+        this.opacity = opacity;
+    }
+
+    public Integer getAxisNum() {
+        return axisNum;
+    }
+
+    public void setAxisNum(Integer axisNum) {
+        this.axisNum = axisNum;
+    }  
 }

@@ -8,4 +8,6 @@ public interface FileService {
     void save(FileInput file);
     void delete(FileInput file);
     List<FileInput> findAll(Project project);
+    FileInput findByFileType(String fileType, Project p);
+    FileInput getByName(String f_name, Project project);
 }

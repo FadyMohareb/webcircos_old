@@ -199,8 +199,8 @@ public class Coverage_Transcriptomic {
          
          //create line properties
          LineProperties prop = new LineProperties();
-         prop.setMaxRadius(60);
-         prop.setMinRadius(30);
+         prop.setMaxRadius(150);
+         prop.setMinRadius(120);
          prop.setLineColor("#EEAD0E");
          prop.setLineWidth(1);
         

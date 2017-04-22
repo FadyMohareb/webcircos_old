@@ -36,11 +36,28 @@ public class FileDao {
               .list(); 
     }
     
+    public FileInput getByName(String f_name, Project project) {
+      return (FileInput) getSession()
+              .createQuery("Select f from FileInput f where f.project=:project and f.f_name=:f_name")
+              .setParameter("project", project)
+              .setParameter("f_name", f_name)
+              .uniqueResult();
+//              .load(FileInput.class, f_name);
+    }
+    
     public FileInput getById(long id) {
       return (FileInput) getSession().load(FileInput.class, id);
     }
 
     public void update(FileInput file) {
       getSession().update(file);
+    }
+    
+    public FileInput getByFileType(String fileType, Project p){
+         return (FileInput) getSession()
+                 .createQuery("Select f from FileInput f where f.project=:project and f.f_type=:type")
+                 .setParameter("project", p)
+                 .setParameter("type", fileType)
+                 .uniqueResult();        
     }
 }
