@@ -3,6 +3,7 @@
 var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
     getInitialState: function getInitialState() {
         Structure.projectName = this.props.projectsList[0];
+        BSAstructure.projectName = this.props.projectsList[0];
         ImportStructure.newProjectName = this.props.projectsList[0];
         React.render(React.createElement(FilesPanel, { projectName: this.props.projectsList[0] }), document.getElementById('filesContainer'));
         
@@ -88,14 +89,19 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
         this.getProjects();
     },
     render: function () {
-        return (React.createElement('div', {className: "panel panel-primary"},
-                React.createElement('div', {className: "panel-heading"}, "Projects  ",
+        return (React.createElement('div', null,
+//                React.createElement('button', {id: 'manualBtn', type: 'button', className: 'btn btn-default btn-sm', onClick: this.handleShowManual},
+//                                        React.createElement('span', {className: 'glyphicon glyphicon-book', 'aria-hidden': 'true'})),
+//                                        React.createElement('br'),
+//                                        React.createElement('br'),
+                React.createElement('div', {className: "panel panel-primary"},
+                React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null, "Projects "),
                         React.createElement('button', {type: 'button', className: 'btn btn-primary btn-sm', onClick: this.handleShowNewProjModal},
                                 React.createElement('span', {className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true'}))),
                 React.createElement('div', {className: "panel-body"},
                         React.createElement("div", {id: 'projects'}, 'Create your first project'),
                         this.state.view.showNewProjModal ? React.createElement(NewProjModal, {handleHideNewProjModal: this.handleHideNewProjModal}) : null))
-                );
+                ));
     }
 });
 var renderProjectsPanel = function () {

@@ -8,8 +8,8 @@ package uk.ac.cranfield.bix.controllers;
 import uk.ac.cranfield.bix.services.PathFinder;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestContextHolder;
 import uk.ac.cranfield.bix.controllers.rest.BackProperties;
 import uk.ac.cranfield.bix.controllers.rest.CircosInput;
 import uk.ac.cranfield.bix.controllers.rest.CircosOutput;
@@ -45,27 +44,28 @@ import static uk.ac.cranfield.bix.utilities.fileParser.fastaParsers.createBiocir
  */
 @Controller
 public class CircosController {
+    
+    @Autowired
+    private PathFinder pathFinder;
 
     @RequestMapping(value = "/circos")
     public String getSimpleCircos() {
         return "Circle";
     }
 
-    //Need to add a list of file in the parameter. 
+   
     @RequestMapping(value = "/circos.data", method = RequestMethod.POST)
     public @ResponseBody
     CircosOutput sendData(@RequestBody CircosInput circosInput) throws IOException, ClassNotFoundException {
         circosInput.removeExtensions();
-        String userID = "", currentPath;
         String path;
-        File dirSequence;
         CircosOutput circosOutput = new CircosOutput();
         
 
         if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
-            path = new PathFinder().getEntireFilePathNotLogged() + "/";
+            path = pathFinder.getEntireFilePathNotLogged() + "/";
         } else {
-            path = new PathFinder().getEntireFilePathLogged(circosInput.getProjectName());
+            path = pathFinder.getEntireFilePathLogged(circosInput.getProjectName());
 
         }
 

@@ -124,6 +124,44 @@ var FilesDropdownAnnotation = React.createClass({displayName: "FilesDropdownAnno
 });
 
 var FilesDropdownTransCoverage = React.createClass({displayName: "FilesDropdownTransCoverage",
+    getInitialState: function ()
+    {
+        return {activeFileTransCoverage: this.props.filesList[0]};
+    },
+    componentWillReceiveProps: function (newProperties)
+    {
+        this.state.activeFileTransCoverage = newProperties.filesList[0];
+        $('#transCoverageBtn').children().first().text(this.state.activeFileTransCoverage);
+    },
+    renderFilesBlock: function renderBlock(filesList, parent)
+    {
+        return filesList.map(function (fileName)
+        {
+            handleFileChange: function handleFileChange(event)
+            {
+                event.preventDefault();
+                parent.setState({activeFileTransCoverage: event.target.id});
+                Structure.transcriptiomicCoverage = event.target.id;
+                $('#transCoverageBtn').children().first().text(parent.state.activeFileTransCoverage);
+            }
+            ;
+            return (React.createElement("li", {onClick: handleFileChange, id: fileName}, fileName));
+        });
+    },
+    render: function ()
+    {
+        return React.createElement('div', {className: 'btn-group'},
+                React.createElement('button', {className: 'btn btn-default dropdown-toggle',
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': 'false', id: 'transCoverageBtn'},
+                        this.state.activeFileTransCoverage + ' ',
+                        React.createElement('span', {className: 'caret'})),
+                React.createElement('ul', {className: 'dropdown-menu'},
+                        this.renderFilesBlock(this.props.filesList, this))
+                );
+    }
+});
+
+var FilesDropdownTransCoverage = React.createClass({displayName: "FilesDropdownTransCoverage",
     getInitialState: function () {
         return {activeFileTransCoverage: this.props.filesList[0]};
     },
@@ -345,6 +383,8 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
     },
     sendData: function () {
         Structure.validateValues();
+        var height = $('#bioCircos').height();
+        var width = $('#bioCircos').width();
         $("#bioCircos").html("");
         console.log('Structure: ' + JSON.stringify(Structure));
 
@@ -414,9 +454,11 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 } else {
                     BACKGROUND02 = [];
                 }
-
-                console.log(data.genomes + ' ' + ARC_01 + ' ' + HISTOGRAM01 + ' ' + LINE01 + ' ' + LINE02 + ' ' + HEATMAP01 + ' ' + HEATMAP02 + ' ' + BACKGROUND01 + ' ' + BACKGROUND02)
-                renderCircos(data.genomes, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02, BACKGROUND01, BACKGROUND02);
+                
+                
+                console.log('Size: ' + height + ' ' + width);
+//                console.log(data.genomes + ' ' + ARC_01 + ' ' + HISTOGRAM01 + ' ' + LINE01 + ' ' + LINE02 + ' ' + HEATMAP01 + ' ' + HEATMAP02 + ' ' + BACKGROUND01 + ' ' + BACKGROUND02)
+                renderCircos(height, width, data.genomes, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02, BACKGROUND01, BACKGROUND02);
             },
             error: function () {
                 alert("Wrong data");
@@ -428,37 +470,37 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
     },
     render: function () {
         return (React.createElement('div', {className: 'container', style: {width: "inherit"}},
-                React.createElement('div', {className: "panel panel-default"},
-                        React.createElement('div', {className: "panel-heading"}, 'Annotation: '),
+                React.createElement('div', {className: "panel panel-danger"},
+                        React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null,'Annotation: ')),
                         React.createElement('div', {className: 'panel-body', id: 'annotation'},
                                 React.createElement(this.contentUpdateProject, {panelType: "annotation"}))),
-                React.createElement('div', {className: "panel panel-default"},
-                        React.createElement('div', {className: "panel-heading"}, 'Reference sequence: '),
+                React.createElement('div', {className: "panel panel-danger"},
+                        React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null, 'Reference sequence: ')),
                         React.createElement('div', {className: 'panel-body', id: 'sequence'},
                                 React.createElement(this.contentUpdateProject, {panelType: "sequence"}))),
-                React.createElement('div', {className: "panel panel-warning"},
-                        React.createElement('div', {className: "panel-heading"}, 'Genomic coverage: '),
+                React.createElement('div', {className: "panel panel-success"},
+                        React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null,'Genomic coverage: ')),
                 React.createElement('div', {className: 'panel-body', id: 'genCoverage'},
                         React.createElement(this.contentUpdateProject, {panelType: "variants"}))),
-                        React.createElement('div', {className: "panel panel-warning"},
-                React.createElement('div', {className: "panel-heading"}, 'SNP density: '),
+                        React.createElement('div', {className: "panel panel-success"},
+                React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null,'SNP density: ')),
                 React.createElement('div', {className: 'panel-body', id: 'variants'},
                 React.createElement(this.contentUpdateProject, {panelType: "variants"}))),
                 React.createElement('div', {className: "panel panel-info"},
-                React.createElement('div', {className: "panel-heading"}, 'Transcriptiomic coverage: '),
+                React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null,'Transcriptiomic coverage: ')),
                 React.createElement('div', {className: 'panel-body', id: 'transCoverage'},
                         React.createElement(this.contentUpdateProject, {panelType: "bedcov"}))),
-                React.createElement('div', {className: "panel panel-success"},
-                React.createElement('div', {className: "panel-heading"}, 'Genes expression: '),
+                React.createElement('div', {className: "panel panel-warning"},
+                React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null,'Genes expression: ')),
                 React.createElement('div', {className: 'panel-body', id: 'expression'},
                         React.createElement(this.contentUpdateProject, {panelType: "expression"}))),
-                React.createElement('div', {className: "panel panel-danger"},
-                React.createElement('div', {className: "panel-heading"}, 'Differential expression: '),
+                React.createElement('div', {className: "panel panel-default"},
+                React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null,'Differential expression: ')),
                 React.createElement('div', {className: 'panel-body', id: 'difExpression'},
                         React.createElement(this.contentUpdateProject, {panelType: "difExpression"}))),
                 React.createElement('br'),
                 React.createElement('button', {className: 'btn btn-primary', style: {'text-align': 'center'}, onClick: this.sendData},
-                        'Display circos'))
+                        React.createElement('strong', null, 'Display circos')))
                 );
     }
 });

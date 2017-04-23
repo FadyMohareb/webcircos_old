@@ -34,13 +34,15 @@ var AccountDropdown = React.createClass({displayName: "accountDropdown",
       this.setState({ view: { showModal: true } });
     },
     render: function () {
-        return (
-            React.createElement("div", { className: 'btn-group', style: { float: 'right', 'margin-top': '10px' } },
-                React.createElement("button", { type: 'button', className: "btn btn-primary dropdown-toggle",
-                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': "false"},"Account  ", 
+        return (React.createElement("div", { className: 'container'},
+        React.createElement("div", { className: 'container'},
+            React.createElement("h2", null, "Welcome ", React.createElement("strong", null, this.props.userName), "!")),
+            React.createElement("div", { className: 'btn-group' },
+                React.createElement("button", { type: 'button', className: "btn btn-primary dropdown-toggle", 
+                    'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': "false"},React.createElement('strong', null, "Account "), 
                     React.createElement("span", { className: 'caret' }),
                     React.createElement("span", { className: 'sr-only' })),
-                React.createElement("ul", { className: 'dropdown-menu dropdown-menu-right' },
+                React.createElement("ul", { className: 'dropdown-menu' },
                 React.createElement("li", { className: 'dropdown-header' }, "Manage account"), 
                     React.createElement("li", null, 
                         React.createElement("a", {href: "#", onClick: this.handleShowModal }, "Change password")),
@@ -50,14 +52,14 @@ var AccountDropdown = React.createClass({displayName: "accountDropdown",
                  ),
                 this.state.view.showModal ? React.createElement(ChangePswdModal, { handleHideModal: this.handleHideModal }) : null
                 )
-        );
+        ));
     }
 });
 var renderAccountDropdown = function (asd) {
 //    console.log(asd);
     React.render(
-        React.createElement(AccountDropdown),
-        document.getElementById("upperRightContainer")
+        React.createElement(AccountDropdown, {userName: asd}),
+        document.getElementById("upperLeftContainer")
     );
 };
 

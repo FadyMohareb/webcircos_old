@@ -13,11 +13,11 @@ public class DataPoint {
     
     private String chr;
     private Integer pos;
-    private Integer value;
+    private String value;
     private String des;
     private String color;
 
-    public DataPoint(String chr, Integer pos, Integer value, String des, String color) {
+    public DataPoint(String chr, Integer pos, String value, String des, String color) {
         this.chr = chr;
         this.pos = pos;
         this.value = value;
@@ -25,7 +25,7 @@ public class DataPoint {
         this.color = color;
     }
     
-     public DataPoint(String chr, Integer pos, Integer value, String des) {
+     public DataPoint(String chr, Integer pos, String value, String des) {
         this.chr = chr;
         this.pos = pos;
         this.value = value;
@@ -50,11 +50,11 @@ public class DataPoint {
         this.pos = pos;
     }
 
-    public Integer getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

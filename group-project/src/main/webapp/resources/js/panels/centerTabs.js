@@ -19,7 +19,7 @@ var CircosTab = React.createClass({displayName: 'CircosTab',
 
         return (
                 React.createElement('li', {onClick: this.props.handleClick, className: this.props.isActive ? "active" : null},
-                        React.createElement('a', {href: '#'}, this.props.data.name))
+                        React.createElement('a', {href: '#'}, React.createElement('strong', null, this.props.data.name)))
                 )
     }
 
@@ -30,7 +30,7 @@ var CircosContent = React.createClass({displayName: 'CircosContent',
 
         return (
                 React.createElement('div', null,
-                        this.props.activeTab.name === 'Overview' ? React.createElement('section', {className: 'panel panel-success'},
+                        this.props.activeTab.name === 'Overview' ? React.createElement('section', {className: 'panel panel-primary'},
                                 React.createElement('div', {className: 'panel-body', id: 'circos', style: {height: "100%"}},
                                         React.createElement(CircosPanel))) : null,
                         this.props.activeTab.name === 'BSA' ? React.createElement('section', {className: 'panel panel-primary'},

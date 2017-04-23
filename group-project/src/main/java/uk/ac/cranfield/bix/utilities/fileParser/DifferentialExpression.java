@@ -259,7 +259,7 @@ public class DifferentialExpression {
         List<HeatMapDataPoint> heatMapDataPoint = new ArrayList();
         for (int j = 0; j < DiffHeatMapValues.size(); j++) {
             //append the data to a string in the right format
-            HeatMapDataPoint point = new HeatMapDataPoint(LineNumbers.get(j)[1].toString(), 4 + (Integer) LineNumbers.get(j)[2], (Integer) LineNumbers.get(j)[3], diffExprOrExpr, DiffHeatMapValues.get(j));
+            HeatMapDataPoint point = new HeatMapDataPoint(LineNumbers.get(j)[1].toString(), 4 + (Integer) LineNumbers.get(j)[2], (Integer) LineNumbers.get(j)[3], diffExprOrExpr, DiffHeatMapValues.get(j).toString()+" fold change");
             heatMapDataPoint.add(point);
         }
         return heatMapDataPoint;

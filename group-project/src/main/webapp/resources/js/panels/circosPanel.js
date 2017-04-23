@@ -46,12 +46,13 @@ var CircosPanel = React.createClass({className: "circosPanel",
 
     render: function () {
 
-        return (React.createElement('div', null,
+        return (React.createElement('div', {style: {height: "100vw"}},
 //                React.createElement("form", {},
 //                React.createElement("i", {className: "fa fa-floppy-o"})),
-                React.createElement('button', {type: 'button', className: 'btn btn-primary glyphicon glyphicon-save', onClick: this.save}," Save"),
+                React.createElement('button', {type: 'button', className: 'btn btn-primary glyphicon glyphicon-save', onClick: this.save},React.createElement('strong', null, " Save")),
                 React.createElement('br'),
-                React.createElement('div', {id: "bioCircos"})));
+                React.createElement('div', {id: "bioCircos", style: {height: 'inherit', width: 'inherit', margin: '8vw 20vw'}},
+                                React.createElement('img', {src: "resources/emptyCircosV2.jpeg"}))));
     }
 });
 

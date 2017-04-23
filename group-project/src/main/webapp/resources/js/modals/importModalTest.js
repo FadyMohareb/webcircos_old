@@ -1,12 +1,11 @@
-/* global React, ImportStructure */
-
 var converter = new Showdown.converter();
 var ProjectsDropdownImport = React.createClass({displayName: "ProjectsDropdownImport",
     getFiles: function(projectName)
     {
-        var projectName = projectName;
+        console.log('Getting files from the project: ' + projectName);
+        var project = projectName;
         var fd = new FormData();
-        fd.append('projectName', projectName);
+        fd.append('projectName', project);
         $.ajax({
             url: "/import/getAll",
             type: 'POST',
@@ -15,12 +14,14 @@ var ProjectsDropdownImport = React.createClass({displayName: "ProjectsDropdownIm
             data: fd,
             success: function (data)
             {
+                var list = [];
+                    list[0] = '--- ';
+                    
                 var filesList = data.message;
                 if (filesList !== "" && filesList !== null)
                 {
                     var filesSplited = filesList.split("\t");
-                    var list = [];
-                    list[0] = '--- ';
+                    
                     for (var i = 0; i < filesSplited.length; i++)
                     {
                         if (filesSplited[i] !== "")
@@ -30,7 +31,7 @@ var ProjectsDropdownImport = React.createClass({displayName: "ProjectsDropdownIm
                     }
                 }
                 console.log(list);
-                React.render(React.createElement(FilesDropdownImport, { filesList: list }), document.getElementById('filesListImport'));
+                return React.render(React.createElement(FilesDropdownImport, { filesList: list }), document.getElementById('filesListImport'));
         
             },
             error: function (status, err) 
@@ -40,17 +41,20 @@ var ProjectsDropdownImport = React.createClass({displayName: "ProjectsDropdownIm
         });
     },
     getInitialState: function getInitialState() 
-    {   ImportStructure.oldProjectName = this.props.projectsList[0];
+    {   this.getFiles(this.props.projectsList[0]);
+//        ImportStructure.oldProjectName = this.props.projectsList[0];
         return {activeProjectImport: this.props.projectsList[0]};
     },
     renderBlock: function renderBlock(projectsList, parent)
-    {
+    { 
         return projectsList.map(function (projectName)
         {
             handleProjectChange: function handleProjectChange(event) {
+                
                 event.preventDefault();
+                
                 parent.state.activeProjectImport = event.target.id;
-                ImportStructure.oldProjectName = parent.state.activeProjectImport
+                ImportStructure.oldProjectName = parent.state.activeProjectImport;
                 $('#projectBtnImport').children().first().text(parent.state.activeProjectImport + ' ');
                 parent.getFiles(parent.state.activeProjectImport);
             };
@@ -58,7 +62,7 @@ var ProjectsDropdownImport = React.createClass({displayName: "ProjectsDropdownIm
         });
     },
     render: function () 
-    {
+    { console.log('List goes as follows in dropdown: ' + this.props.projectsList);
         return React.createElement('div', {className: 'btn-group'},
                         React.createElement('button', {className: 'btn btn-default dropdown-toggle',
                             'data-toggle': "dropdown", 'aria-haspopup': "true",
@@ -155,7 +159,9 @@ var ImportModalTest = React.createClass({className: "importModalTest",
             }});
     },
     getProjects: function getProjects()
-    {
+    { 
+        console.log('Im here');
+        
         $.ajax({
         url: "/project/getProjects",
         type: 'GET',
@@ -178,7 +184,7 @@ var ImportModalTest = React.createClass({className: "importModalTest",
                     list[i+1] = ProjectName;
                     
                 }
-                
+                console.log('List goes as follows: ' + list);
                  return React.render(React.createElement('div', {className: 'container'},
                         React.createElement(ProjectsDropdownImport, {projectsList: list})),document.getElementById('projectsListImport'));
                 

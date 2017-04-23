@@ -69,8 +69,9 @@ var FilesDropdownParent1 = React.createClass({displayName: "FilesDropdownParent1
             handleFileChangeParent1: function handleFileChangeParent1(event) {
 
                 event.preventDefault();
-                parent.state.activeFileParent1 = event.target.id;
-                BSAstructure.parent1 = event.target.id;
+                var tempSolution = event.target.id.replace(/\s+/g, '');
+                parent.state.activeFileParent1 = tempSolution 
+                BSAstructure.parent1 = tempSolution;
                 console.log('Parent 1: ' + BSAstructure.parent1);
                 $('#parent1Btn').children().first().text(parent.state.activeFileParent1 + ' ');
 
@@ -111,8 +112,9 @@ var FilesDropdownParent2 = React.createClass({displayName: "FilesDropdownParent2
             handleFileChangeParent2: function handleFileChangeParent2(event) {
 
                 event.preventDefault();
-                parent.state.activeFileParent2 = event.target.id;
-                BSAstructure.parent2 = event.target.id;
+                var tempSolution = event.target.id.replace(/\s+/g, '');
+                parent.state.activeFileParent2 = tempSolution;
+                BSAstructure.parent2 = tempSolution;
                 console.log('Parent 2: ' + BSAstructure.parent2);
                 $('#parent2Btn').children().first().text(parent.state.activeFileParent2 + ' ');
 
@@ -153,8 +155,9 @@ var FilesDropdownPool1 = React.createClass({displayName: "FilesDropdownPool1",
             handleFileChangePool1: function handleFileChangePool1(event) {
 
                 event.preventDefault();
-                parent.state.activeFilePool1 = event.target.id;
-                BSAstructure.pool1 = event.target.id;
+                var tempSolution = event.target.id.replace(/\s+/g, '');
+                parent.state.activeFilePool1 = tempSolution;
+                BSAstructure.pool1 = tempSolution;
                 console.log('Pool 1: ' + BSAstructure.pool1);
                 $('#pool1Btn').children().first().text(parent.state.activeFilePool1 + ' ');
 
@@ -193,8 +196,9 @@ var FilesDropdownPool2 = React.createClass({displayName: "FilesDropdownPool2",
             handleFileChangePool2: function handleFileChangePool2(event) {
 
                 event.preventDefault();
-                parent.state.activeFilePool2 = event.target.id;
-                BSAstructure.pool2 = event.target.id;
+                var tempSolution = event.target.id.replace(/\s+/g, '');
+                parent.state.activeFilePool2 = tempSolution;
+                BSAstructure.pool2 = tempSolution;
                 console.log('Pool 2: ' + BSAstructure.pool2);
                 $('#pool2Btn').children().first().text(parent.state.activeFilePool2 + ' ');
 
@@ -298,59 +302,30 @@ var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
         $("#bsaCircos").html("");
 
         $.ajax({
-            url: "/circos.data",
+            url: "/bsa.data",
             dataType: 'json',
             type: 'POST',
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(BSAstructure),
             success: function (data) {
-                alert("Button Test");
-//                var ARC_01;
-//                var HISTOGRAM01;
-//                var LINE01;
-//                var LINE02;
-//                var HEATMAP01;
-//                var HEATMAP02;
-//                console.log(data);
-//
-//                if (data.histo !== null) {
-//                    HISTOGRAM01 = [data.histo.histId, data.histo.properties, data.histo.histDataPoint];
-//                } else {
-//                    HISTOGRAM01 = [];
-//                }
-//
-//                if (data.arc !== null) {
-//                    ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint];
-//                } else {
-//                    ARC_01 = [];
-//                }
-//
-//                if (data.genomicCoverage !== null) {
-//                    LINE01 = [data.genomicCoverage.lineId, data.genomicCoverage.properties, data.genomicCoverage.linePoints];
-//                } else {
-//                    LINE01 = [];
-//                }
-//
-//                if (data.transcriptomicCoverage !== null) {
-//
-//                    LINE02 = [data.transcriptomicCoverage.lineId, data.transcriptomicCoverage.properties, data.transcriptomicCoverage.linePoints];
-//                } else {
-//                    LINE02 = [];
-//                }
-//
-//                if (data.dEHeatMap !== null) {
-//                    HEATMAP01 = [data.dEHeatMap.heatMapId, data.dEHeatMap.properties, data.dEHeatMap.heatMapDataPoint];
-//                } else {
-//                    HEATMAP01 = [];
-//                }
-//
-//                if (data.geneExpressionHeatMap !== null) {
-//                    HEATMAP02 = [data.geneExpressionHeatMap.heatMapId, data.geneExpressionHeatMap.properties, data.geneExpressionHeatMap.heatMapDataPoint];
-//                } else {
-//                    HEATMAP02 = [];
-//                }
-//                
-//                renderCircos(data.genomes, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02);
+               // alert("Button Test");
+                var ARC_01;
+                var LINK01;
+                console.log(data);
+
+                if (data.arc !== null) {
+                    ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint];
+                } else {
+                    ARC_01 = [];
+                }
+
+                if (data.link !== null) {
+                    LINK01 = [data.link.linkId, data.link.properties, data.link.linkData];
+                } else {
+                    LINK01 = [];
+                }
+                
+                renderBSA(data.genomes, ARC_01, LINK01);
             },
             error: function () {
                 alert("Wrong data");
@@ -362,32 +337,33 @@ var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
     },
     render: function () {
 
-        return (React.createElement('div', {className: 'container'},
-                React.createElement('label', {for : 'annotationBsaBtn'}, 'Annotation: '),
-                React.createElement('div', {className: 'container', id: 'annotationBSA'},
-                        React.createElement(this.contentUpdate, {panelType: "annotation"})),
+        return (React.createElement('div', {className: 'container', style: {width: "inherit"}},
+                React.createElement('div', {className: "panel panel-danger"},
+                        React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null, 'Annotation: ')),
+                        React.createElement('div', {className: 'panel-body', id: 'annotationBSA'},
+                        React.createElement(this.contentUpdate, {panelType: "annotation"}))),
+                React.createElement('div', {className: "panel panel-danger"},
+                        React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null, 'Reference sequence: ')),
+                        React.createElement('div', {className: 'panel-body', id: 'sequenceBSA'},
+                        React.createElement(this.contentUpdate, {panelType: "sequence"}))),
+                React.createElement('div', {className: "panel panel-success"},
+                        React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null,'Parent 1: ')),
+                        React.createElement('div', {className: 'panel-body', id: 'parent1'},
+                        React.createElement(this.contentUpdate, {panelType: "variants"}))),
+                React.createElement('div', {className: "panel panel-info"},
+                        React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null,'Parent 2: ')),
+                        React.createElement('div', {className: 'panel-body', id: 'parent2'},
+                        React.createElement(this.contentUpdate, {panelType: "variants"}))),
+                React.createElement('div', {className: "panel panel-warning"},
+                        React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null,'Pool 1: ')),
+                        React.createElement('div', {className: 'panel-body', id: 'pool1'},
+                        React.createElement(this.contentUpdate, {panelType: "variants"}))),
+                React.createElement('div', {className: "panel panel-default"},
+                        React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null,'Pool 2: ')),
+                        React.createElement('div', {className: 'panel-body', id: 'pool2'},
+                        React.createElement(this.contentUpdate, {panelType: "variants"}))),
                 React.createElement('br'),
-                React.createElement('label', {for : 'sequenceBsaBtn'}, 'Reference sequence: '),
-                React.createElement('div', {className: 'container', id: 'sequenceBSA'},
-                        React.createElement(this.contentUpdate, {panelType: "sequence"})),
-                React.createElement('br'),
-                React.createElement('label', {for : 'parent1'}, 'Parent 1: '),
-                React.createElement('div', {className: 'container', id: 'parent1'},
-                        React.createElement(this.contentUpdate, {panelType: "variants"})),
-                React.createElement('br'),
-                React.createElement('label', {for : 'parent2'}, 'Parent 2: '),
-                React.createElement('div', {className: 'container', id: 'parent2'},
-                        React.createElement(this.contentUpdate, {panelType: "variants"})),
-                React.createElement('br'),
-                React.createElement('label', {for : 'pool1'}, 'Pool 1: '),
-                React.createElement('div', {className: 'container', id: 'pool1'},
-                        React.createElement(this.contentUpdate, {panelType: "variants"})),
-                React.createElement('br'),
-                React.createElement('label', {for : 'pool2'}, 'Pool 2: '),
-                React.createElement('div', {className: 'container', id: 'pool2'},
-                        React.createElement(this.contentUpdate, {panelType: "variants"})),
-                React.createElement('br'),
-                React.createElement('button', {className: 'btn btn-primary', onClick: this.sendData}, 'Display BSA circos'))
+                React.createElement('button', {className: 'btn btn-primary', onClick: this.sendData}, React.createElement('strong', null, 'Display BSA circos')))
                 );
 
 

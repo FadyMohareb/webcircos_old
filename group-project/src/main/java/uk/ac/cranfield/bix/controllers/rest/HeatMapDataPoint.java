@@ -17,9 +17,9 @@ public class HeatMapDataPoint implements Serializable{
     private Integer start;
     private Integer end;
     private String name;
-    private double value;
+    private String value;
 
-    public HeatMapDataPoint(String chr, Integer start, Integer end, String name, double value) {
+    public HeatMapDataPoint(String chr, Integer start, Integer end, String name, String value) {
         this.chr = chr;
         this.start = start;
         this.end = end;
@@ -61,11 +61,11 @@ public class HeatMapDataPoint implements Serializable{
         this.name = name;
     }
 
-    public double getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(String value) {
         this.value = value;
     }
     
