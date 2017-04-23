@@ -76,7 +76,7 @@ var ProjectsDropdownImport = React.createClass({displayName: "ProjectsDropdownIm
 
 var FilesDropdownImport = React.createClass({displayName: "FilesDropdownImport",
     getInitialState: function getInitialState()
-    {   ImportFileStructure.fileName = this.props.filesList[0];
+    {   ImportStructure.fileName = this.props.filesList[0];
         return {activeFileImport: this.props.filesList[0]};
     },
     componentWillReceiveProps: function (newProperties)

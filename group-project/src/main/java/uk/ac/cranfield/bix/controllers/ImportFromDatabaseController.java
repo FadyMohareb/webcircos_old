@@ -65,10 +65,12 @@ public class ImportFromDatabaseController
     @ResponseBody
     RestResponse copyFile(@RequestParam("newProjectName") String newProjectName, @RequestParam("oldProjectName") String oldProjectName, @RequestParam("oldFileName") String oldFileName) throws Exception
     {
-        String oldPath, newPath, fileType;
+        String oldPath, newPath, fileType, newFileName="", extention;
         Project oldProject, newProject;
         FileInput oldFile, newFile;
-        File dir;
+        File dir, oldDir, fileToCopy;
+        File[] oldFilesList;
+        int i;
         
         try
         {
@@ -93,13 +95,13 @@ public class ImportFromDatabaseController
                     List<FileInput> findAll = fileService.findAll(newProject);
                     for (FileInput file : findAll)
                     {
-                        if ("annotation".equals(file.getF_type()))
+                        if ("annotation".equals(fileType))
                             fileService.delete(file);
-                        else if ("difExpression".equals(file.getF_type()))
+                        else if ("difExpression".equals(fileType))
                             fileService.delete(file);
-                        else if ("expression".equals(file.getF_type()))
+                        else if ("expression".equals(fileType))
                             fileService.delete(file);
-                        else if ("bedcov".equals(file.getF_type()))
+                        else if ("bedcov".equals(fileType))
                             fileService.delete(file);
                         else
                         {}
@@ -113,15 +115,33 @@ public class ImportFromDatabaseController
                         dir.mkdir();
                 }
             }
-            //copy file
-            FileCopyUtils.copy(new FileInputStream(oldPath + "/" + oldFileName), new FileOutputStream(newPath + "/" + oldFileName));
-
-            // Parse and serialize files
-//            parseFile(newPath + "/" + oldFileName, fileType);
-
+            newPath = newPath + "/" + fileType;
+            oldPath = oldPath + "/" + fileType;
+            //get all files
+            oldDir = new File(oldPath);
+            oldFilesList = oldDir.listFiles();
+            
+            //iterate through files
+            for (i=0; i<oldFilesList.length; i++)
+            {
+                fileToCopy = oldFilesList[i];
+                //check if filename matches
+                newFileName = fileToCopy.getName();
+                String[] splittedNewFileName = newFileName.split("\\.");
+                extention = splittedNewFileName[splittedNewFileName.length-1];
+                newFileName = newFileName.replaceAll(extention, "");
+                
+                if (oldFileName.startsWith(newFileName))
+                {
+                    newFileName = newFileName + extention;
+                    //copy all files
+                    FileCopyUtils.copy(new FileInputStream(oldPath + "/" + oldFileName), new FileOutputStream(newPath + "/" + newFileName));
+                }
+            }
+            
             newFile = new FileInput();
-            newFile.setF_name(oldFileName);
-            newFile.setF_path(newPath + "/" + oldFileName);
+            newFile.setF_name(newFileName);
+            newFile.setF_path(newPath + "/" + newFileName);
             newFile.setF_type(fileType);
             newFile.setProject(newProject);
         

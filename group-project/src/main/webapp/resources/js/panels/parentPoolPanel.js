@@ -41,7 +41,7 @@ var ParentPoolPanel = React.createClass({className: "ParentPoolPanel",
         return (
                 React.createElement('div', null,
                         React.createElement('button', {type: 'button', 
-                            className: 'btn btn-primary glyphicon glyphicon-save', onClick: this.save}," Save"),
+                            className: 'btn btn-primary glyphicon glyphicon-save', style: {float: 'right'}, onClick: this.save},React.createElement('strong', null, " Save")),
                 React.createElement('br'),
                                 React.createElement('div', {id: "bsaCircos", style: {height: 'inherit', width: 'inherit', margin: '8vw 20vw'}}))
                 );

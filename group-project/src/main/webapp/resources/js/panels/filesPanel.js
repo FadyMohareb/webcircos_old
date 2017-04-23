@@ -33,9 +33,10 @@ var FilesPanel = React.createClass({displayName: "FilesPanel",
     },
     render: function () {
 
-        return (React.createElement('div', {className: "panel panel-primary"},
+        return (React.createElement('div', null ,
+                React.createElement('div', {className: "panel panel-primary"},
                 React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null, "Files  "),
-                        React.createElement('btn-group', {role: 'group'},
+                        React.createElement('btn-group', {role: 'group', style: {float: 'right'}},
                                 React.createElement('button', {id: 'uploadModalBtn', type: 'button', className: 'btn btn-primary btn-sm', onClick: this.handleShowUploadModal},
                                         React.createElement('span', {className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true'})),
                                 React.createElement('button', {id: "importModalBtn", type: 'button', className: 'btn btn-primary btn-sm', onClick: this.handleShowImportModal},
@@ -47,8 +48,8 @@ var FilesPanel = React.createClass({displayName: "FilesPanel",
                         React.createElement(FilesTabsComponent, {projectName: this.props.projectName})),
                 this.state.view.showUploadModal ? React.createElement(UploadModal, {handleHideUploadModal: this.handleHideUploadModal, projectName: this.props.projectName}) : null,
                 this.state.view.showImportModal ? React.createElement(ImportModalTest, {handleHideImportModal: this.handleHideImportModal, projectName: this.props.projectName}) : null,
-                this.state.view.showRemoveModal ? React.createElement(RemoveModal, {handleHideRemoveModal: this.handleHideRemoveModal, projectName: this.props.projectName}) : null));
-        ;
+                this.state.view.showRemoveModal ? React.createElement(RemoveModal, {handleHideRemoveModal: this.handleHideRemoveModal}) : null))
+        );
     }
 });
 

@@ -39,6 +39,7 @@
         <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
         <script src="${contextPath}/resources/css/bootstrap.min.css"></script>
         <script src="${contextPath}/resources/js/datastructures/ImportFileStructure.js"></script>
+        <script src="${contextPath}/resources/js/datastructures/RemoveFileStructure.js"></script>
     </head>
     <body>
         <script type="text/javascript">
@@ -54,12 +55,16 @@
             $(function () {
                 ImportStructure = new ImportFileStructure();
             });
+            var RemoveStructure = {};
+            $(function () {
+                RemoveStructure = new RemoveFileStructure();
+            });
         </script>
         <div>
             <div class="col-lg-3" style="float:left;margin:0px 10px 0px 10px;width:25%">
-                <div class="row"  id="test">
+                <div class="row" id="test">
                         <security:authorize acess="isAuthenticated"></security>
-                        <div id="upperLeftContainer" class="col-lg-3 page-header" style="float:left">${upperLeftContainer}</div>
+                        <div id="upperLeftContainer" class="col-lg-3" style="float:left">${upperLeftContainer}</div>
                             <c:if test="${pageContext.request.userPrincipal.name != null}">
                                  
                                     <!--<h2>Welcome <strong>${pageContext.request.userPrincipal.name}</strong>!</h2>-->
@@ -82,7 +87,8 @@
                                 <!--</div>-->
                             </c:if>
                     </div>
-                    <div id="projectsContainer" class="row">${projectsContainer}</div>
+                            <br><br>
+                    <div id="projectsContainer">${projectsContainer}</div>
                     <c:if test="${pageContext.request.userPrincipal.name != null}">
                         <script type="text/javascript">
                             $(function () {
@@ -97,7 +103,7 @@
                             });
                         </script>
                     </c:if>
-                    <div id="filesContainer" class="row">${filesContainer}</div>
+                    <div id="filesContainer">${filesContainer}</div>
                     <script type="text/javascript">
                         $(function () {
                             renderFilesPanel('${pageContext.request.userPrincipal.name}');
@@ -107,7 +113,7 @@
                 <div id="centerContainer" class="col-lg-6" style="float:left;margin:0px 10px 0px 10px;width:72%">${centerContainer}</div>
                 <script type="text/javascript">
                     $(function () {
-                        renderCircosTabsComponent();
+                        renderCircosTabsComponent();z
                     });
                 </script>
             </div>

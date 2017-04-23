@@ -44,7 +44,7 @@ var HomePage = React.createClass({
   render: function render() {
     return (
                 React.createElement("div", {className: "pull-left"},
-                    React.createElement("button", { className: 'btn btn-primary', onClick: this.handleShowModal}, "Sign in"),
+                    React.createElement("button", { className: 'btn btn-primary', onClick: this.handleShowModal}, React.createElement('strong', null, "Sign in")),
                     React.createElement('div', {className: 'container'}, this.props.userStatus),
                       this.state.view.showModal ? React.createElement(LoginModal, { handleHideModal: this.handleHideModal,
                           handleShowRegModal: this.handleShowRegModal, handleShowResetModal: this.handleShowResetModal}) : null,

@@ -322,9 +322,11 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
 
                         for (var i = 0; i < n; i++)
                         {
+                            var fileName = filesSplited[i];
                             list[i + 1] = filesSplited[i];
                         }
-                    } else
+                    } 
+                    else
                     {
                         var filesSplited = filesList.split("\t");
                         for (var i = 0; i < filesSplited.length; i++)

@@ -61,7 +61,9 @@ public class PathFinder {
     private FileService fileService;
 
     //current path THE ONE OF TWO TO CHANGE AT DIFFERENT COMPUTERS
-    private final String constantPath = ("/home/vmuser/WebCircos/");
+//    private final String constantPath = ("/home/vmuser/WebCircos/");
+    private final String constantPath = ("Z:/ProfileData/s260533/Desktop/");
+    
     private String currentPath;
 
     public PathFinder() {

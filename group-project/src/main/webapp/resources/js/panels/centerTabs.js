@@ -48,7 +48,7 @@ var CircosTabsComponent = React.createClass({displayName: 'CircosTest',
         this.setState({activeTab: tab});
     },
     render: function render() {
-        return React.createElement('div', null,
+        return React.createElement('div', {className: "container"},
                 React.createElement(CircosTabs, {activeTab: this.state.activeTab, changeTab: this.handleClick}),
                 React.createElement(CircosContent, {activeTab: this.state.activeTab})
                 );

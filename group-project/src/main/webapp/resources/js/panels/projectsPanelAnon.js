@@ -18,7 +18,7 @@ var ProjectsPanelAnon = React.createClass({displayName: "projectsPanelAnon",
 //                                        React.createElement('br'),
 //                                        React.createElement('br'),
                 React.createElement('div', {className: "panel panel-primary"},
-                React.createElement('div', {className: "panel-heading"}, "Projects  "),
+                React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null, "Projects")),
                         React.createElement('div', {className: "panel-body"}, 
                         React.createElement('div', null, "Sign in to access your projects"))),
                                 this.state.view.showManualModal ? React.createElement(ManualModal, {handleHideManualModal: this.handleHideManualModal}) : null

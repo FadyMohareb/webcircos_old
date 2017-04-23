@@ -34,9 +34,9 @@ var AccountDropdown = React.createClass({displayName: "accountDropdown",
       this.setState({ view: { showModal: true } });
     },
     render: function () {
-        return (React.createElement("div", { className: 'container'},
+        return (
         React.createElement("div", { className: 'container'},
-            React.createElement("h2", null, "Welcome ", React.createElement("strong", null, this.props.userName), "!")),
+            React.createElement("h2", null, "Welcome ", React.createElement("strong", null, this.props.userName), "!"),
             React.createElement("div", { className: 'btn-group' },
                 React.createElement("button", { type: 'button', className: "btn btn-primary dropdown-toggle", 
                     'data-toggle': "dropdown", 'aria-haspopup': "true", 'aria-expanded': "false"},React.createElement('strong', null, "Account "), 
@@ -51,8 +51,8 @@ var AccountDropdown = React.createClass({displayName: "accountDropdown",
                         React.createElement("a", {href: '#', onClick: this.handleSubmit },  "Log out "))
                  ),
                 this.state.view.showModal ? React.createElement(ChangePswdModal, { handleHideModal: this.handleHideModal }) : null
-                )
-        ));
+                ))
+        );
     }
 });
 var renderAccountDropdown = function (asd) {
