@@ -40,11 +40,16 @@ Clone the repository (if you haven't done it already). Originally, repository ha
 
 **Open repository in Java environment**
 
-Originally, the application was written in The NetBeans IDE but we do not recommend it.
+Originally, the application was written in The NetBeans IDE.
 
 **Download dependencies and all necessary tools (Resolve problems).**
 
-**Increase RAM initially allocated in your IDE. Change the garbage collector algorithm for the optimized one.**   
+**Increase RAM initially allocated in your IDE. Change the garbage collector algorithm for the optimized one.**  
+
+In the netbeans.conf file, some arguments need to be changed: 
+J-Xms128 
+-J-Xmx2g
+-J-XX:+UseG1GC to optimize the garbage collector. 
 
 **Database set up**
 
