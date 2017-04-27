@@ -47,8 +47,8 @@ Originally, the application was written in The NetBeans IDE.
 **Increase RAM initially allocated in your IDE. Change the garbage collector algorithm for the optimized one.**  
 
 In the netbeans.conf file, some arguments need to be changed: 
-J-Xms128 
--J-Xmx2g
+J-Xms128, the initial size of the jvm memory.
+-J-Xmx2g, the maximal size of the jvm memory
 -J-XX:+UseG1GC to optimize the garbage collector. 
 
 **Database set up**
