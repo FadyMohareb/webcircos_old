@@ -32,23 +32,23 @@ Here is the link to the official installation pages : http://bedtools.readthedoc
 b) Install the VCFtools suite on your computer.  
 Link to the VCFtools : https://vcftools.github.io/index.html
 
-3. Clone
+**Clone**
 
 Clone the repository (if you haven't done it already). Originally, repository had been placed in bitbucket.org. To clone it, we recommend to familiarize yourself with the documentation ([https://confluence.atlassian.com/bitbucket/clone-a-repository-223217891.html](Link URL)).
 
-4. Open repository in Java environment
+**Open repository in Java environment**
 
 Originally, the application was written in The NetBeans IDE but we do not recommend it.
 
-5. Download dependencies and all necessary tools (Resolve problems).
+**Download dependencies and all necessary tools (Resolve problems).**
 
-6. Increase RAM initially allocated in your IDE. Change the garbage collector algorithm for the optimized one.   
+**Increase RAM initially allocated in your IDE. Change the garbage collector algorithm for the optimized one.**   
 
-7. Database set up
+**Database set up**
 
-8. Changing the path and creating appropriate folders
+**Changing the path and creating appropriate folders**
 
-9. Starting the application
+**Starting the application**
 
 a)
 b)
