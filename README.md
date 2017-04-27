@@ -16,6 +16,7 @@ To run the application, some external tools are needed when it comes to parsing 
 ### Installing ###
 
 1. Install MySQL database and create a database. 
+
 Here is a link to the dowload page from the official web site: https://dev.mysql.com/downloads/installer/
 
 When creating the database, store the name and password of the database. THat will be needed farther in the installation. 
