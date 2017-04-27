@@ -22,12 +22,12 @@ When creating the database, store the name and password of the database. THat wi
 
 2. Install externals tools for parsing files. Caution these tools can only be run on linux and macOS. If you want to run the application on Windows you need to configure a bash compiler.  
 
-Install the Bedtools suite on your computer. 
+Here is a link to a tutorial to install bash compiler : https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/
+
+a) Install the Bedtools suite on your computer. 
 Here is the link to the official installation pages : http://bedtools.readthedocs.io/en/latest/content/installation.html
 
-Install the VCFtools suite on your computer. 
-Here is a link to a tutorial to install bash compiler : https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/
- 
+b) Install the VCFtools suite on your computer.  
 Link to the VCFtools : https://vcftools.github.io/index.html
 
 3. Clone
@@ -40,11 +40,13 @@ Originally, the application was written in The NetBeans IDE but we do not recomm
 
 5. Download dependencies and all necessary tools (Resolve problems).
 
-6. Database set up
+6. Increase RAM initially allocated in your IDE. Change the garbage collector algorithm for the optimized one.   
 
-7. Changing the path
+7. Database set up
 
-8. Starting the application
+8. Changing the path and creating appropriate folders
+
+9. Starting the application
 
 a)
 b)
