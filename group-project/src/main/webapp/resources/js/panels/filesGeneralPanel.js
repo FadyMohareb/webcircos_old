@@ -345,7 +345,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
     },
     sendData: function () 
     {
-//        alert('Structure: ' + Structure);
+        //alert('Structure: ' + Structure);
         Structure.validateValues();
         var height = $('#bioCircos').height();
         var width = $('#bioCircos').width();
@@ -366,7 +366,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 check = true;
                 isAnot = false;
             }
-            console.log(JSON.stringify(Structure.transcriptiomicCoverage));//undefined  
+           // console.log(JSON.stringify(Structure.transcriptiomicCoverage));//undefined  
             if(typeof(JSON.stringify(Structure.transcriptiomicCoverage))!=="undefined")
             {
                 check = true;
@@ -394,7 +394,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(Structure),
                     success: function (data) {
-
+                        console.log('I am in ajax /circos.data')
                         console.log(data);
                         var ARC_01;
                         var HISTOGRAM01;

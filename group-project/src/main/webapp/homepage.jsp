@@ -60,6 +60,7 @@
             });
         </script>
         <div>
+            <div id="bsaCircosTemp" class="hidden"></div>
             <div class="col-lg-3" style="float:left" id='leftCol'>
                 <div class="row" id="test">
                         <security:authorize acess="isAuthenticated"></security>

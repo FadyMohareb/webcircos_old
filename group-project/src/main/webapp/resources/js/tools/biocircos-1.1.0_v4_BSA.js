@@ -6152,12 +6152,12 @@ var BioCircos;
                                             }
                                             return AltLabels;
                                         }
-
-                                        for(var i = 0; i < self.genomeLabel.length; i++){
+                                        //TODO: Fix it in other way please, it doesn't work because Link[1] is undefined.
+                                        /*for(var i = 0; i < self.genomeLabel.length; i++){
                                             if(self.LINK[1].chr !== self.genomeLabel[i]){
                                                 document.getElementById(self.settings.target).innerHTML = 'Arguments Error: The chromosome names given in the VCF files and the Fasta file must match)';
                                              }                               
-                                        };
+                                        };*/
                                     
 
 

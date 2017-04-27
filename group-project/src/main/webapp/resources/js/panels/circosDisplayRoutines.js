@@ -3,8 +3,8 @@ function renderCircos(height, width, BioCircosGenome, ARC_01, HISTOGRAM01, LINE0
     BioCircos01 = new BioCircos(height, width, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02, BACKGROUND01, BACKGROUND02, BioCircosGenome, {// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
         //Main configuration
         target: 'bioCircos', // Main configuration "target"
-        svgWidth: width, // Main configuration "svgWidth"
-        svgHeight: height, // Main configuration "svgHeight"
+        svgWidth: 1000,//width, // Main configuration "svgWidth"
+        svgHeight: 1000,//height, // Main configuration "svgHeight"
         chrPad: 0.02, // Main configuration "chrPad"
         innerRadius: 246, // Main configuration "innerRadius"
         outerRadius: 270, // Main configuration "outerRadius"
@@ -234,15 +234,15 @@ function renderCircos(height, width, BioCircosGenome, ARC_01, HISTOGRAM01, LINE0
         GenomeMouseOutGenomeStrokeColor: "none",
         GenomeMouseOutGenomeStrokeWidth: "none"
     });
+   
     BioCircos01.draw_genome(BioCircos01.genomeLength); // BioCircos.js callback
-
 }
 
 function renderBSA(BioCircosGenome, LINK01) {
     //commented out 
     BioCircos02 = new BioCircos(LINK01, BioCircosGenome, {// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
         //Main configuration
-        target: "bioCircos", // Main configuration "target"
+        target: "bsaCircosTemp", // Main configuration "target"
         svgWidth: 1350, // Main configuration "svgWidth"
         svgHeight: 900, // Main configuration "svgHeight"
         chrPad: 0.04, // Main configuration "chrPad"
@@ -251,6 +251,7 @@ function renderBSA(BioCircosGenome, LINK01) {
         BSAzoom: true
 
     });
+    
     BioCircos02.BSA(BioCircosGenome, 4); // BioCircos.js callback
-
+    $('#bsaCircos').html($('#bsaCircosTemp').html());
 }

@@ -288,7 +288,7 @@ var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
     sendData: function () {
         BSAstructure.validateValues();
 //        alert(JSON.stringify(BSAstructure));
-        $("#bioCircos").html("");
+        $("#bsaCircos").html("");
 
         $.ajax({
             url: "/bsa.data",
