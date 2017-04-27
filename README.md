@@ -10,14 +10,15 @@ This README documents all steps necessary to get application up and running.
 
 ### WebCircos application ###
 
-WebCircos is a third-tiers web based application using React.js library for the web application and the Spring Boot framework for the server which can be called the Java Based Manager. It is related to a MySQL database.
+WebCircos is a third-tiers web based application using React.js library for the web application, the Spring Boot framework and Maven for the server which can be called the Java Based Manager. It is related to a MySQL database.
 To run the application, some external tools are needed when it comes to parsing files. 
 
 ### Installing ###
 
 **Install MySQL database and create a database.** 
 
-Here is a link to the dowload page from the official web site: https://dev.mysql.com/downloads/installer/
+Here is a link to the dowload page from the official web site: 
+https://dev.mysql.com/downloads/installer/
 
 When creating the database, store the name and password of the database. THat will be needed farther in the installation. 
 
@@ -27,7 +28,8 @@ Caution these tools can only be run on linux and macOS. If you want to run the a
 Here is a link to a tutorial to install bash compiler : https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/
 
 a) Install the Bedtools suite on your computer. 
-Here is the link to the official installation pages : http://bedtools.readthedocs.io/en/latest/content/installation.html
+Here is the link to the official installation pages : 
+http://bedtools.readthedocs.io/en/latest/content/installation.html
 
 b) Install the VCFtools suite on your computer.  
 Link to the VCFtools : https://vcftools.github.io/index.html
@@ -64,6 +66,7 @@ db.username: "your database name"
 db.password: "your database password "
 
 **Changing the path and creating appropriate folders**
+
 Go in the Source packages/uk.ac.cranfield.bix.services/PathFinder.java class. 
 The constant path attribute value needs to be change following the place you want to store uploaded files. 
 In our version file are store in the Webcircos/temp/ folder for unauthenticated user and in the Webcircos/user/ folder for authenticated user. If you want to follow the same hierachy, you need to create a *Webcircos* folder and inside it two sub-folders, one called *temp* and the other *user*   
