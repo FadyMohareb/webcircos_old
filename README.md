@@ -55,7 +55,7 @@ Originally, the application was written in The NetBeans IDE but we do not recomm
 * Test connection and if it's working click on finish. 
 A url will appear with this shape will appear :"jdbc:mysql://port//your_database_name". You need to copy it.
 
-In the /Other sources/src/main/ressources/<default package>, th application.properties file can found. 
+In the /Other sources/src/main/ressources/<default package>, the application.properties file can found. 
 Open it and change these following line: 
 
 db.driver: com.mysql.jdbc.Driver
@@ -64,6 +64,9 @@ db.username: "your database name"
 db.password: "your database password "
 
 **Changing the path and creating appropriate folders**
+Go in the Source packages/uk.ac.cranfield.bix.services/PathFinder.java class. 
+The constant path attribute value needs to be change following the place you want to store uploaded files. 
+In our version file are store in the Webcircos/temp/ folder for unauthenticated user and in the Webcircos/user/ folder for authenticated user. If you want to follow the same hierachy, you need to create a *Webcircos* folder and inside it two sub-folders, one called *temp* and the other *user*   
 
 **Starting the application**
 
