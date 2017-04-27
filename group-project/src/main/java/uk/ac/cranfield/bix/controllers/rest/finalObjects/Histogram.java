@@ -10,7 +10,7 @@ import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.HistogramProperties;
 
 /**
- *
+ *  This Class is the model for the HISTOGRAM module from biocircos library. It allows to store the data in the good shape to be drawn.
  * @author s262012
  */
 public class Histogram {

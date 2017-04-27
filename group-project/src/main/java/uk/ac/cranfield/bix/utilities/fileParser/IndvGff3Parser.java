@@ -38,6 +38,7 @@ public class IndvGff3Parser {
                     System.out.println(Arrays.toString(line.split("\\t")));
                 }
             }
+            br.close();
         } catch (IOException ex) {
             Logger.getLogger(Gff3Parser.class.getName()).log(Level.SEVERE, null, ex);
         }

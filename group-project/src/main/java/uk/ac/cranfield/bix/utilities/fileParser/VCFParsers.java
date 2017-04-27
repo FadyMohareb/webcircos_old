@@ -45,21 +45,19 @@ public class VCFParsers {
 
         String path = pathWithoutName + filename;
 
-        String line = "/usr/local/bin/vcftools --vcf " + filepath + " --out " + path + " --remove-indels --recode";
- 
+        String line = "/usr/local/bin/vcftools --vcf " + filepath + " --out " + path + " --remove-indels --recode --recode-INFO-all";
+
         String s;
         Process p;
-                try {
+        try {
             p = Runtime.getRuntime().exec(line);
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while((s = br.readLine()) != null)
-                System.out.println("line: " +s);
+//            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//            while((s = br.readLine()) != null)
+//                System.out.println("line: " +s);
             p.waitFor();
             System.out.println("exit:" + p.exitValue());
             p.destroy();
-            
-            
-            
+
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,7 +67,7 @@ public class VCFParsers {
 
 //run VCF tools to get a SNP density per N bases, lat line of CMD array sets this
     //The file is the output from above method.
-    public static String VcfToolsSNPDensity(String SnpDenseFilepath) throws InterruptedException {
+    public static String VcfToolsSNPDensity(String SnpDenseFilepath, String state, List<String[]> meta) throws InterruptedException {
         //each string is an argument
         String[] cmdArray = new String[2];
 
@@ -85,25 +83,32 @@ public class VCFParsers {
         int index = SnpDenseFilepath.lastIndexOf("/");
         String pathWithoutName = SnpDenseFilepath.substring(0, index + 1);
 
-        String path = pathWithoutName + SNPfilename + "SNPsOnly";
-        System.out.println("inside SNP density function " + path);
+        String path;
+        String line;
+        if (state.equals("genome")) {
+            path = pathWithoutName + SNPfilename + "SNPsOnly";
+            line = "/usr/local/bin/vcftools --vcf " + SnpDenseFilepath + " --out " + path + " --SNPdensity 1000000";
+        } else {
+            path = pathWithoutName + SNPfilename + "SNPsOnlyChrom";
+            Integer bin = 1000000 / meta.size();
+            line = "/usr/local/bin/vcftools --vcf " + SnpDenseFilepath + " --out " + path + " --SNPdensity " + bin.toString();
+        }
 
+        System.out.println("command " + line);
 
-        String line = "/usr/local/bin/vcftools --vcf " + SnpDenseFilepath +" --out " + path +" --SNPdensity 1000000";
-        System.out.println("command "+ line);
-
-         String s;
-         Process runtime;
+        String s;
+        Process runtime;
         try {
-           
+
             runtime = Runtime.getRuntime().exec(line);
             BufferedReader br = new BufferedReader(new InputStreamReader(runtime.getInputStream()));
-            while((s = br.readLine()) != null)
-                System.out.println("line: " +s);
+            while ((s = br.readLine()) != null) {
+                System.out.println("line: " + s);
+            }
             runtime.waitFor();
             System.out.println("exit:" + runtime.exitValue());
             runtime.destroy();
-            
+
         } catch (IOException ex) {
             Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -137,18 +142,24 @@ public class VCFParsers {
         //Once you have it invoke -> HistWriter
     }
 
-    public static List<HistogramDataPoint> HistogramData(ArrayList<String[]> HistList) throws IOException {
+    public static List<HistogramDataPoint> HistogramData(ArrayList<String[]> HistList, String state, List<String[]> meta) throws IOException {
         //Interval is the width of the bin for the histogram
-        Integer interval = 1000000;
+        Integer interval;
+        if (state.equals("genome")) {
+            interval = 1000000;
+        }else{
+            interval = 1000000/meta.size();   
+        }
+
         //HistData is string that contains the data in the correct format for the Histogram module of BioCircos
         List<HistogramDataPoint> HistData = new ArrayList();
         for (int i = 0; i < HistList.size(); i++) {
             //take the HistList.get(i)[2] and add it at the end to have the SNP count. 
             if (HistList.get(i)[1].equalsIgnoreCase("0")) {
-                HistogramDataPoint histPoint = new HistogramDataPoint(HistList.get(i)[0], 1, Integer.parseInt(HistList.get(i)[1]) + interval, "Hist", Double.parseDouble(HistList.get(i)[3]),HistList.get(i)[2]);
+                HistogramDataPoint histPoint = new HistogramDataPoint(HistList.get(i)[0], 1, Integer.parseInt(HistList.get(i)[1]) + interval, "Hist", Double.parseDouble(HistList.get(i)[3]), HistList.get(i)[2] + " per million");
                 HistData.add(histPoint);
             } else {
-                HistogramDataPoint histPoint = new HistogramDataPoint(HistList.get(i)[0], Integer.parseInt(HistList.get(i)[1]) + 4, Integer.parseInt(HistList.get(i)[1]) + interval, "Hist", Double.parseDouble(HistList.get(i)[3]),HistList.get(i)[2]);
+                HistogramDataPoint histPoint = new HistogramDataPoint(HistList.get(i)[0], Integer.parseInt(HistList.get(i)[1]) + 4, Integer.parseInt(HistList.get(i)[1]) + interval, "Hist", Double.parseDouble(HistList.get(i)[3]), HistList.get(i)[2] + " per million");
                 HistData.add(histPoint);
             }
 
@@ -156,7 +167,7 @@ public class VCFParsers {
         return HistData;
     }
 
-    public static Histogram HistWriter(List<HistogramDataPoint> HistData) {
+    public static Histogram HistWriter(List<HistogramDataPoint> HistData, String id) {
 
         //create histogram object
         Histogram hist = new Histogram();
@@ -168,7 +179,8 @@ public class VCFParsers {
         histProperties.setMinRadius(75);
 
         //set values of the object
-        hist.setHistId("HISTOGRAM01");
+      
+        hist.setHistId(id);
         hist.setProperties(histProperties);
         hist.setHistDataPoint(HistData);
 

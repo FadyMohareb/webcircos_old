@@ -10,7 +10,7 @@ import uk.ac.cranfield.bix.controllers.rest.LineDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.LineProperties;
 
 /**
- *
+ * This Class is the model for the LINE module from biocircos library. It allows to store the data in the good shape to be drawn.
  * @author vmuser
  */
 public class Line {

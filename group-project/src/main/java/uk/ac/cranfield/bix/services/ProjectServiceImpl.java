@@ -13,7 +13,7 @@ import uk.ac.cranfield.bix.models.User;
 import uk.ac.cranfield.bix.models.dao.ProjectDao;
 
 /**
- *
+ * File serviceImpl override all methods from FileService. 
  * @author solene
  */
 @Service
@@ -32,6 +32,11 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.save(project);
     }
 
+    @Override
+    public void delete(Project project) {
+        projectRepository.delete(project);
+    }
+    
     @Override
     public List<Project> findAll(User user){
         return projectRepository.getAll(user);

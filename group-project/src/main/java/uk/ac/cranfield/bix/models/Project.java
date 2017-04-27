@@ -1,5 +1,6 @@
 package uk.ac.cranfield.bix.models;
 
+import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,9 +15,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * Representation of the Projects table from the database
+ * @author vmuser
+ */
 @Entity
 @Table(name = "Projects")
-public class Project {
+public class Project implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -6,7 +6,7 @@
 package uk.ac.cranfield.bix.controllers.rest;
 
 /**
- *
+ * Class containing the data structure which allow web application and server to communicate for genome and chromosome circos draw purpose
  * @author s262012
  */
 public class CircosInput {

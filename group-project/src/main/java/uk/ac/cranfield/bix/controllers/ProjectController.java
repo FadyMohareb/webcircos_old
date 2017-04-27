@@ -18,7 +18,7 @@ import uk.ac.cranfield.bix.services.UserService;
 import static uk.ac.cranfield.bix.utilities.Utilities.folderExist;
 
 /**
- *
+ * Project controllers includes method to create a new project and get the list of project for a user.
  * @author solene
  */
 @Controller
@@ -33,6 +33,11 @@ public class ProjectController {
      @Autowired
     private PathFinder pathFinder;
 
+    /**
+     * Create a new project in database as well as a folder to store files. Project is only created no project with this name already exist for the user.
+     * @param projectName name of the project which was just created.
+     * @return
+     */
     @RequestMapping(value = "/project/newProject", method = RequestMethod.POST)
     public @ResponseBody
     RestResponse upload(@RequestBody(required = true) String projectName) {
@@ -72,6 +77,11 @@ public class ProjectController {
             return new RestResponse(e.getMessage(), null);
         }
     }
+
+    /**
+     * Get all the project for the current user.
+     * @return list of project name
+     */
     @RequestMapping(value = "/project/getProjects", method = RequestMethod.GET)
     public @ResponseBody
     RestResponse getProjects() {

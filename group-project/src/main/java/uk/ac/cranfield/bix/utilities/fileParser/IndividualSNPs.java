@@ -38,10 +38,10 @@ public class IndividualSNPs {
                     UselessJunk.add(line);
                 } else if (line.contains(Chrom.get(i))) {
                     IndvHistList.add(line.split("\\s"));
-                    System.out.println(Arrays.toString(line.split("\\s")));
                 }
 
             }
+            br.close();
         } catch (IOException ex) {
             Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -56,10 +56,10 @@ public class IndividualSNPs {
        
         for (int i = 0; i < IndvHistList.size(); i++) {
             if (IndvHistList.get(i)[1].equalsIgnoreCase("0")) {
-                HistogramDataPoint histPoint = new HistogramDataPoint(IndvHistList.get(i)[0],1,Integer.parseInt(IndvHistList.get(i)[1]) + interval,Chr.get(j),Double.parseDouble(IndvHistList.get(i)[3]),IndvHistList.get(i)[2]);
+                HistogramDataPoint histPoint = new HistogramDataPoint(IndvHistList.get(i)[0],1,Integer.parseInt(IndvHistList.get(i)[1]) + interval,Chr.get(j),Double.parseDouble(IndvHistList.get(i)[3]),IndvHistList.get(i)[2]+" per million");
                 IndvHistdata.add(histPoint);
             } else {
-                HistogramDataPoint histPoint = new HistogramDataPoint(IndvHistList.get(i)[0],Integer.parseInt(IndvHistList.get(i)[1]) + 4,Integer.parseInt(IndvHistList.get(i)[1]) + interval,Chr.get(j),Double.parseDouble(IndvHistList.get(i)[3]),IndvHistList.get(i)[2]);
+                HistogramDataPoint histPoint = new HistogramDataPoint(IndvHistList.get(i)[0],Integer.parseInt(IndvHistList.get(i)[1]) + 4,Integer.parseInt(IndvHistList.get(i)[1]) + interval,Chr.get(j),Double.parseDouble(IndvHistList.get(i)[3]),IndvHistList.get(i)[2]+" per million");
                 IndvHistdata.add(histPoint);
             }
         }

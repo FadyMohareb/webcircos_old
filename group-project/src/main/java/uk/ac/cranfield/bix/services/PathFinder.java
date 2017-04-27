@@ -10,16 +10,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import uk.ac.cranfield.bix.controllers.rest.HeatMapDataPoint;
+import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import uk.ac.cranfield.bix.models.FileInput;
-import uk.ac.cranfield.bix.models.FileInput;
 import uk.ac.cranfield.bix.models.Project;
-import uk.ac.cranfield.bix.models.Project;
-import uk.ac.cranfield.bix.models.User;
 import uk.ac.cranfield.bix.models.User;
 import uk.ac.cranfield.bix.services.FileService;
 import uk.ac.cranfield.bix.services.ProjectService;
@@ -33,6 +30,7 @@ import static uk.ac.cranfield.bix.utilities.SerializeDeserialize.SerializeVcfCov
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.SortToBins;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.VCFDepthExtract;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.VCFLineParser;
+import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.VCFParserMeta;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.CoverageParser;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.GffParser2;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.SortToBinsTranscriptomics;
@@ -43,6 +41,7 @@ import static uk.ac.cranfield.bix.utilities.fileParser.DifferentialExpression.Gf
 import static uk.ac.cranfield.bix.utilities.fileParser.DifferentialExpression.gffSorter;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffParser;
 import static uk.ac.cranfield.bix.utilities.fileParser.RSEMBamExpression.RsemGenesResultsParser;
+import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistogramData;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VCFHistParser;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VcfToolsSNPDensity;
 import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.VcfToolsSNPS;
@@ -216,9 +215,12 @@ public void parseFile(String filePath, String fileType, String projectName) thro
                 List<List<String[]>> genesAndMetadataForDExpr = GffParserExpression(gffPath);
                 ArrayList<String[]> ebseqData = EbSeqParser(filePath);
                 ArrayList<String[]> sortedgff = gffSorter(genesAndMetadataForDExpr);
-                ArrayList<Object[]> data = EbseqData(genesAndMetadataForDExpr, sortedgff);
-                List<HeatMapDataPoint> dataToSerialize = DiffJavascriptWriter(ebseqData, data, "differential Expression");
+                ArrayList<Object[]> dataGenome = EbseqData(genesAndMetadataForDExpr, sortedgff, "genome");
+//                ArrayList<Object[]> dataChrom = EbseqData(genesAndMetadataForDExpr, sortedgff, "chromosome");
+                List<HeatMapDataPoint> dataToSerialize = DiffJavascriptWriter(ebseqData, dataGenome, "differential Expression");
+//                List<HeatMapDataPoint> dataToSerializeChrom = DiffJavascriptWriter(ebseqData, dataChrom, "differential Expression");
                 SerializeExpression(dataToSerialize, fileWithoutExtension + "DExpression.txt");
+//                SerializeExpression(dataToSerializeChrom, fileWithoutExtension + "DExpressionChrom.txt");
 
                 break;
 
@@ -229,29 +231,38 @@ public void parseFile(String filePath, String fileType, String projectName) thro
                 List<List<String[]>> genesAndMetadataForExpr = GffParserExpression(gFFPath);
                 ArrayList<String[]> ExprData = RsemGenesResultsParser(filePath);
                 ArrayList<String[]> sortedgffExpr = gffSorter(genesAndMetadataForExpr);
-                ArrayList<Object[]> dataExpr = EbseqData(genesAndMetadataForExpr, sortedgffExpr);
-                List<HeatMapDataPoint> dataToSerializeExpr = DiffJavascriptWriter(ExprData, dataExpr, "Expression");
+                ArrayList<Object[]> dataExprGenome = EbseqData(genesAndMetadataForExpr, sortedgffExpr, "genome");
+//                ArrayList<Object[]> dataExprChromosome = EbseqData(genesAndMetadataForExpr, sortedgffExpr, "chromosome");
+                List<HeatMapDataPoint> dataToSerializeExpr = DiffJavascriptWriter(ExprData, dataExprGenome, "Expression");
+//                List<HeatMapDataPoint> dataToSerializeExprChrom = DiffJavascriptWriter(ExprData, dataExprChromosome, "Expression");
                 SerializeExpression(dataToSerializeExpr, fileWithoutExtension + "Expression.txt");
+//                SerializeExpression(dataToSerializeExprChrom, fileWithoutExtension + "ExpressionChrom.txt");
 
                 break;
 
             case "variants":
+                List<String[]> metaData = VCFParserMeta(filePath);
+                
                 // (only VCF file)
                 String VcfToolsSNPS = VcfToolsSNPS(filePath);
-                String VcfToolsSNPDensity = VcfToolsSNPDensity(VcfToolsSNPS);
+                String VcfToolsSNPDensity = VcfToolsSNPDensity(VcfToolsSNPS, "genome",metaData);
+                String VcfToolsSNPDensityChrom = VcfToolsSNPDensity(VcfToolsSNPS, "chromosome",metaData);
                 ArrayList<String[]> VCFHistParser = VCFHistParser(VcfToolsSNPDensity);
-                SerializeVcf(VCFHistParser, fileWithoutExtension + ".txt");
+                ArrayList<String[]> VCFHistParserChrom = VCFHistParser(VcfToolsSNPDensityChrom);
+                List<HistogramDataPoint> HistogramData = HistogramData(VCFHistParser,"genome", metaData);
+                List<HistogramDataPoint> HistogramDataChrom = HistogramData(VCFHistParserChrom,"chromosome", metaData);
+                SerializeVcf(HistogramData, fileWithoutExtension + ".txt");
+                SerializeVcf(HistogramDataChrom, fileWithoutExtension + "chrom.txt");
 
                 //Change the path of the serialized data to put the path to genomic coverage folder. 
-                List<List<String[]>> lists = VCFLineParser(filePath);
-                ArrayList<Object[]> depth = VCFDepthExtract(lists);
-                ArrayList<Object[]> sortedBins = SortToBins(lists, depth);
+                List<String> genomicCovData = VCFLineParser(filePath);
+                ArrayList<Object[]> depth = VCFDepthExtract(genomicCovData);
+                ArrayList<Object[]> sortedBins = SortToBins(metaData, depth);
                 SerializeVcfCoverageGenomics(sortedBins, fileWithoutExtension + "coverage.txt");
                 break;
 
             default:
                 break;
-
         }
     }
 

@@ -20,20 +20,47 @@ function FileListStructure(){
     };
     
     this.validateValues = function(){
-        if(this.referenceSequence === '---')
+        if(this.referenceSequence === '---' || this.referenceSequence === undefined || this.referenceSequence === "")
             this.referenceSequence = undefined;
-        if(this.genomicCoverage === '---')
+        else
+            this.referenceSequence = this.referenceSequence.replace(/\s+/g, '');
+//       alert(this.referenceSequence);
+        
+        if(this.genomicCoverage === '---' || this.genomicCoverage === undefined || this.genomicCoverage === "")
             this.genomicCoverage = undefined;
-        if(this.snpdensity === '---')
+        else
+            this.genomicCoverage = this.genomicCoverage.replace(/\s+/g, '');
+        
+        if(this.snpdensity === '---' || this.snpdensity === undefined || this.snpdensity === "")
             this.snpdensity = undefined;
-        if(this.transcriptiomicCoverage === '---')
+        else
+            this.snpdensity = this.snpdensity.replace(/\s+/g, '');
+        
+        if(this.transcriptiomicCoverage === '---' || this.transcriptiomicCoverage === undefined || this.transcriptiomicCoverage === "")
             this.transcriptiomicCoverage = undefined;
-        if(this.genesExpresion === '---')
+        else
+            this.transcriptiomicCoverage = this.transcriptiomicCoverage.replace(/\s+/g, '');
+        
+//        alert(this.genesExpresion);
+        if(this.genesExpresion === '---' || this.genesExpresion === undefined || this.genesExpresion === "")
             this.genesExpresion = undefined;
-        if(this.differentialExpression === '---')
-            this.differentialExpression = undefined;
-        if(this.annotation === '---')
+        else
+            this.genesExpresion = this.genesExpresion.replace(/\s+/g, '');
+       
+        if(this.differentialExpression === '---' || this.differentialExpression === undefined || this.differentialExpression === "")
+            this.differentialExpression= undefined;
+//        console.log('I am in IF');}
+        
+        else
+//            alert('Structure ' + this.differentialExpression);
+            this.differentialExpression = this.differentialExpression.replace(/\s+/g, '');
+//            console.log('I am in ELSE ' + this.differentialExpression);
+        
+        
+        if(this.annotation === '---' || this.annotation === undefined || this.annotation === "")
             this.annotation = undefined;
-        //TODO: Others
+        else
+            this.annotation = this.annotation.replace(/\s+/g, '');
+        
     };
 };

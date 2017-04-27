@@ -15,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 import uk.ac.cranfield.bix.controllers.rest.LoginCredentials;
 import uk.ac.cranfield.bix.controllers.rest.RestResponse;
@@ -24,6 +23,11 @@ import uk.ac.cranfield.bix.services.SecurityService;
 import uk.ac.cranfield.bix.services.UserService;
 import uk.ac.cranfield.bix.utilities.Utilities;
 
+/**
+ * Custom controller handles functionalities related to the user such as registering, changing password logging in and logging out.
+ * It also contains the method to open the home page.
+ * @author vmuser
+ */
 @Controller
 public class CustomController {
     @Autowired

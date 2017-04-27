@@ -14,6 +14,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * Representation of the Files table from the database
+ * @author vmuser
+ */
 @Entity
 @Table(name = "Files")
 @JsonIgnoreProperties({"bytes"})

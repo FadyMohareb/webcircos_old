@@ -8,7 +8,7 @@ package uk.ac.cranfield.bix.controllers.rest.finalObjects;
 import uk.ac.cranfield.bix.controllers.rest.TextProperties;
 
 /**
- *
+ * This Class is the model for the TEXT module from biocircos library. It allows to store the data in the good shape to be drawn.
  * @author s262012
  */
 public class DisplayText {

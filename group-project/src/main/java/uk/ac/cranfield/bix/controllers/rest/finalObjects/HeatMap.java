@@ -11,7 +11,7 @@ import uk.ac.cranfield.bix.controllers.rest.HeatMapProperties;
 import uk.ac.cranfield.bix.controllers.rest.HistogramDataPoint;
 
 /**
- *
+ * This Class is the model for the HEATMAP module from biocircos library. It allows to store the data in the good shape to be drawn.
  * @author solene
  */
 public class HeatMap {

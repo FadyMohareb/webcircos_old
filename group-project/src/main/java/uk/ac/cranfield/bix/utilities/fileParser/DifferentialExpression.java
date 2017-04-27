@@ -32,12 +32,12 @@ import uk.ac.cranfield.bix.controllers.rest.finalObjects.HeatMap;
 public class DifferentialExpression {
 
     //Check with Rory but I think we can use the paerser from gff
-    public static  List<List<String[]>> GffParserExpression(String GffFilePath) throws IOException {
+    public static List<List<String[]>> GffParserExpression(String GffFilePath) throws IOException {
         List<String[]> GffFile = new ArrayList();
         List<String[]> metadata = new ArrayList();
-        
+
         List<List<String[]>> list = new ArrayList();
-        
+
         try (BufferedReader br = new BufferedReader(new FileReader(GffFilePath))) {
             String line;
             try {
@@ -63,7 +63,7 @@ public class DifferentialExpression {
                 }
                 list.add(metadata);
                 list.add(GffFile);
-
+                br.close();
             } catch (IOException ex) {
                 Logger.getLogger(RSEMBamExpression.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -96,7 +96,7 @@ public class DifferentialExpression {
         return Ebseq;
     }
 
-    public static  ArrayList<String[]> gffSorter(List<List<String[]>> li) {
+    public static ArrayList<String[]> gffSorter(List<List<String[]>> li) {
         ArrayList<String[]> SortedGff = new ArrayList();
         //SO this can be replaced with "sort -k 4 -n" on the command line
         //But why would you? This convoluted method is WAAAAAY better, and probably *maybe* just as accurate
@@ -124,22 +124,28 @@ public class DifferentialExpression {
         return SortedGff;
     }
 
-    public static ArrayList<Object[]> EbseqData(List<List<String[]>> li, ArrayList<String[]> SortedGff) {
+    public static ArrayList<Object[]> EbseqData(List<List<String[]>> li, ArrayList<String[]> SortedGff, String view) {
         ArrayList<Integer> BinNumber = new ArrayList();
-        Integer BinSize = 1000000;
+        Integer BinSize;
+        if (view.equals("genome")) {
+            BinSize = 1000000;
+
+        }else{
+            BinSize = 1000000/li.get(0).size();
+        }
 
         //List of lists, that contains a list for each chromomsome, and the lines from the GFF file relating to that chromosome
         List<List<String[]>> lists = new ArrayList<>();
 
         //Object Array that contains the number RSEM file lines on each bin, the chromosome , Start and stop of each Bin
         ArrayList<Object[]> LineNumbers = new ArrayList();
-        
+
         //Retrieve chromosome and length;
         List<String[]> metadata = li.get(0);
 
         //populates BinNumber ArrayList with the Number of Bins in Each Chromosome
         for (int k = 0; k < metadata.size(); k++) {
-            BinNumber.add(Integer.parseInt(metadata.get(k)[1])/ BinSize);
+            BinNumber.add(Integer.parseInt(metadata.get(k)[1]) / BinSize);
         }
 
         //Creates a list for each chromosome and Splits the Sorted GFF file ArrayList by Chromosome;
@@ -207,10 +213,10 @@ public class DifferentialExpression {
 
             for (int l = 0; l < Integer.parseInt((String) LineNumbers.get(k)[0]); l++) {
                 //for all the RSEM file lines inside the limits of the current bin
-                if(diffExprOrExpr.equalsIgnoreCase("differential Expression")){
-                Tpm = Double.valueOf(Ebseq.get(l)[4]); //get the tpm value from the RSEM file for this line
-                }else{
-                Tpm = Double.valueOf(Ebseq.get(l)[5]);
+                if (diffExprOrExpr.equalsIgnoreCase("differential Expression")) {
+                    Tpm = Double.valueOf(Ebseq.get(l)[4]); //get the tpm value from the RSEM file for this line
+                } else {
+                    Tpm = Double.valueOf(Ebseq.get(l)[5]);
                 }
                 TpmValuesInBin.add(Tpm);
             }
@@ -264,13 +270,14 @@ public class DifferentialExpression {
         }
         return heatMapDataPoint;
     }
-    
-        //write out to a javascript file
-    public static HeatMap HeatMapWriter(List<HeatMapDataPoint> heatMapDataPoint, Integer innerRadius, Integer outerRadius) throws IOException {
+
+    //write out to a javascript file
+    public static HeatMap HeatMapWriter(List<HeatMapDataPoint> heatMapDataPoint, Integer innerRadius, Integer outerRadius, String id) throws IOException {
 
         //Create heatMap 
+       
         HeatMap heatMap = new HeatMap();
-        heatMap.setHeatMapId("HEATMAP01");
+        heatMap.setHeatMapId(id);
 
         //Create heatMapProperties with the default value
         HeatMapProperties properties = new HeatMapProperties(innerRadius, outerRadius, "red", "yellow");

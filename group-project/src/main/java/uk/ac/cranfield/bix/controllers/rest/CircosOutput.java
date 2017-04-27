@@ -1,28 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.cranfield.bix.controllers.rest;
 
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.BackgroundDisplay;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.DisplayText;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Histogram;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.IndGff;
-import uk.ac.cranfield.bix.controllers.rest.finalObjects.Snp;
 import java.util.List;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.HeatMap;
 import uk.ac.cranfield.bix.controllers.rest.finalObjects.Line;
 
 /**
- * This class will contain all the object to draw a circos 
+ * Data structure which is sent back to web application to draw genome and chromosome circos. 
+ * Data are already processed and in the good shape to be understood by the biocircos library.
  * @author s262012
  */
 public class CircosOutput {
 
     private List<Object[]> genomes;
-    
-    private Snp snp;
     
     private Histogram histo;
     
@@ -43,6 +37,9 @@ public class CircosOutput {
     private BackgroundDisplay backgroundGenoCov;
     
     private BackgroundDisplay backgroundTranCov;
+    
+    private Histogram snpDenChromView;
+    
 
     public List<Object[]> getGenomes() {
         return genomes;
@@ -51,14 +48,6 @@ public class CircosOutput {
     public void setGenomes(List<Object[]> genomes) {
         this.genomes = genomes;
     } 
-
-    public Snp getSnp() {
-        return snp;
-    }
-
-    public void setSnp(Snp snp) {
-        this.snp = snp;
-    }
 
     public DisplayText getText() {
         return text;
@@ -139,7 +128,15 @@ public class CircosOutput {
     public void setBackgroundTranCov(BackgroundDisplay backgroundTranCov) {
         this.backgroundTranCov = backgroundTranCov;
     }
+
+    public Histogram getSnpDenChromView() {
+        return snpDenChromView;
+    }
+
+    public void setSnpDenChromView(Histogram snpDenChromView) {
+        this.snpDenChromView = snpDenChromView;
+    }
+
     
-    
-     
+  
 }

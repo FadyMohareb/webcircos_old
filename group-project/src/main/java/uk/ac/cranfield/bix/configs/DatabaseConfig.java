@@ -12,6 +12,10 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+/**
+ * DatabaseConfig contains all the needed attributes and method to create the database and start connection between database and server. 
+ * @author vmuser
+ */
 @Configuration
 @EnableTransactionManagement
 public class DatabaseConfig {
@@ -72,4 +76,4 @@ public class DatabaseConfig {
     return transactionManager;
   }
 
-} // class DatabaseConfig
+} 

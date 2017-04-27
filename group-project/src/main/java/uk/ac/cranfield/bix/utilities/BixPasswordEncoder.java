@@ -8,7 +8,7 @@ package uk.ac.cranfield.bix.utilities;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- *
+ * Encoding password before storing it in database with the others user information. 
  * @author s262012
  */
 public class BixPasswordEncoder implements PasswordEncoder {

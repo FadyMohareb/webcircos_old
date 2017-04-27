@@ -39,6 +39,7 @@ public class Gff3Parser {
                     }
                 }
             }
+            br.close();
         } catch (IOException ex) {
             Logger.getLogger(Gff3Parser.class.getName()).log(Level.SEVERE, null, ex);
         }

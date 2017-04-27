@@ -6,12 +6,14 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import uk.ac.cranfield.bix.models.User;
 
+/**
+ * Class containing function for all the basic operation that can be done in a database for the USERS table. 
+ * @author vmuser
+ */
 @Repository
 @Transactional
 public class UserDao {

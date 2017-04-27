@@ -9,6 +9,10 @@ import org.springframework.stereotype.Repository;
 import uk.ac.cranfield.bix.models.FileInput;
 import uk.ac.cranfield.bix.models.Project;
 
+/**
+ * Class containing function for all the basic operation that can be done in a database for the Files table. 
+ * @author vmuser
+ */
 @Repository
 @Transactional
 public class FileDao {

@@ -14,6 +14,10 @@ import uk.ac.cranfield.bix.models.dao.UserDao;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * UserDetailsErvice is required by the spring boot security framework.
+ * @author vmuser
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired

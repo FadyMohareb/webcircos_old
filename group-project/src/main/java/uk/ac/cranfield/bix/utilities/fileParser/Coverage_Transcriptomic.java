@@ -56,6 +56,7 @@ public class Coverage_Transcriptomic {
             }
             list.add(metadata);
             list.add(Karyotype);
+            br.close();
 
         }   catch (IOException ex) {
             Logger.getLogger(Gff3Parser.class.getName()).log(Level.SEVERE, null, ex);

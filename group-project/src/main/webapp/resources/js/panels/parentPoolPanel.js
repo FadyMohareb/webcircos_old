@@ -1,5 +1,5 @@
 
-var ParentPoolPanel = React.createClass({className: "ParentPoolPanel",
+var BSATab = React.createClass({className: "bsaTab ",
     save: function ()
     {
         //get svg element.
@@ -38,19 +38,22 @@ var ParentPoolPanel = React.createClass({className: "ParentPoolPanel",
     
     render: function () {
 
-        return (
-                React.createElement('div', null,
-                        React.createElement('button', {type: 'button', 
-                            className: 'btn btn-primary glyphicon glyphicon-save', onClick: this.save}," Save"),
+        $("#centerContainer").height($("#leftCol").height());
+        return (React.createElement('div', {className: 'container', style: {width: 'inherit'}},
+//                React.createElement("form", {},
+//                React.createElement("i", {className: "fa fa-floppy-o"})),
+                React.createElement('button', {type: 'button', style: {float: 'right'}, className: 'btn btn-primary glyphicon glyphicon-save', onClick: this.save},React.createElement('strong', null, " Save")),
                 React.createElement('br'),
-                                React.createElement('div', {id: "bsaCircos"}))
-                );
+                React.createElement('div', {id: "bsaCircos", style: {height: '90%', width: '100%', 'text-align': "center"}}
+//                ,
+//                                React.createElement('img', {src: "resources/emptyCircosV2.jpeg"})
+                                        )));
     }
 })
 
-var renderFilesParentPoolPanel = function () {
+var renderBSATab  = function () {
     React.render(
-            React.createElement(ParentPoolPanel),
+            React.createElement(BSATab),
             document.getElementById("parentPool")
             );
 };

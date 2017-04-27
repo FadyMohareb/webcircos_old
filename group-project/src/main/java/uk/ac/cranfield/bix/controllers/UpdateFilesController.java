@@ -112,7 +112,6 @@ public class UpdateFilesController {
                     {
                         dir1.mkdir();
                     }
-                    pathFinder.setCurrentPath(newPath);
                     //newPath with added FileType
                     newPath=(newPath+"/"+type);
                     dir2 = new File(newPath);

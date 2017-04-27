@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,25 +44,28 @@ public class FileController {
     @Autowired
     private FileService fileService;
     
+    /**
+     * 
+     * @param multipartFile MultipartFile users file
+     * @param projectName String with project name
+     * @param fileType String with recognised file type
+     * @return RestResponse null or error
+     * @throws Exception 
+     */
     @RequestMapping(value = "/controller/upload", method = RequestMethod.POST)
     public
     @ResponseBody
     RestResponse upload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName")String projectName, @RequestParam("fileType") String fileType) throws Exception 
     {
-        
         //initializations
-        String fileName, path, userID, result;
-        File dir1, dir2, dir1_5;
+        String fileName, path;
+        File dir2, dir1_5;
         FileWriter fileWriter;
         BufferedWriter bufferedWriter;
         String[] splittedFileName;
-        FileReader fileReader;
-        BufferedReader bufferedReader;
-        boolean flag=false;
         
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         {
-//          System.out.println("User is ANONYMOUS");
             path = pathFinder.getEntireFilePathNotLogged();
             try
             {
@@ -89,16 +95,15 @@ public class FileController {
                 //copy file
                 FileCopyUtils.copy(multipartFile.getBytes(), new FileOutputStream(path+"/"+fileName));
 
-                //new file
+                //add file to list
                 fileWriter = new FileWriter(path+"/contentOfFolder.txt",true);
                 bufferedWriter = new BufferedWriter(fileWriter);
                 bufferedWriter.append(path+"/"+fileName);
                 bufferedWriter.append("\t");
-                //bufferedWriter.newLine();
                 bufferedWriter.close();
                 fileWriter.close();
                 
-                // Parse and serialize files. Give an empty String for project name as project do not exist for unlogged user.
+                //parse and serialize files. Give an empty String for project name as project do not exist for unlogged user.
                 pathFinder.parseFile(path+"/"+fileName, fileType,"");
                 
                 return new RestResponse(null, null);
@@ -111,48 +116,58 @@ public class FileController {
         else
         {
 //            System.out.println("User is LOGGED");
-            //Find user
+            //find user
             String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(userLogin);
             
-            //Check if project allready exist
+            //get project
             Project project = projectService.findByProjectName(projectName, user);
             
-//            System.out.println("User is LOGGED");
+            //get path
             path = pathFinder.getEntireFilePathLogged() + '/' + projectName;
             
+            //DFF files
             if ("annotation".equals(fileType))
             {
                 if (checkIfGFF(projectName))
                 {
                     List<FileInput> findAll = fileService.findAll(project);
-                    for (FileInput file : findAll)
+                    findAll.forEach((file) -> 
                     {
-                        if ("annotation".equals(file.getF_type()))
-                            fileService.delete(file);
-                        else if ("difExpression".equals(file.getF_type()))
-                            fileService.delete(file);
-                        else if ("expression".equals(file.getF_type()))
-                            fileService.delete(file);
-                        else if ("bedcov".equals(file.getF_type()))
-                            fileService.delete(file);
-                        else
-                        {}
-                    };
+                        if (null == file.getF_type()) 
+                        {
+                        } 
+                        else switch (file.getF_type()) 
+                        {
+                            case "annotation":
+                                fileService.delete(file);
+                                break;
+                            case "difExpression":
+                                fileService.delete(file);
+                                break;
+                            case "expression":
+                                fileService.delete(file);
+                                break;
+                            case "bedcov":
+                                fileService.delete(file);
+                                break;
+                            default:
+                                break;
+                        }
+                    });
                     FileUtils.deleteDirectory(new File(path+"/annotation"));
                     FileUtils.deleteDirectory(new File(path+"/difExpression"));
                     FileUtils.deleteDirectory(new File(path+"/expression"));
                     FileUtils.deleteDirectory(new File(path+"/bedcov"));
                 }
             }
-            
-            
             try
             {
                 //newPath with added ProjectName
                 dir1_5 = new File(path);
                 if (!dir1_5.exists())
                     dir1_5.mkdir();
+                
                 //newPath with added FileType
                 path=(path+"/"+fileType);
                 dir2 = new File(path);
@@ -177,6 +192,7 @@ public class FileController {
                 file.setF_type(fileType);
                 file.setProject(project);
 
+                //save file in database
                 fileService.save(file);
 
                 return new RestResponse(null, null);
@@ -187,16 +203,31 @@ public class FileController {
             }
         }
     }
+    
+    /**
+     * 
+     * @param projectName String with project name
+     * @return boolean if gff file exists
+     * @throws Exception 
+     */
     @SuppressWarnings("empty-statement")
     private boolean checkIfGFF(String projectName) throws Exception
     {
+        //initialize
+        Project project;
+        boolean flag =false;
+        String path, result; 
+        FileReader fileReader; 
+        BufferedReader bufferedReader;
+            
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         {
 //            System.out.println("User is ANONYMOUS");
-            String path, result; FileReader fileReader; BufferedReader bufferedReader;
             
-//            path = pathFinder.getGffFilePath(projectName);
+            //get path
             path = pathFinder.getEntireFilePathNotLogged()+ "/annotation";
+            
+            //read content of folder
             fileReader = new FileReader(path+"/contentOfFolder.txt");
             bufferedReader = new BufferedReader(fileReader);
             result = bufferedReader.readLine();
@@ -207,17 +238,16 @@ public class FileController {
         else
         {
 //            System.out.println("User is LOGGED");
-            Project project;
-            boolean flag =false;
-            //Find user
+
+            //find user
             String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(userLogin);
 
-            //Check if project allready exist
+            //find project
             project = projectService.findByProjectName(projectName, user);
 
+            //get files
             List<FileInput> findAll = fileService.findAll(project);
-
             for (FileInput file : findAll)
             {
                 String fileType = file.getF_type();
@@ -225,6 +255,84 @@ public class FileController {
                     flag = true;
             };
             return flag;
+        }
     }
+    
+    /**
+     * 
+     * @param projectName String with project name
+     * @param fileName String with file name
+     * @return RestResponse with null or errors
+     * @throws Exception 
+     */
+    @RequestMapping(value = "/controller/remove", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    RestResponse remove(@RequestParam("projectName") String projectName, @RequestParam("fileName") String fileName) throws Exception 
+    {
+        String path, userLogin, extention, fileNameWE, nameOfFileInDirectory;
+        Project project;
+        FileInput file;
+        File[] allFilesInDirectory;
+        int i;
+        Path fileToDeletePath;
+        
+        try
+        {
+            //find user
+            userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userService.findByUsername(userLogin);
+            
+            //get project
+            project = projectService.findByProjectName(projectName, user);
+            
+            //find file
+            if (fileName.equals("---"))
+            {
+//                //check if project has files
+//                if (fileService.findAll(project).size()==0)
+//                {
+//                    
+//                }
+            }
+//            else
+                file = fileService.getByName(fileName, project);
+            
+            //get path
+            path = pathFinder.getEntireFilePathLogged() + '/' + projectName + '/' + file.getF_type();// + '/' + fileName;
+            File dir = new File(path);
+            
+            //remove database entry
+            fileService.delete(file);
+            
+            //remove files from directory
+                
+            //get fileNames
+            extention = fileName.split("\\.")[fileName.split("\\.").length-1];
+            if ("sorted".equals(extention))
+                extention=extention+"."+fileName.split("\\.")[fileName.split("\\.").length-2];
+            
+            fileNameWE = fileName.substring(0, (fileName.length()-extention.length()-1));
+            
+            //get list of all files in directory
+            allFilesInDirectory = dir.listFiles();
+            
+            //remove all files connected with that file
+            for(i=0;i<allFilesInDirectory.length;i++)
+            {
+                nameOfFileInDirectory = allFilesInDirectory[i].getName();
+                if (nameOfFileInDirectory.startsWith(fileNameWE))
+                {
+                    fileToDeletePath = Paths.get(allFilesInDirectory[i].getAbsolutePath());
+                    Files.deleteIfExists(fileToDeletePath);
+                }
+            }
+            
+            return new RestResponse(null, null);
+        }
+        catch(Exception e)
+        {
+            return new RestResponse("removeError", e.getMessage());
+        }
     }
 }

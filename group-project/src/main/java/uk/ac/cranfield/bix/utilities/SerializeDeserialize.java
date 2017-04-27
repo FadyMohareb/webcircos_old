@@ -22,10 +22,9 @@ import uk.ac.cranfield.bix.controllers.rest.finalObjects.Sequence;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Genomic.CoverageData;
 import static uk.ac.cranfield.bix.utilities.fileParser.Coverage_Transcriptomic.CoverageDataTranscriptomics;
 import static uk.ac.cranfield.bix.utilities.fileParser.Gff3Parser.GffDataPoints;
-import static uk.ac.cranfield.bix.utilities.fileParser.VCFParsers.HistogramData;
 
 /**
- *
+ * All the function to serialised and deserialised data coming from input files and that will be render in the web app.S
  * @author solene
  */
 public class SerializeDeserialize {
@@ -46,6 +45,20 @@ public class SerializeDeserialize {
         }
     }
 
+    public static void SerializeExpression(List<HeatMapDataPoint> list, String filepath) {
+        try {
+            try (FileOutputStream fileOut = new FileOutputStream(filepath); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+                out.writeObject(list);
+            }
+            System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
     public static void SerializeGff(List<String[]> list, String filepath) {
         try {
             List<GffDataPoint> GffDataPoints = GffDataPoints(list);
@@ -62,13 +75,29 @@ public class SerializeDeserialize {
             System.out.println(e.getMessage());
         }
     }
-
-    public static void SerializeVcf(ArrayList<String[]> list, String filepath) {
+    
+    public static void SerializeGffDataPOint(List<GffDataPoint> list, String filepath) {
         try {
-            List<HistogramDataPoint> HistogramData = HistogramData(list);
             FileOutputStream fileOut = new FileOutputStream(filepath);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(HistogramData);
+            out.writeObject(list);
+            out.close();
+            fileOut.close();
+            System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void SerializeVcf(List<HistogramDataPoint> list, String filepath) {
+        try {
+            
+            FileOutputStream fileOut = new FileOutputStream(filepath);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(list);
             out.close();
             fileOut.close();
             System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
@@ -83,6 +112,21 @@ public class SerializeDeserialize {
     public static void SerializeVcfCoverageGenomics(ArrayList<Object[]> list, String filepath) {
         try {
             List<LineDataPoint> lineData = CoverageData(list);
+            try (FileOutputStream fileOut = new FileOutputStream(filepath); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+                out.writeObject(lineData);
+            }
+            System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public static void SerializeVcfCoverageGenomics(List<HistogramDataPoint>  lineData, String filepath) {
+        try {
+//            List<LineDataPoint> lineData = CoverageData(list);
             try (FileOutputStream fileOut = new FileOutputStream(filepath); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
                 out.writeObject(lineData);
             }
@@ -109,11 +153,14 @@ public class SerializeDeserialize {
             System.out.println(e.getMessage());
         }
     }
-    
-    public static void SerializeExpression(List<HeatMapDataPoint> list, String filepath) {
-        try {
-            try (FileOutputStream fileOut = new FileOutputStream(filepath); ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
-                out.writeObject(list);
+
+    public static void SerializeTranscriptomicCov(List<LineDataPoint> linePoints, String filepath) {
+        try 
+        {
+            try (FileOutputStream fileOut = new FileOutputStream(filepath); 
+                ObjectOutputStream out = new ObjectOutputStream(fileOut)) 
+            {
+                out.writeObject(linePoints);
             }
             System.out.println("\nSerialization Successful... Checkout your specified output file..\n");
 
@@ -123,7 +170,7 @@ public class SerializeDeserialize {
             System.out.println(e.getMessage());
         }
     }
-
+    
     public static Object Deserialize(String filename) throws ClassNotFoundException {
         try {
             FileInputStream fileIn = new FileInputStream(new File(filename));

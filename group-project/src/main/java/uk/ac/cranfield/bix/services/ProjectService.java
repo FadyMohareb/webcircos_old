@@ -10,11 +10,13 @@ import uk.ac.cranfield.bix.models.Project;
 import uk.ac.cranfield.bix.models.User;
 
 /**
- *
+ * ProjectService is an interface. It is used in controllers as an intermediate to communicate with the database. 
+ * Especially the ProjectController uses this service to check if project get and save projects. 
  * @author solene
  */
 public interface ProjectService {
     Project findByProjectName(String projectName, User user);
     void save(Project project);
+    void delete(Project project);
     List<Project> findAll(User user);
 }

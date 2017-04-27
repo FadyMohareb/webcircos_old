@@ -2,10 +2,19 @@
 
 var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
     getInitialState: function getInitialState() {
-        Structure.projectName = this.props.projectsList[0];
-        React.render(React.createElement(FilesPanel, { projectName: this.props.projectsList[0] }), document.getElementById('filesContainer'));
         
-        return {activeProject: this.props.projectsList[0]};
+        (!$.cookie('activeProject') || $.cookie('activeProject') === "") ? $.cookie('activeProject', this.props.projectsList[0]) : null;
+        console.log($.cookie('activeProject'));
+        Structure.projectName = $.cookie('activeProject') ;
+        BSAstructure.projectName = $.cookie('activeProject') ;
+        RemoveStructure.projectName = $.cookie('activeProject') ;
+        ImportStructure.newProjectName = $.cookie('activeProject') ;
+            
+        
+        
+        React.render(React.createElement(FilesPanel, { projectName: $.cookie('activeProject') }), document.getElementById('filesContainer'));
+        
+        return {activeProject: $.cookie('activeProject')};
     },
     renderBlock: function renderBlock(projectsList, parent)
     {
@@ -20,13 +29,15 @@ var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
                     $('#projectButton').children().first().text(parent.state.activeProject + ' ');
                     Structure.projectName = parent.state.activeProject;
                     BSAstructure.projectName = parent.state.activeProject;
-                    React.render(React.createElement(FilesPanel, { projectName: parent.state.activeProject }), document.getElementById('filesContainer'));
+                    ImportStructure.newProjectName = parent.state.activeProject;
+                    $.cookie('activeProject', parent.state.activeProject);
+                    React.render(React.createElement(FilesPanel, { projectName: $.cookie('activeProject') }), document.getElementById('filesContainer'));
                 };
                 return (React.createElement("li",{onClick: handleProjectChange, id: projectName}, projectName));
             });
     },
     render: function () 
-    {
+    {console.log("COOKIE VALUE: " + this.state.activeProject);
         return React.createElement('div', {className: 'btn-group'},
                         React.createElement('button', {className: 'btn btn-default dropdown-toggle',
                             'data-toggle': "dropdown", 'aria-haspopup': "true",
@@ -37,6 +48,7 @@ var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
                 );
     }
 });
+
 var ProjectsPanel = React.createClass({displayName: "projectsPanel",
     getInitialState: function getInitialState() {
         return {view: {showNewProjModal: false}}; // need a method to check whether user is logged or not
@@ -70,10 +82,14 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
                     list[i] = ProjectName;
                 }
                 $('#uploadModalBtn').attr("disabled", false);
+                $('#removeModalBtn').attr("disabled", false);
+                $('#importModalBtn').attr("disabled", false);
                 React.render(React.createElement(ProjectsDropdown, {projectsList: list}), document.getElementById('projects'));
             }
             else {
+                $('#removeModalBtn').attr("disabled", true);
                 $('#uploadModalBtn').attr("disabled", true);
+                $('#importModalBtn').attr("disabled", true);
             }
             list.length > 2 ? $('#importModalBtn').attr('disabled', false) : $('#importModalBtn').attr('disabled', true);
         },
@@ -86,14 +102,15 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
         this.getProjects();
     },
     render: function () {
-        return (React.createElement('div', {className: "panel panel-primary"},
-                React.createElement('div', {className: "panel-heading"}, "Projects  ",
+        return (React.createElement('div', null,
+                React.createElement('div', {className: "panel panel-primary"},
+                React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null, "Projects "),
                         React.createElement('button', {type: 'button', className: 'btn btn-primary btn-sm', onClick: this.handleShowNewProjModal},
                                 React.createElement('span', {className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true'}))),
                 React.createElement('div', {className: "panel-body"},
                         React.createElement("div", {id: 'projects'}, 'Create your first project'),
                         this.state.view.showNewProjModal ? React.createElement(NewProjModal, {handleHideNewProjModal: this.handleHideNewProjModal}) : null))
-                );
+                ));
     }
 });
 var renderProjectsPanel = function () {

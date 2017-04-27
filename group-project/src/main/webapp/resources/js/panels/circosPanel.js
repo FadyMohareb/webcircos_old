@@ -7,7 +7,7 @@
 
 /* global React */
 
-var CircosPanel = React.createClass({className: "circosPanel",
+var OverviewTab = React.createClass({className: "overviewTab",
  save: function ()
     {
         //get svg element.
@@ -45,19 +45,21 @@ var CircosPanel = React.createClass({className: "circosPanel",
     },
 
     render: function () {
-
-        return (React.createElement('div', null,
+$("#centerContainer").height($("#leftCol").height());
+        return (React.createElement('div', {className: 'container', style: {width: 'inherit'}},
 //                React.createElement("form", {},
 //                React.createElement("i", {className: "fa fa-floppy-o"})),
-                React.createElement('button', {type: 'button', className: 'btn btn-primary glyphicon glyphicon-save', onClick: this.save}," Save"),
+                React.createElement('button', {type: 'button', style: {float: 'right'}, className: 'btn btn-primary glyphicon glyphicon-save', onClick: this.save},React.createElement('strong', null, " Save")),
                 React.createElement('br'),
-                React.createElement('div', {id: "bioCircos"})));
+                React.createElement('div', {id: "bioCircos", style: {height: '90%', width: '100%', 'text-align': "center"}},
+                    React.createElement('img', {src: "resources/emptyCircos.png"})
+                            )));
     }
 });
 
-var renderCircosPanel = function () {
+var renderOverviewTab = function () {
     React.render(
-            React.createElement(CircosPanel),
+            React.createElement(OverviewTab),
             document.getElementById("circos")
             );
 };

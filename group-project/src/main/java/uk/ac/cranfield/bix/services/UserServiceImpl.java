@@ -6,6 +6,11 @@ import uk.ac.cranfield.bix.models.User;
 import uk.ac.cranfield.bix.models.dao.UserDao;
 import uk.ac.cranfield.bix.utilities.BixPasswordEncoder;
 
+/**
+ * File UserServiceImpl override all methods from UserService.. 
+ * UserService is used everywhere retrieving user id is needed. 
+ * @author vmuser
+ */
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired

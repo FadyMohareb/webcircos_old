@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 import uk.ac.cranfield.bix.models.Project;
 import uk.ac.cranfield.bix.models.User;
 
+/**
+ * Class containing function for all the basic operation that can be done in a database for the Projects table. 
+ * @author vmuser
+ */
 @Repository
 @Transactional
 public class ProjectDao {
