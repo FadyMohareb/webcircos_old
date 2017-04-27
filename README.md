@@ -2,7 +2,7 @@
 
 This README documents all steps necessary to get application up and running.
 
-### What is in this document ###
+### Document content ###
 
 * Quick summary of application
 * How to install application?
@@ -10,29 +10,26 @@ This README documents all steps necessary to get application up and running.
 
 ### WebCircos application ###
 
-WebCircos is a third-tiers web based application using React.js library for the web application, the Spring Boot framework and Maven for the server which can be called the Java Based Manager. It is related to a MySQL database.
-To run the application, some external tools are needed when it comes to parsing files. 
+WebCircos is a third-tiers Web-based application using React.js library for the user interface, Spring Boot framework and Maven for the server which can be called the Java Based Manager. Files storage is based upon MySQL database.
+To run the application, some external tools are needed for parsing files. 
 
 ### Installing ###
 
-**Install MySQL database and create a database.** 
+**Install and create MySQL database.** 
+Official MySQL installer download page: https://dev.mysql.com/downloads/installer/
 
-Here is a link to the dowload page from the official web site: 
-https://dev.mysql.com/downloads/installer/
-
-When creating the database, store the name and password of the database. THat will be needed farther in the installation. 
+When creating the database, store the credentials to the database. That will be necessary for further installation. 
 
 **Install externals tools for parsing files.**
-Caution these tools can only be run on linux and macOS. If you want to run the application on Windows you need to configure a bash compiler.  
+Caution! These tools can only be ran on Linux and MacOS. If you want to run the application on Windows you need to configure a bash compiler.  
 
-Here is a link to a tutorial to install bash compiler : https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/
+Bash compiler installation tutorial: https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/
 
-a) Install the Bedtools suite on your computer. 
-Here is the link to the official installation pages : 
-http://bedtools.readthedocs.io/en/latest/content/installation.html
+a) Install Bedtools suite on your computer. 
+Official installation pages: http://bedtools.readthedocs.io/en/latest/content/installation.html
 
-b) Install the VCFtools suite on your computer.  
-Link to the VCFtools : https://vcftools.github.io/index.html
+b) Install VCFtools suite on your computer.  
+VCFtools : https://vcftools.github.io/index.html
 
 **Clone**
 
@@ -53,28 +50,28 @@ J-Xms128, the initial size of the jvm memory.
 
 **Database set up**
 
-* On the upper left of your IDE a panel containing project services and files can be found. 
-* Click on services.
+* On the upper left panel of your IDE Projects, Services and Files tabs can be found. 
+* Click on Services.
 * Then right click on Database and select new connection. 
-* Select MYSQL as the driver and then click on next. 
-* Enter your database name in Database field and your database password in the Password field. 
-* Put the appropriate port.  
-* Test connection and if it's working click on finish. 
-A url will appear with this shape will appear :"jdbc:mysql://port//your_database_name". You need to copy it.
+* Select MySQL as the driver and then click Next. 
+* Enter your database name in Database field and your password in the Password field. 
+* Enter the appropriate port.  
+* Test connection and if it's working click on Finish. 
+A following url will appear: "jdbc:mysql://port//your_database_name". You need to copy it.
 
-In the /Other sources/src/main/ressources/<default package>, the application.properties file can found. 
-Open it and change these following line: 
+In the subfolder Other Sources/src/main/ressources/<default package> of the project, application.properties file can be found. 
+Open it and change the following lines: 
 
 db.driver: com.mysql.jdbc.Driver
 db.url:" Put the url you just copied"
 db.username: "your database name"
 db.password: "your database password "
 
-**Changing the path and creating appropriate folders**
+**Changing the path and creating essential folders**
 
-Go in the Source packages/uk.ac.cranfield.bix.services/PathFinder.java class. 
-The constant path attribute value needs to be change following the place you want to store uploaded files. 
-In our version file are store in the Webcircos/temp/ folder for unauthenticated user and in the Webcircos/user/ folder for authenticated user. If you want to follow the same hierachy, you need to create a *Webcircos* folder and inside it two sub-folders, one called *temp* and the other *user*   
+Go to the Source packages/uk.ac.cranfield.bix.services/PathFinder.java class of the project. 
+The constant path attribute value needs to be changed following the place you want to store uploaded files. 
+In our version files are stored in the Webcircos/temp/ folder for unauthenticated user and in the Webcircos/user/ folder for authenticated user. If you want to follow the same hierachy, you need to create a *Webcircos* folder and two corresponding sub-folders inside it.   
 
 **Starting the application**
 
