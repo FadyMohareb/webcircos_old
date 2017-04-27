@@ -200,7 +200,7 @@ public class BSA_Parsers {
                 //if the MAF value is more than 0.97 add it to the LINK data as a line 
                 if ((Double) Pool1.get(i)[3] > 0.97 && (Double) Parent1.get(i)[3] > 0.97) {
                     Object[] LinkData = new Object[9];
-                    LinkData[0] = Pool1.get(i)[0].toString() + ": " + Pool1.get(i)[4].toString() + "-" + Pool1.get(i)[5].toString();  //Linkname
+                    LinkData[0] = Pool1.get(i)[0].toString() + "-WT" + " to " + Parent1.get(i)[0] + " : " + Pool1.get(i)[4].toString() + "-" + Pool1.get(i)[5].toString();  //Linkname
                     LinkData[1] = Pool1.get(i)[0] + "Po1";  //Pool Chrom 
                     LinkData[2] = Pool1.get(i)[4].toString();  //Pool Bin Start
                     LinkData[3] = Pool1.get(i)[5].toString();  //Pool Bin End
@@ -221,7 +221,7 @@ public class BSA_Parsers {
             //if the MAF value is more than 0.97 add it to the LINK data as a line 
             if ((Double) Pool1.get(i)[3] > 0.97 && (Double) Parent2.get(i)[3] > 0.97) {
                 Object[] LinkData = new Object[9];
-                LinkData[0] = Pool1.get(i)[0].toString() + ": " + Pool1.get(i)[4].toString() + "-" + Pool1.get(i)[5].toString();  //Linkname
+                LinkData[0] = Pool1.get(i)[0].toString() + "-WT" + " to " + Parent2.get(i)[0] +" : " + Pool1.get(i)[4].toString() + "-" + Pool1.get(i)[5].toString();  //Linkname
                 LinkData[1] = Pool1.get(i)[0].toString() + "Po1";  //Pool Chrom 
                 LinkData[2] = Pool1.get(i)[4].toString();  //Pool Bin Start
                 LinkData[3] = Pool1.get(i)[5].toString();  //Pool Bin End
@@ -239,7 +239,7 @@ public class BSA_Parsers {
             //if the MAF value is more than 0.97 add it to the LINK data as a line 
             if ((Double) Pool2.get(i)[3] > 0.97 && (Double) Parent1.get(i)[3] > 0.97) {
                 Object[] LinkData = new Object[9];
-                LinkData[0] = Pool2.get(i)[0].toString() + ": " + Pool2.get(i)[4].toString() + "-" + Pool2.get(i)[5].toString();  //Linkname
+                LinkData[0] = Pool2.get(i)[0].toString() + "-M+" + " to " + Parent1.get(i)[0] + ": " + Pool2.get(i)[4].toString() + "-" + Pool2.get(i)[5].toString();  //Linkname
                 LinkData[1] = Pool1.get(i)[0].toString() + "Po2";  //Pool Chrom 
                 LinkData[2] = Pool2.get(i)[4].toString();  //Pool Bin Start
                 LinkData[3] = Pool2.get(i)[5].toString();  //Pool Bin End
@@ -256,7 +256,7 @@ public class BSA_Parsers {
             //if the MAF value is more than 0.97 add it to the LINK data as a line 
             if ((Double) Pool2.get(i)[3] > 0.97 && (Double) Parent2.get(i)[3] > 0.97) {
                 Object[] LinkData = new Object[9];
-                LinkData[0] = Pool2.get(i)[0].toString() + ": " + Pool2.get(i)[4].toString() + "-" + Pool2.get(i)[5].toString();  //Linkname
+                LinkData[0] = Pool2.get(i)[0].toString() + "-M+" + " to " + Parent2.get(i)[0] + ": " + Pool2.get(i)[4].toString() + "-" + Pool2.get(i)[5].toString();  //Linkname
                 LinkData[1] = Pool1.get(i)[0].toString() + "Po2";  //Pool Chrom 
                 LinkData[2] = Pool2.get(i)[4].toString();  //Pool Bin Start
                 LinkData[3] = Pool2.get(i)[5].toString();  //Pool Bin End

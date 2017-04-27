@@ -28,7 +28,7 @@ public class VCFParsers {
     // initialise variables
 
     /**
-     *
+     * VCFToolsSNPS - method to remove indels by running vctools --remove-indels on the command line on the desired file
      * @param filepath
      * @param filename
      * @return
@@ -42,18 +42,16 @@ public class VCFParsers {
         //need the file directory. Can take the absolute path and then remove the file name
         int index = filepath.lastIndexOf("/");
         String pathWithoutName = filepath.substring(0, index + 1);
-
+        //paht is the output directory
         String path = pathWithoutName + filename;
-
+        //line is the command to be run
         String line = "/usr/local/bin/vcftools --vcf " + filepath + " --out " + path + " --remove-indels --recode --recode-INFO-all";
-
+        
         String s;
         Process p;
+        //run the proces using the command from string line
         try {
             p = Runtime.getRuntime().exec(line);
-//            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-//            while((s = br.readLine()) != null)
-//                System.out.println("line: " +s);
             p.waitFor();
             System.out.println("exit:" + p.exitValue());
             p.destroy();
@@ -61,18 +59,26 @@ public class VCFParsers {
         } catch (IOException | InterruptedException ex) {
             Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        //path is the loaction of the file with no idels
         return path;
     }
 
-//run VCF tools to get a SNP density per N bases, lat line of CMD array sets this
+//run VCF tools to get a SNP density per N bases
     //The file is the output from above method.
+    /**
+     * VcftoolsSNPDentsity - method to calculate the SNPdensity in a VCF file by using the VCFtools command SNPdensity on the desired file. 
+     * Currently BinSize is set to 1 million bases
+     * @param SnpDenseFilepath
+     * @param state
+     * @param meta
+     * @return
+     * @throws InterruptedException 
+     */
     public static String VcfToolsSNPDensity(String SnpDenseFilepath, String state, List<String[]> meta) throws InterruptedException {
-        //each string is an argument
-        String[] cmdArray = new String[2];
-
+       
+        //VCF file
         File SNPdense = new File(SnpDenseFilepath);
-
+        
         //get the file name
         String SNPfilename = SNPdense.getName();
         if (SNPfilename.indexOf(".") > 0) {
@@ -82,9 +88,11 @@ public class VCFParsers {
         //need the file directory. Can take the absolute path and then remove the file name
         int index = SnpDenseFilepath.lastIndexOf("/");
         String pathWithoutName = SnpDenseFilepath.substring(0, index + 1);
-
+        
         String path;
+        //line is the command to be run
         String line;
+        //this if else was to generate single chromosome bins
         if (state.equals("genome")) {
             path = pathWithoutName + SNPfilename + "SNPsOnly";
             line = "/usr/local/bin/vcftools --vcf " + SnpDenseFilepath + " --out " + path + " --SNPdensity 1000000";
@@ -95,12 +103,14 @@ public class VCFParsers {
         }
 
         System.out.println("command " + line);
-
+        
         String s;
         Process runtime;
+        //run the command on the command line using process builder
         try {
 
             runtime = Runtime.getRuntime().exec(line);
+            //Read input stream
             BufferedReader br = new BufferedReader(new InputStreamReader(runtime.getInputStream()));
             while ((s = br.readLine()) != null) {
                 System.out.println("line: " + s);
@@ -112,14 +122,19 @@ public class VCFParsers {
         } catch (IOException ex) {
             Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        //retunr file path of new SNPDen file
         return path + ".snpden";
     }
-
+    /**
+     * VCFHistParser - method to parse SNPden file into correct format for HISTOGRAM module in BioCircos library
+     * @param SnpDenseFilepath
+     * @return
+     * @throws FileNotFoundException 
+     */
     public static ArrayList<String[]> VCFHistParser(String SnpDenseFilepath) throws FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader(new File(SnpDenseFilepath)));
         ArrayList<String[]> HistList = new ArrayList();
-        //Reads VCF file line by line, adds relevant lines as lists of column elements
+        //Reads SNPden file line by line, adds relevant lines as lists of column elements
         //ArrayList to store MetaData Stores Meta Data
         ArrayList UselessJunk = new ArrayList();
         String line;
@@ -141,7 +156,14 @@ public class VCFParsers {
 
         //Once you have it invoke -> HistWriter
     }
-
+    /**
+     * HistogramData - method to create the object that can be passed to BioCIrcos Library HISTOGRAM Module in the correct format
+     * @param HistList
+     * @param state
+     * @param meta
+     * @return
+     * @throws IOException 
+     */
     public static List<HistogramDataPoint> HistogramData(ArrayList<String[]> HistList, String state, List<String[]> meta) throws IOException {
         //Interval is the width of the bin for the histogram
         Integer interval;
@@ -155,6 +177,8 @@ public class VCFParsers {
         List<HistogramDataPoint> HistData = new ArrayList();
         for (int i = 0; i < HistList.size(); i++) {
             //take the HistList.get(i)[2] and add it at the end to have the SNP count. 
+            //if first bin in chromsome
+            //sets the data in the correct format
             if (HistList.get(i)[1].equalsIgnoreCase("0")) {
                 HistogramDataPoint histPoint = new HistogramDataPoint(HistList.get(i)[0], 1, Integer.parseInt(HistList.get(i)[1]) + interval, "Hist", Double.parseDouble(HistList.get(i)[3]), HistList.get(i)[2] + " per million");
                 HistData.add(histPoint);
@@ -166,7 +190,12 @@ public class VCFParsers {
         }
         return HistData;
     }
-
+    /**
+     * HistWriter - method returns the HIstogram object with properties set and IDs when called then can be passed to render Circos
+     * @param HistData
+     * @param id
+     * @return 
+     */
     public static Histogram HistWriter(List<HistogramDataPoint> HistData, String id) {
 
         //create histogram object

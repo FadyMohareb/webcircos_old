@@ -23,11 +23,18 @@ import uk.ac.cranfield.bix.controllers.rest.HistogramProperties;
  * @author Adoni5
  */
 public class IndividualSNPs {
-
+    /**
+     * Reads a VCftools snpden file and parses the correct data out
+     * @param SnpFilePath
+     * @param Chrom
+     * @param i
+     * @return
+     * @throws FileNotFoundException 
+     */
     public ArrayList<String[]> IndvVCFParse(String SnpFilePath, ArrayList<String> Chrom, Integer i) throws FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader(SnpFilePath));
-        //Reads VCF file line by line, adds relevant lines as lists of column elements
-        //ArrayList to store MetaData Stores Meta Data
+        //Reads Snpden file line by line, adds relevant lines to lists as column elements
+        //Useless junk to store MetaData Stores Meta Data
         ArrayList UselessJunk = new ArrayList();
         ArrayList<String[]> IndvHistList = new ArrayList();
         String line;
@@ -45,9 +52,19 @@ public class IndividualSNPs {
         } catch (IOException ex) {
             Logger.getLogger(VCFParsers.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //contains all vcf lines parsed
         return IndvHistList;
     }
-
+    /**
+     * HistogramData - method that returns the Hiostogram data points, by taking the line and adding the bin start and end to iy
+     * @param seqlen
+     * @param Chr
+     * @param filename
+     * @param j
+     * @param IndvHistList
+     * @return
+     * @throws IOException 
+     */
     public List<HistogramDataPoint> HistogramData(ArrayList<Integer> seqlen, ArrayList<String> Chr, String filename, Integer j, ArrayList<String[]> IndvHistList) throws IOException {
         //Interval is the width of the bin for the histogram
         Integer interval = 1000000;
@@ -55,6 +72,7 @@ public class IndividualSNPs {
         List<HistogramDataPoint> IndvHistdata = new ArrayList();
        
         for (int i = 0; i < IndvHistList.size(); i++) {
+            //if this is the first bin in a chromosome
             if (IndvHistList.get(i)[1].equalsIgnoreCase("0")) {
                 HistogramDataPoint histPoint = new HistogramDataPoint(IndvHistList.get(i)[0],1,Integer.parseInt(IndvHistList.get(i)[1]) + interval,Chr.get(j),Double.parseDouble(IndvHistList.get(i)[3]),IndvHistList.get(i)[2]+" per million");
                 IndvHistdata.add(histPoint);
@@ -66,7 +84,11 @@ public class IndividualSNPs {
         System.out.println(IndvHistdata);
         return IndvHistdata;
     }
-
+    /**
+     * HistWriter returns the Histogram data points to be rendered by BioCircos
+     * @param IndvHistdata
+     * @return 
+     */
     public Histogram HistWriter(List<HistogramDataPoint> IndvHistdata) {
 
         Histogram hist = new Histogram();

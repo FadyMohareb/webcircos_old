@@ -21,9 +21,15 @@ public class IndividualChromosome {
     
     
 
-    
+    /**
+     * ChromDataPoints - method that returns the Chromosome in the BioCircos genome object, [[name, length],[name,length]];
+     * @param Chrom
+     * @param Seqlen
+     * @param i
+     * @return 
+     */
     public String ChromDataPoints(ArrayList<String> Chrom, ArrayList<Integer> Seqlen, Integer i){
-    
+        
         StringBuffer sb = new StringBuffer();    
         IndvData = (sb.append("[").append("\"").append(Chrom.get(i).trim()).append("\"").append(",").append(Seqlen.get(i)).append("],\n"));
         return IndvData.toString();

@@ -149,7 +149,7 @@ public class ImportFromDatabaseController
                     oldExtention = oldExtention + "." + oldFileName.split("\\.")[oldFileName.split("\\.").length-2];
                 oldFileNameWE = oldFileName.substring(0, (oldFileName.length()-oldExtention.length()-1));
 
-                newFileName = newFileName.replaceAll(newExtention, "");
+                newFileName = newFileName.substring(0, (newFileName.length()-newExtention.length()-1));
                 if (newFileName.startsWith(oldFileNameWE))
                 {
                     //copy all files

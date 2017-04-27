@@ -210,7 +210,7 @@ var BioCircos;
             "GenomeMouseOverTooltipsPadding": "3px",
             "GenomeMouseOverTooltipsBorderRadius": "3px",
             "GenomeMouseOverTooltipsOpacity": 0.8,
-            "GenomeMouseOverColor": "none",
+            "GenomeMouseOverColor": "white",
             "GenomeMouseOverOpacity": 1.0,
             "GenomeMouseOverStrokeColor": "#F26223",
             "GenomeMouseOverStrokeWidth": 3,
@@ -6153,9 +6153,12 @@ var BioCircos;
                                             return AltLabels;
                                         }
 
-
-
-
+                                        for(var i = 0; i < self.genomeLabel.length; i++){
+                                            if(self.LINK[1].chr !== self.genomeLabel[i]){
+                                                document.getElementById(self.settings.target).innerHTML = 'Arguments Error: The chromosome names given in the VCF files and the Fasta file must match)';
+                                             }                               
+                                        };
+                                    
 
 
                                         console.log(self.genomeLabel);
@@ -6196,8 +6199,7 @@ var BioCircos;
                                                 .padding(0)
                                                 .sortSubgroups(d3.descending)
                                                 .matrix(fraction(n));
-                                        console.log(fraction(n));
-                                        console.log(self.BSAzoom);
+
                                         if (self.BSAzoom == true) {
                                             console.log(self.target);
                                             var svg = d3.select(self.target).append("svg")
@@ -6229,7 +6231,7 @@ var BioCircos;
                                                     .attr("id", "BSAsvg")
                                                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
                                         }
-                                        console.log("Hello");
+
                                         var FillCalc = function(genome, s){
                                             var fillArray = ["rgb(0,255,0)", "rgb(255,255,0)", "rgb(255,0,255)", "rgb(204,0,0)", "rgb(255,0,0)", "rgb(255,0,204)", "rgb(255,204,204)", "rgb(255,153,0)", "rgb(255,204,0)", "rgb(255,255,0)", "rgb(204,255,0)", "rgb(0,255,0)", "rgb(53,128,0)", "rgb(0,0,204)", "rgb(102,153,255)", "rgb(153,204,255)", "rgb(0,255,255)", "rgb(204,255,255)", "rgb(153,0,204)", "rgb(204,51,255)", "rgb(204,153,255)", "rgb(102,102,102)", "rgb(153,153,153)", "rgb(204,204,204)"];
                                             var newfill = new Array();
@@ -6241,7 +6243,7 @@ var BioCircos;
                                             return newfill;
                                             
                                         };
-                                        console.log(FillCalc(genome, n));
+
                                         if (self.BSABorder == true) {
                                             svg.append("g")
                                                     .attr("class", "BioCircosGenome")
@@ -6520,13 +6522,10 @@ var BioCircos;
                                                         d3.select(this)
                                                                 .transition()
                                                                 .duration(self.settings.GenomeMouseOutAnimationTime)
-                                                                .style("fill", function (d, i) {
-                                                                    if (self.settings.GenomeMouseOutColor == "none") {
-                                                                        return fill(d.index);
-                                                                    } else {
-                                                                        return fill(d.index);
-                                                                    }
-                                                                })
+                                                                .style("fill",function (d) {
+                                                        return FillCalc(genome, n)[d.index];
+                                                    }
+                                                                )
                                                                 .style("opacity", function (d, i) {
                                                                     if (self.settings.GenomeMouseOutOpacity == "none") {
                                                                         return "";

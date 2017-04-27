@@ -31,18 +31,24 @@ import uk.ac.cranfield.bix.controllers.rest.finalObjects.HeatMap;
  */
 public class DifferentialExpression {
 
-    //Check with Rory but I think we can use the paerser from gff
+
+    /**
+     * GffPArserExpression is a method that parses a GFF file and gets the data and meta data into two separate lists
+     * @param GffFilePath
+     * @return
+     * @throws IOException 
+     */
     public static List<List<String[]>> GffParserExpression(String GffFilePath) throws IOException {
         List<String[]> GffFile = new ArrayList();
         List<String[]> metadata = new ArrayList();
 
         List<List<String[]>> list = new ArrayList();
-
+        //read Gff file
         try (BufferedReader br = new BufferedReader(new FileReader(GffFilePath))) {
             String line;
             try {
                 while ((line = br.readLine()) != null) {
-                    //this should be fine, used to add to an arrayList, didn't test the current thing
+                    //get metadata into list
                     if (line.charAt(0) == '#') {
                         if (line.startsWith("##sequence")) {
                             //split line by tab and only keep 1 and 3
@@ -52,7 +58,7 @@ public class DifferentialExpression {
                             s[1] = split[3];
                             metadata.add(s);
                         }
-
+                        //get gene values 
                     } else {
                         if (line.split("\\s")[2].equalsIgnoreCase("gene")) {
                             GffFile.add(line.split("\\s"));
@@ -71,16 +77,22 @@ public class DifferentialExpression {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(RSEMBamExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //list, a list of lists, contains metadata at index 0 and Gene lines at index 1
         return list;
     }
-
+    /**
+     * EbSeqParseq parser parsers ebseq files and gets all the values
+     * @param EbseqFilePath
+     * @return
+     * @throws IOException 
+     */
     public static ArrayList<String[]> EbSeqParser(String EbseqFilePath) throws IOException {
         ArrayList<String[]> Ebseq = new ArrayList();
         try (BufferedReader br2 = new BufferedReader(new FileReader(EbseqFilePath))) {
             String line;
             try {
                 while ((line = br2.readLine()) != null) {
-                    //same as above, if this dosn't work can go back to add to arrayList
+                    //add line data to arraylists split by whitespace
                     if (line.contains("PPEE")) {
                     } else {
                         Ebseq.add(line.split("\\s"));
@@ -95,7 +107,11 @@ public class DifferentialExpression {
         }
         return Ebseq;
     }
-
+    /**
+     * gffsorter sorts the Gff file values by position and chromsome
+     * @param li
+     * @return 
+     */
     public static ArrayList<String[]> gffSorter(List<List<String[]>> li) {
         ArrayList<String[]> SortedGff = new ArrayList();
         //SO this can be replaced with "sort -k 4 -n" on the command line
@@ -123,7 +139,13 @@ public class DifferentialExpression {
         }
         return SortedGff;
     }
-
+    /**
+     * EbSeqdata - a method to sort the lines into chromosomes based on line numbers in each file
+     * @param li
+     * @param SortedGff
+     * @param view
+     * @return 
+     */
     public static ArrayList<Object[]> EbseqData(List<List<String[]>> li, ArrayList<String[]> SortedGff, String view) {
         ArrayList<Integer> BinNumber = new ArrayList();
         Integer BinSize;
@@ -196,7 +218,13 @@ public class DifferentialExpression {
         }
         return LineNumbers;
     }
-
+    /**
+     * DiffJavascriptwriter - a method to get the number of lines in a bin and then process those lines to get expression values for that bin.
+     * @param Ebseq
+     * @param LineNumbers
+     * @param diffExprOrExpr
+     * @return 
+     */
     public static List<HeatMapDataPoint> DiffJavascriptWriter(ArrayList<String[]> Ebseq, ArrayList<Object[]> LineNumbers, String diffExprOrExpr) {
 
         //List of the Transcript per million(Tpm) values for the entries inside the limits of the bin
@@ -220,10 +248,7 @@ public class DifferentialExpression {
                 }
                 TpmValuesInBin.add(Tpm);
             }
-            //remove already processed lines from files
-//            for (int j = 0; j < Integer.parseInt((String) LineNumbers.get(k)[0]); j++) {
-//                Ebseq.remove(0);
-//            }
+
             //Add the values contained in this Bin to the overall List
             BinTpms.add(TpmValuesInBin);
 
@@ -272,6 +297,15 @@ public class DifferentialExpression {
     }
 
     //write out to a javascript file
+    /**
+     * Heatmapwriter returns the data points to the BioCircos function, in the correct format
+     * @param heatMapDataPoint
+     * @param innerRadius
+     * @param outerRadius
+     * @param id
+     * @return
+     * @throws IOException 
+     */
     public static HeatMap HeatMapWriter(List<HeatMapDataPoint> heatMapDataPoint, Integer innerRadius, Integer outerRadius, String id) throws IOException {
 
         //Create heatMap 

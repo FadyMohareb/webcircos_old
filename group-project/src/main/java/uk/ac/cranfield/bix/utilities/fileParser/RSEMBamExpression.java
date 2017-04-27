@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * To produce heatMap for gene expression methods fron differential expression
+ * To produce heatMap for gene expression methods from differential expression
  * can be used. Only the parser id different
  *
  * @author s263839
@@ -24,14 +24,15 @@ public class RSEMBamExpression {
     public static ArrayList<String[]> RsemGenesResultsParser(String RsemFilePath) throws IOException {
         //ArrayList for storing the RSEM file lines, split by whitespace
         ArrayList<String[]> RsemFile = new ArrayList();
+        //read file
         try (BufferedReader br2 = new BufferedReader(new FileReader(RsemFilePath))) {
             String line;
-
+            //read each line
             while ((line = br2.readLine()) != null) {
-                //same as above, if this dosn't work can go back to add to arrayList
+                
                 if (line.contains("gene_id")) {
-
                 } else {
+                    //add to RSemFile ArrayList
                     RsemFile.add(line.split("\\s"));
                 }
 
@@ -41,6 +42,7 @@ public class RSEMBamExpression {
         } catch (IOException ex) {
             Logger.getLogger(RSEMBamExpression.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //return the RsemFile List
         return RsemFile;
     }
 }

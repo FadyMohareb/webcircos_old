@@ -24,7 +24,11 @@ import uk.ac.cranfield.bix.controllers.rest.finalObjects.Line;
  * @author s263839
  */
 public class Coverage_Genomic {
-
+/**
+ * VcfLineParsers returns a List of strings, each element is a line of the vcf 
+ * @param VCFfilePath
+ * @return 
+ */
     public static List<String> VCFLineParser(String VCFfilePath) {
 //        List<List<String[]>> list = new ArrayList();
 //        List<String[]> meta = new ArrayList();
@@ -33,7 +37,7 @@ public class Coverage_Genomic {
 //        Pattern p = Pattern.compile(pattern);
 
         try {
-            //Reads the VCF file,  splits by tab, adds each Line as a list containg each column entry
+            //Reads the VCF file,
 
             BufferedReader br = new BufferedReader(new FileReader(VCFfilePath));
             String line;
@@ -62,7 +66,11 @@ public class Coverage_Genomic {
         }
         return VCFlines;
     }
-
+    /**
+     * VCFPArserMeta returns the Chromosome length and name from the VCF file, in a string array
+     * @param VCFfilePath
+     * @return 
+     */
     public static List<String[]> VCFParserMeta(String VCFfilePath) {
 
         List<String[]> meta = new ArrayList();
@@ -95,7 +103,11 @@ public class Coverage_Genomic {
         }
         return meta;
     }
-
+    /**
+     * VCFDepthExtract extracts the depth from the VCF file line list from VCFLineparser
+     * @param li
+     * @return 
+     */
     public static ArrayList<Object[]> VCFDepthExtract(List<String> li) {
 
         ArrayList<Object[]> DPValues = new ArrayList();
@@ -117,23 +129,30 @@ public class Coverage_Genomic {
         }
         return DPValues;
     }
-
+    /**
+     * Sort to bins sorts the coverage into bins of set size 1M bases , returns an object array of the bins, and the average depth in that Bin
+     * @param meta
+     * @param DPValues
+     * @return 
+     */
     public static ArrayList<Object[]> SortToBins(List<String[]> meta, ArrayList<Object[]> DPValues) {
         Integer BinSize = 1000000;
+        //BinNUmber contains the NUmber of bins in each chromosome 
         ArrayList<Integer> BinNumber = new ArrayList();
+       
         List<List<Object[]>> lists = new ArrayList<>();
         ArrayList<Object[]> DataValues = new ArrayList();
 
-
+        //calculatethe number of bins in each chromosome, add it to binnumber
         for (int k = 0; k < meta.size(); k++) {
             BinNumber.add(Integer.parseInt(meta.get(k)[1]) / BinSize);
         }
-
+        //create a list of the DPValues that match a certain chromosome, and add that list to an overall list of lists
         for (int i = 0; i < meta.size(); i++) {
             List<Object[]> list = new ArrayList();
             System.out.println(meta.get(i)[0]);
             for (int j = 0; j < DPValues.size(); j++) {
-
+                //if The chromsome value is the same for the DP value as the meta data
                 if (DPValues.get(j)[1].equals(meta.get(i)[0])) {
 
                     list.add(DPValues.get(j));
@@ -150,10 +169,11 @@ public class Coverage_Genomic {
             for (int j = 1; j <= BinNumber.get(i); j++) { // for all bins in that chromosome
 
                 for (int l = 0; l < lists.get(i).size(); l++) { // for all entries under that chromosomome
-
+                    //if the line pos is inside the value of the current bin, add the depth to the total, and add 1 to the count
                     if (Integer.parseInt(lists.get(i).get(l)[2].toString()) > (BinSize * (j - 1)) && Integer.parseInt(lists.get(i).get(l)[2].toString()) < (BinSize * j)) {
                         DepthInBin = DepthInBin + Integer.parseInt(lists.get(i).get(l)[0].toString());
                         Count += 1;
+                        //if the line pos is outside the current bin, calculate the average and add it to the Datavalues array listy
                     } else if (Integer.parseInt(lists.get(i).get(l)[2].toString()) > (BinSize * j)) {
                         Object[] values = new Object[4];
                         AvgValue = (DepthInBin / Count) / 10;
@@ -172,7 +192,11 @@ public class Coverage_Genomic {
         }
         return DataValues;
     }
-
+/**
+ * Method to line data point object to be passed to BioCircos
+ * @param DataValues
+ * @return 
+ */
     public static List<LineDataPoint> CoverageData(ArrayList<Object[]> DataValues) {
         Integer BinSize = 1000000;
         List<LineDataPoint> Data = new ArrayList();
@@ -184,7 +208,12 @@ public class Coverage_Genomic {
         }
         return Data;
     }
-
+    /**
+     * Return a fully formatted object for processing by biocircos
+     * @param Data
+     * @return
+     * @throws IOException 
+     */
     public static Line GenomeCoverageWriter(List<LineDataPoint> Data) throws IOException {
 
         //Create line object
