@@ -21,7 +21,7 @@ Here is a link to the dowload page from the official web site: https://dev.mysql
 
 When creating the database, store the name and password of the database. THat will be needed farther in the installation. 
 
- **Install externals tools for parsing files.**
+**Install externals tools for parsing files.**
 Caution these tools can only be run on linux and macOS. If you want to run the application on Windows you need to configure a bash compiler.  
 
 Here is a link to a tutorial to install bash compiler : https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/
@@ -45,6 +45,23 @@ Originally, the application was written in The NetBeans IDE but we do not recomm
 **Increase RAM initially allocated in your IDE. Change the garbage collector algorithm for the optimized one.**   
 
 **Database set up**
+
+* On the upper left of your IDE a panel containing project services and files can be found. 
+* Click on services.
+* Then right click on Database and select new connection. 
+* Select MYSQL as the driver and then click on next. 
+* Enter your database name in Database field and your database password in the Password field. 
+* Put the appropriate port.  
+* Test connection and if it's working click on finish. 
+A url will appear with this shape will appear :"jdbc:mysql://port//your_database_name". You need to copy it.
+
+In the /Other sources/src/main/ressources/<default package>, th application.properties file can found. 
+Open it and change these following line: 
+
+db.driver: com.mysql.jdbc.Driver
+db.url:" Put the url you just copied"
+db.username: "your database name"
+db.password: "your database password "
 
 **Changing the path and creating appropriate folders**
 
