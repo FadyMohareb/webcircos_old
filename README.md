@@ -15,13 +15,14 @@ To run the application, some external tools are needed when it comes to parsing 
 
 ### Installing ###
 
-1. Install MySQL database and create a database. 
+**Install MySQL database and create a database.** 
 
 Here is a link to the dowload page from the official web site: https://dev.mysql.com/downloads/installer/
 
 When creating the database, store the name and password of the database. THat will be needed farther in the installation. 
 
-2. Install externals tools for parsing files. Caution these tools can only be run on linux and macOS. If you want to run the application on Windows you need to configure a bash compiler.  
+ **Install externals tools for parsing files.**
+Caution these tools can only be run on linux and macOS. If you want to run the application on Windows you need to configure a bash compiler.  
 
 Here is a link to a tutorial to install bash compiler : https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/
 
