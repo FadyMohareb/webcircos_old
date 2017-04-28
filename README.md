@@ -75,6 +75,9 @@ In our version files are stored in the Webcircos/temp/ folder for unauthenticate
 
 **Deployment of the application**
 
+First time you deploy the application change the following line *hibernate.hbm2ddl.auto: none* to *hibernate.hbm2ddl.auto: create*. After the application has been successfully launched, before the next launch, change the line back to *hibernate.hbm2ddl.auto: none*
+Thus it will not recreate the database each time you start the application.
+
 we are using maven so we need to compile our project specific maven goal which is obtained by following build plugin
 
 ```
@@ -106,7 +109,6 @@ List of all possible properties of the server is available on link above:
 https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
 The most common starting parametrisation of the server can look as follows
-
 
 ```
 #!bash
