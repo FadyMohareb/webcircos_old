@@ -18,7 +18,7 @@ To run the application, some external tools are needed for parsing files.
 **Install and create MySQL database.** 
 Official MySQL installer download page: https://dev.mysql.com/downloads/installer/
 
-When creating the database, store the credentials to the database. That will be necessary for further installation. 
+When creating the database, store the database user credentials. That will be necessary for further installation. 
 
 **Install externals tools for parsing files.**
 Caution! These tools can only be ran on Linux and MacOS. If you want to run the application on Windows you need to configure a bash compiler.  
@@ -33,7 +33,7 @@ VCFtools : https://vcftools.github.io/index.html
 
 **Clone**
 
-Clone the repository (if you haven't done it already). Originally, repository had been placed in bitbucket.org. To clone it, we recommend to familiarize yourself with the documentation ([https://confluence.atlassian.com/bitbucket/clone-a-repository-223217891.html](Link URL)).
+Clone the repository from master branch(if you haven't done it already). Originally, repository had been placed in bitbucket.org. To clone it, we recommend to familiarize yourself with the documentation ([https://confluence.atlassian.com/bitbucket/clone-a-repository-223217891.html](Link URL)).
 
 **Open repository in Java environment**
 
@@ -71,11 +71,29 @@ db.password: "your database password "
 
 Go to the Source packages/uk.ac.cranfield.bix.services/PathFinder.java class of the project. 
 The constant path attribute value needs to be changed following the place you want to store uploaded files. 
-In our version files are stored in the Webcircos/temp/ folder for unauthenticated user and in the Webcircos/user/ folder for authenticated user. If you want to follow the same hierachy, you need to create a *Webcircos* folder and two corresponding sub-folders inside it.   
+In our version files are stored in the Webcircos/temp/ folder for unauthenticated user and in the Webcircos/user/ folder for authenticated user. If you want to follow the same hierarchy, you need to create a *Webcircos* folder and two corresponding sub-folders inside it.   
+
+**Deployment of the application**
+ze qre using ,qven so ze need to co,pile our project specific mqven goql zhich is obtqined by follozing build plugin
+
+```
+#!xml
+
+<build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+```
+
+All you need to do is to creqte q WAR file thqt zill contqin qll the dependencies:
 
 **Starting the application**
-
-a)
+This application uses SpringBootFramework, which creates a stand-alone instance of Tomcat WebServer.
+a) 
 b)
 
 ### Contact ###
