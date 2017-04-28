@@ -74,6 +74,7 @@ The constant path attribute value needs to be changed following the place you wa
 In our version files are stored in the Webcircos/temp/ folder for unauthenticated user and in the Webcircos/user/ folder for authenticated user. If you want to follow the same hierarchy, you need to create a *Webcircos* folder and two corresponding sub-folders inside it.   
 
 **Deployment of the application**
+
 we are using maven so we need to compile our project specific maven goal which is obtained by following build plugin
 
 ```
@@ -98,6 +99,7 @@ mvn clean install
 It will create the target directory in which the war file is located. 
 
 **Starting the application**
+
 This application uses SpringBoot framework, which creates a stand-alone instance of Tomcat WebServer. It is possible to change all of the tomcat properties by passing command line arguments. 
 
 List of all possible properties of the server is available on link above:
