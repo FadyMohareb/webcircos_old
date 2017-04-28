@@ -89,15 +89,13 @@ we are using maven so we need to compile our project specific maven goal which i
     </build>
 ```
 
-Build the project to create a WAR file that will contains all the dependencies.
- 
-
+Build the project to create a WAR file that will contains all the dependencies by running the following command line:
 ```
 #!bash
 
 mvn clean install
 ```
-
+It will create the target directory in which the war file is located. 
 
 **Starting the application**
 This application uses SpringBoot framework, which creates a stand-alone instance of Tomcat WebServer. It is possible to change all of the tomcat properties by passing command line arguments. 
