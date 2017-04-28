@@ -1,5 +1,3 @@
-/* global React, Structure, FilesPanel, NewProjModal */
-
 var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
     getInitialState: function getInitialState() {
         
@@ -18,9 +16,6 @@ var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
     },
     renderBlock: function renderBlock(projectsList, parent)
     {
-//        console.log(projectsList)
-//        console.log(parent)
-//        console.log(parent.state.activeProject)
         return projectsList.map(function (projectName)
             {
                 handleProjectChange: function handleProjectChange(event) {
@@ -37,21 +32,20 @@ var ProjectsDropdown = React.createClass({displayName: "ProjectsDropdown",
             });
     },
     render: function () 
-    {console.log("COOKIE VALUE: " + this.state.activeProject);
+    {
         return React.createElement('div', {className: 'btn-group'},
                         React.createElement('button', {className: 'btn btn-default dropdown-toggle',
                             'data-toggle': "dropdown", 'aria-haspopup': "true",
                             'aria-expanded': 'false', id: 'projectButton'}, this.state.activeProject + ' ',
                                 React.createElement('span', {className: 'caret'})),
                         React.createElement('ul', {className: 'dropdown-menu'},
-                                this.renderBlock(this.props.projectsList, this))
-                );
+                                this.renderBlock(this.props.projectsList, this)));
     }
 });
 
 var ProjectsPanel = React.createClass({displayName: "projectsPanel",
     getInitialState: function getInitialState() {
-        return {view: {showNewProjModal: false}}; // need a method to check whether user is logged or not
+        return {view: {showNewProjModal: false}};
     },
     handleShowNewProjModal: function handleShowNewProjModal() {
         this.setState({view: {showNewProjModal: true}});
@@ -60,7 +54,6 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
         this.setState({view: {showNewProjModal: false}});
         $(".modal-backdrop.in").remove();
     },
-//    used to define any props accessed by this.props
     getProjects: function getProjects()
     {
         $.ajax({
@@ -70,7 +63,6 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
         contentType: "application/json; charset=utf-8",
         success: function (data)
         {
-//            console.log(data.errors);
             var ProjectList = data.errors.split("\t");
             var list = [];
             if (ProjectList[0].length !== 0)
@@ -113,6 +105,7 @@ var ProjectsPanel = React.createClass({displayName: "projectsPanel",
                 ));
     }
 });
+
 var renderProjectsPanel = function () {
     React.render(
             React.createElement(ProjectsPanel),

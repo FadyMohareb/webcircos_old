@@ -1,7 +1,3 @@
-/* global React, Showdown, SecurityContextHolder, RequestContextHolder, UploadModal, Structure */
-
-var converter = new Showdown.converter();
-
 var FilesDropdownSequence = React.createClass({displayName: "FilesDropdownSequence",
     getInitialState: function getInitialState()
     {
@@ -239,20 +235,11 @@ var FilesDropdownDifExpression = React.createClass({displayName: "FilesDropdownD
     }
 });
 
-var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
+var FilesOverviewPanel = React.createClass({className: "FilesOverviewPanel",
     getInitialState: function getInitialState()
     {
         return {view: {showUploadModal: false}};
     },
-//    handleShowUploadModal: function handleShowUploadModal() 
-//    {
-//        this.setState({view: {showUploadModal: true}});
-//    },
-//    handleHideUploadModal: function handleHideUploadModal() 
-//    {
-//        this.setState({view: {showUploadModal: false}});
-//        $(".modal-backdrop.in").remove();
-//    },
     contentUpdateProject: function (panelType)
     {
         var projectName = this.props.projectName;
@@ -345,13 +332,11 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
     },
     sendData: function () 
     {
-        //alert('Structure: ' + Structure);
         Structure.validateValues();
         var height = $('#bioCircos').height();
         var width = $('#bioCircos').width();
         $("#bioCircos").html("");
 
-//        alert('Into AJAX: ' + Structure.differentialExpression);
         if(typeof(JSON.stringify(Structure.referenceSequence))!=="undefined")
         {
             var check = false;
@@ -366,7 +351,6 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 check = true;
                 isAnot = false;
             }
-           // console.log(JSON.stringify(Structure.transcriptiomicCoverage));//undefined  
             if(typeof(JSON.stringify(Structure.transcriptiomicCoverage))!=="undefined")
             {
                 check = true;
@@ -382,11 +366,7 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 }
             }
             
-             
-//            if (isAnot === true)
-//            {
                 Structure.validateValues();
-//                alert('Into AJAX: ' + JSON.stringify(Structure));
                 $.ajax({
                     url: "/circos.data",
                     dataType: 'json',
@@ -462,20 +442,8 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                         } else {
                             HChrom = [];
                         }
-        //                if (data.deHeatMapChrom !== null) {
-        //                    HEATMA01HeChrom = [data.deHeatMapChrom.heatMapId, data.deHeatMapChrom.properties, data.deHeatMapChrom.heatMapDataPoint];
-        //                } else {
-        //                    HEATMA01HeChrom = [];
-        //                }
-        //                if (data.exprChromView !== null) {
-        //                    HEATMA02HeChrom = [data.exprChromView.heatMapId, data.exprChromView.properties, data.exprChromView.heatMapDataPoint];
-        //                } else {
-        //                    HEATMA02HeChrom = [];
-        //                }
-
 
                         console.log('Size: ' + height + ' ' + width);
-        //                console.log(data.genomes + ' ' + ARC_01 + ' ' + HISTOGRAM01 + ' ' + LINE01 + ' ' + LINE02 + ' ' + HEATMAP01 + ' ' + HEATMAP02 + ' ' + BACKGROUND01 + ' ' + BACKGROUND02)
                         renderCircos(height, width, data.genomes, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02, BACKGROUND01, BACKGROUND02, HChrom);
                     },
                     error: function (status, err) {
@@ -484,16 +452,8 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                     }
 
                 });
-//                }
-//                else
-//                {
-//                    alert("Annotation file needs to be provided!");
-//                }
-//            }
-//            else
-//                alert("Sequence file needs to be provided!");
         }
-        else{
+        else {
             alert('Choose reference sequence!');
         }
     },
@@ -533,8 +493,3 @@ var FilesGeneralPanel = React.createClass({className: "FilesGeneralPanel",
                 );
     }
 });
-
-var renderFilesGeneralPanel = function ()
-{
-    React.render(React.createElement(FilesGeneralPanel), document.getElementById('filesContainer'));
-};

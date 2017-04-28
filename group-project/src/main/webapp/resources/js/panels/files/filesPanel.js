@@ -1,7 +1,3 @@
-/* global React, FilesTabsComponent, Showdown, UploadModal, ImportModal */
-
-var converter = new Showdown.converter();
-
 var FilesPanel = React.createClass({displayName: "FilesPanel",
     getInitialState: function getInitialState() {
         return {view: {showUploadModal: false, showImportModal: false, showRemoveModal: false}};
@@ -45,7 +41,18 @@ var FilesPanel = React.createClass({displayName: "FilesPanel",
                                         React.createElement('span', {className: 'glyphicon glyphicon-trash', 'aria-hidden': 'true'}))
                                 )),
                 React.createElement('div', {className: "panel-body", id: 'filesTabsContainer'},
-                        React.createElement(FilesTabsComponent, {projectName: this.props.projectName})),
+                        React.createElement("ul", {className: "nav nav-pills"},
+                                React.createElement("li", {className: "active"}, React.createElement("a", {'data-target': "#overview", 'data-toggle': "tab"}, React.createElement('strong', null, "Overview"))),
+                                React.createElement("li", {className: ""}, React.createElement("a", {'data-target': "#bsa", 'data-toggle': "tab"}, React.createElement('strong', null, "BSA")))),
+                        React.createElement("div", {className: "panel panel-primary"},
+                                React.createElement("div", {className: "tab-content"},
+                                React.createElement("br"),
+                                React.createElement("div", {className: "tab-pane active", id: "overview"},
+                                        React.createElement(FilesOverviewPanel, { projectName: this.props.projectName})),
+                                        React.createElement("div", {className: "tab-pane", id: "bsa"},
+                                        React.createElement(FilesBSATab, {projectName: this.props.projectName}))),
+                                React.createElement("br")
+                                )),
                 this.state.view.showUploadModal ? React.createElement(UploadModal, {handleHideUploadModal: this.handleHideUploadModal, projectName: this.props.projectName}) : null,
                 this.state.view.showImportModal ? React.createElement(ImportModalTest, {handleHideImportModal: this.handleHideImportModal, projectName: this.props.projectName}) : null,
                 this.state.view.showRemoveModal ? React.createElement(RemoveModal, {handleHideRemoveModal: this.handleHideRemoveModal, projectName: this.props.projectName}) : null))
@@ -54,8 +61,6 @@ var FilesPanel = React.createClass({displayName: "FilesPanel",
 });
 
 var renderFilesPanel = function (isLogged) {
-    console.log('IsLogged ' + isLogged);
-
     var logged = null;
 
     if (isLogged !== null && isLogged !== "")

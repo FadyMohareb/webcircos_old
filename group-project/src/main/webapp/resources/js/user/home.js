@@ -48,8 +48,7 @@ var HomePage = React.createClass({
                     React.createElement('div', {className: 'container'}, this.props.userStatus),
                       this.state.view.showModal ? React.createElement(LoginModal, { handleHideModal: this.handleHideModal,
                           handleShowRegModal: this.handleShowRegModal, handleShowResetModal: this.handleShowResetModal}) : null,
-                      this.state.view.showRegModal ? React.createElement(RegistrationModal, { handleHideRegModal: this.handleHideRegModal }) : null,
-                      this.state.view.showResetModal ? React.createElement(ResetPswdModal, { handleHideResetModal: this.handleHideResetModal }) : null)
+                      this.state.view.showRegModal ? React.createElement(RegistrationModal, { handleHideRegModal: this.handleHideRegModal }) : null)
     );
   },
   propTypes: {
@@ -58,7 +57,6 @@ var HomePage = React.createClass({
 });
 
 var renderHomePage = function (asd) {
-//    console.log("asdasd: " + asd);
     var logged = null;
     
     if (asd !== null)

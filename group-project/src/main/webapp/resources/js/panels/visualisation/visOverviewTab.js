@@ -7,7 +7,7 @@
 
 /* global React */
 
-var OverviewTab = React.createClass({className: "overviewTab",
+var VisOverviewTab = React.createClass({className: "visOverviewTab",
  save: function ()
     {
         //get svg element.
@@ -54,10 +54,3 @@ $("#centerContainer").height($("#leftCol").height());
                             )));
     }
 });
-
-var renderOverviewTab = function () {
-    React.render(
-            React.createElement(OverviewTab),
-            document.getElementById("circos")
-            );
-};

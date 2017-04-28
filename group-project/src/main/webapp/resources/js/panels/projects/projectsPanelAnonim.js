@@ -1,6 +1,4 @@
-var converter = new Showdown.converter();
-
-var ProjectsPanelAnon = React.createClass({displayName: "projectsPanelAnon",
+var ProjectsPanelAnonim = React.createClass({displayName: "projectsPanelAnonim",
     getInitialState: function getInitialState() {
         return {view: {showManualModal: false}};
     },
@@ -13,10 +11,6 @@ var ProjectsPanelAnon = React.createClass({displayName: "projectsPanelAnon",
     },
     render: function () {
         return (React.createElement('div', null,
-//                React.createElement('button', {id: 'manualBtn', type: 'button', className: 'btn btn-default btn-sm', onClick: this.handleShowManualModal},
-//                                        React.createElement('span', {className: 'glyphicon glyphicon-book', 'aria-hidden': 'true'})),
-//                                        React.createElement('br'),
-//                                        React.createElement('br'),
                 React.createElement('div', {className: "panel panel-primary"},
                 React.createElement('div', {className: "panel-heading"}, React.createElement('strong', null, "Projects")),
                         React.createElement('div', {className: "panel-body"}, 
@@ -30,9 +24,9 @@ var ProjectsPanelAnon = React.createClass({displayName: "projectsPanelAnon",
     }
 });
 
-var renderProjectsPanelAnon = function () {
+var renderProjectsPanelAnonim = function () {
     React.render(
-            React.createElement(ProjectsPanelAnon),
+            React.createElement(ProjectsPanelAnonim),
             document.getElementById("projectsContainer")
             );
 };

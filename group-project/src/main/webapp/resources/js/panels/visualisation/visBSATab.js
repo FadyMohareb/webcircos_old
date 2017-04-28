@@ -1,5 +1,5 @@
 
-var BSATab = React.createClass({className: "bsaTab",
+var VisBSATab = React.createClass({className: "visBsaTab",
     save: function ()
     {
         //get svg element.
@@ -37,20 +37,11 @@ var BSATab = React.createClass({className: "bsaTab",
     },
 
     render: function () {
-
         $("#centerContainer").height($("#leftCol").height());
         return (React.createElement('div', {className: 'container', style: {width: 'inherit'}},
                 React.createElement('button', {type: 'button', style: {float: 'right'}, className: 'btn btn-primary glyphicon glyphicon-save', onClick: this.save}, React.createElement('strong', null, " Save")),
                 React.createElement('br'),
                 React.createElement('div', {id: "bsaCircos", style: {height: '90%', width: '100%', 'text-align': "center"}},
-                        React.createElement('img', {src: "resources/emptyCircosV2.jpeg"})
-                        )));
+                        React.createElement('img', {src: "resources/emptyCircos.png"}))));
     }
-})
-
-var renderBSATab = function () {
-    React.render(
-            React.createElement(BSATab),
-            document.getElementById("parentPool")
-            );
-};
+});

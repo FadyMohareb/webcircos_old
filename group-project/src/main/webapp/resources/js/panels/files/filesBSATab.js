@@ -1,8 +1,3 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 var FilesDropdownSequenceBSA = React.createClass({displayName: "FilesDropdownSequenceBSA",
     getInitialState: function () {
         return {activeFileSequenceBSA: this.props.filesList[0]};
@@ -215,7 +210,7 @@ var FilesDropdownPool2 = React.createClass({displayName: "FilesDropdownPool2",
 
 });
 
-var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
+var FilesBSATab = React.createClass({className: "FilesBSATab",
     contentUpdate: function (panelType)
     {
         var projectName = this.props.projectName;
@@ -287,7 +282,6 @@ var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
     },
     sendData: function () {
         BSAstructure.validateValues();
-//        alert(JSON.stringify(BSAstructure));
         $("#bsaCircos").html("");
 
         $.ajax({
@@ -297,17 +291,7 @@ var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(BSAstructure),
             success: function (data) {
-               // alert("Button Test");
-//                var ARC_01;
                 var LINK01;
-                console.log(data);
-                
-//                if (data.arc !== null) {
-//                    ARC_01 = [data.arc.indGffid, data.arc.properties, data.arc.gffDataPoint];
-//                } else {
-//                    ARC_01 = [];
-//                }
-
                 if (data.link !== null) {
                     LINK01 = [data.link.linkId, data.link.properties, data.link.linkData];
                 } else {
@@ -348,16 +332,6 @@ var FilesParentPoolPanel = React.createClass({className: "FilesParentPoolPanel",
                         React.createElement('div', {className: 'panel-body', id: 'pool2'},
                         React.createElement(this.contentUpdate, {panelType: "variants"}))),
                 React.createElement('br'),
-                React.createElement('button', {className: 'btn btn-primary', onClick: this.sendData}, React.createElement('strong', null, 'Display BSA circos')))
-                );
-
-
+                React.createElement('button', {className: 'btn btn-primary', onClick: this.sendData}, React.createElement('strong', null, 'Display BSA circos'))));
     }
 })
-
-var renderFilesParentPoolPanel = function () {
-    React.render(
-            React.createElement(FilesParentPoolPanel),
-            document.getElementById("filesParentPool")
-            );
-};

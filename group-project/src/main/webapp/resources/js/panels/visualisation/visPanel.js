@@ -1,4 +1,4 @@
-var CircosPanel = React.createClass({displayName: 'circosPanel',
+var VisPanel = React.createClass({displayName: 'visPanel',
 
     render: function () {
 
@@ -12,9 +12,9 @@ var CircosPanel = React.createClass({displayName: 'circosPanel',
                                 React.createElement("div", {className: "tab-content"},
                                         React.createElement("br"),
                                         React.createElement("div", {className: "tab-pane active", id: "overviewTab"},
-                                                React.createElement(OverviewTab, {projectName: this.props.projectName})),
+                                                React.createElement(VisOverviewTab, {projectName: this.props.projectName})),
                                         React.createElement("div", {className: "tab-pane", id: "bsaTab"},
-                                                React.createElement(BSATab, {projectName: this.props.projectName}))),
+                                                React.createElement(VisBSATab, {projectName: this.props.projectName}))),
                                 React.createElement("br")
 
                                 )));
@@ -22,10 +22,10 @@ var CircosPanel = React.createClass({displayName: 'circosPanel',
     }
 });
 
-var renderCircosPanel = function () {
+var renderVisPanel = function () {
 
     React.render(
-            React.createElement(CircosPanel),
+            React.createElement(VisPanel),
             document.getElementById("centerContainer")
             );
 }

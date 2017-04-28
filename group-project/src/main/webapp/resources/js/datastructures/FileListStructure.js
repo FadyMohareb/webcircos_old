@@ -20,11 +20,11 @@ function FileListStructure(){
     };
     
     this.validateValues = function(){
+        
         if(this.referenceSequence === '---' || this.referenceSequence === undefined || this.referenceSequence === "")
             this.referenceSequence = undefined;
         else
             this.referenceSequence = this.referenceSequence.replace(/\s+/g, '');
-//       alert(this.referenceSequence);
         
         if(this.genomicCoverage === '---' || this.genomicCoverage === undefined || this.genomicCoverage === "")
             this.genomicCoverage = undefined;
@@ -41,7 +41,6 @@ function FileListStructure(){
         else
             this.transcriptiomicCoverage = this.transcriptiomicCoverage.replace(/\s+/g, '');
         
-//        alert(this.genesExpresion);
         if(this.genesExpresion === '---' || this.genesExpresion === undefined || this.genesExpresion === "")
             this.genesExpresion = undefined;
         else
@@ -49,13 +48,8 @@ function FileListStructure(){
        
         if(this.differentialExpression === '---' || this.differentialExpression === undefined || this.differentialExpression === "")
             this.differentialExpression= undefined;
-//        console.log('I am in IF');}
-        
         else
-//            alert('Structure ' + this.differentialExpression);
-            this.differentialExpression = this.differentialExpression.replace(/\s+/g, '');
-//            console.log('I am in ELSE ' + this.differentialExpression);
-        
+            this.differentialExpression = this.differentialExpression.replace(/\s+/g, '');        
         
         if(this.annotation === '---' || this.annotation === undefined || this.annotation === "")
             this.annotation = undefined;
