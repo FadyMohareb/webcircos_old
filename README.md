@@ -74,7 +74,7 @@ The constant path attribute value needs to be changed following the place you wa
 In our version files are stored in the Webcircos/temp/ folder for unauthenticated user and in the Webcircos/user/ folder for authenticated user. If you want to follow the same hierarchy, you need to create a *Webcircos* folder and two corresponding sub-folders inside it.   
 
 **Deployment of the application**
-ze qre using ,qven so ze need to co,pile our project specific mqven goql zhich is obtqined by follozing build plugin
+we are using maven so we need to compile our project specific maven goal which is obtained by following build plugin
 
 ```
 #!xml
@@ -89,12 +89,30 @@ ze qre using ,qven so ze need to co,pile our project specific mqven goql zhich i
     </build>
 ```
 
-All you need to do is to creqte q WAR file thqt zill contqin qll the dependencies:
+Build the project to create a WAR file that will contains all the dependencies.
+ 
+
+```
+#!bash
+
+mvn clean install
+```
+
 
 **Starting the application**
-This application uses SpringBootFramework, which creates a stand-alone instance of Tomcat WebServer.
-a) 
-b)
+This application uses SpringBoot framework, which creates a stand-alone instance of Tomcat WebServer. It is possible to change all of the tomcat properties by passing command line arguments. 
+
+List of all possible properties of the server is available on link above:
+https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+
+The most common starting parametrisation of the server can look as follows
+
+
+```
+#!bash
+
+java - jar_name_of_the_.jar_file --server.port=8080 --server.address=127.0.0.1
+```
 
 ### Contact ###
 
