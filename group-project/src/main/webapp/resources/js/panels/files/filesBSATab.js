@@ -282,30 +282,34 @@ var FilesBSATab = React.createClass({className: "FilesBSATab",
     },
     sendData: function () {
         BSAstructure.validateValues();
-        $("#bsaCircos").html("");
+        $("#bsaCircos").html("<img src=\"resources/LoadingScreen.PNG\", height= \"1000px\", width= \"1000px\">");
+        
+        if(typeof(JSON.stringify(BSAstructure.sequence))!=="undefined" && typeof(JSON.stringify(BSAstructure.parent1))!=="undefined" && typeof(JSON.stringify(BSAstructure.parent2))!=="undefined" && typeof(JSON.stringify(BSAstructure.pool1))!=="undefined" && typeof(JSON.stringify(BSAstructure.pool2))!=="undefined")
+        {
+            $.ajax({
+                url: "/bsa.data",
+                dataType: 'json',
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(BSAstructure),
+                success: function (data) {
+                    var LINK01;
+                    if (data.link !== null) {
+                        LINK01 = [data.link.linkId, data.link.properties, data.link.linkData];
+                    } else {
+                        LINK01 = [];
+                    }
 
-        $.ajax({
-            url: "/bsa.data",
-            dataType: 'json',
-            type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(BSAstructure),
-            success: function (data) {
-                var LINK01;
-                if (data.link !== null) {
-                    LINK01 = [data.link.linkId, data.link.properties, data.link.linkData];
-                } else {
-                    LINK01 = [];
+                    renderBSA(data.genomes, LINK01);
+                },
+                error: function (status, err) {
+                    alert("Wrong data");
+                    console.error(status, err.toString());
                 }
-                
-                renderBSA(data.genomes, LINK01);
-            },
-            error: function () {
-                alert("Wrong data");
-                console.error(status, err.toString());
-            }
-
-        });
+            });
+        }
+        else
+            alert("Not all files are provided");
 
     },
     render: function () {

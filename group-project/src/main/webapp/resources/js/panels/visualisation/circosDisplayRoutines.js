@@ -3,7 +3,7 @@ function renderCircos(height, width, BioCircosGenome, ARC_01, HISTOGRAM01, LINE0
     BioCircos01 = new BioCircos(height, width, ARC_01, HISTOGRAM01, LINE01, LINE02, HEATMAP01, HEATMAP02, BACKGROUND01, BACKGROUND02, BioCircosGenome, {// Initialize BioCircos.js with "BioCircosGenome" and Main configuration
         //Main configuration
         target: 'bioCircos', // Main configuration "target"
-        svgWidth: 1000,//width, // Main configuration "svgWidth"
+        svgWidth: 1500,//width, // Main configuration "svgWidth"
         svgHeight: 1000,//height, // Main configuration "svgHeight"
         chrPad: 0.02, // Main configuration "chrPad"
         innerRadius: 246, // Main configuration "innerRadius"

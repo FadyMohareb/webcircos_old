@@ -45,7 +45,7 @@ public class FileController {
     private FileService fileService;
     
     /**
-     * 
+     * upload function is responsible for uploading desired file under file type to specified project
      * @param multipartFile MultipartFile users file
      * @param projectName String with project name
      * @param fileType String with recognised file type
@@ -203,9 +203,9 @@ public class FileController {
             }
         }
     }
-    
+
     /**
-     * 
+     * checkIfGFF is returning true if annotation file already exists in project
      * @param projectName String with project name
      * @return boolean if gff file exists
      * @throws Exception 
@@ -259,7 +259,7 @@ public class FileController {
     }
     
     /**
-     * 
+     * remove function is responsible for removing selected file from project
      * @param projectName String with project name
      * @param fileName String with file name
      * @return RestResponse with null or errors

@@ -47,7 +47,12 @@ public class ImportFromDatabaseController
     
     @Autowired
     private PathFinder pathFinder;
-    
+
+    /**
+     * getAllFiles returns all files for project
+     * @param projectName String with project name
+     * @return ResponseBody with files list or error
+     */
     @RequestMapping(value = "/import/getAll", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -56,28 +61,37 @@ public class ImportFromDatabaseController
         Project project;
         String result = "";
         List<FileInput> allFiles;
-        int i, j;
+        int j;
                 
-        //Find user
+        //find user
         String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByUsername(userLogin);
 
-        //Find project
+        //find project
         project = projectService.findByProjectName(projectName, user);
         
-        //Find files
+        //find files
         allFiles = fileService.findAll(project);
         for(j=0;j<allFiles.size();j++)
             result = result + allFiles.get(j).getF_name() + "\t";
         return new RestResponse(null, result);
     };
-    
+
+
+    /**
+     * copyFile copies desired file with parsed data from old project to new one
+     * @param newProjectName String with project name to copy file into
+     * @param oldProjectName String with project name to copy file from
+     * @param oldFileName String with file name to copy
+     * @return RestResponse with null or error
+     * @throws Exception
+     */
     @RequestMapping(value = "/import/copyFile", method = RequestMethod.POST)
     public
     @ResponseBody
     RestResponse copyFile(@RequestParam("newProjectName") String newProjectName, @RequestParam("oldProjectName") String oldProjectName, @RequestParam("oldFileName") String oldFileName) throws Exception
     {
-        String oldPath, newPath, fileType, newFileName="", newExtention, oldExtention, finalExtention="", oldFileNameWE, finalName = null;
+        String oldPath, newPath, fileType, newFileName="", newExtention, oldExtention, finalExtention="", oldFileNameWE, finalName = null, newFileNameWE;
         Project oldProject, newProject;
         FileInput oldFile, newFile;
         File dir, oldDir, fileToCopy;
@@ -87,18 +101,21 @@ public class ImportFromDatabaseController
         
         try
         {
+            //get paths
             newPath = pathFinder.getEntireFilePathLogged(newProjectName);
             oldPath = pathFinder.getEntireFilePathLogged(oldProjectName);
 
-            //Find user
+            //find user
             String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(userLogin);
 
-            //Check if project allready exist
+            //get projects
             oldProject = projectService.findByProjectName(oldProjectName, user);
             newProject = projectService.findByProjectName(newProjectName, user);
 
+            //get files
             oldFile = fileService.getByName(oldFileName, oldProject);
+
             //check if gff
             fileType = oldFile.getF_type();
             if ("annotation".equals(fileType))
@@ -128,6 +145,7 @@ public class ImportFromDatabaseController
                         dir.mkdir();
                 }
             }
+            //add file type to paths
             newPath = newPath + "/" + fileType;
             oldPath = oldPath + "/" + fileType;
             //get all files
@@ -137,83 +155,95 @@ public class ImportFromDatabaseController
             //iterate through files
             for (i=0; i<oldFilesList.length; i++)
             {
+                //get file to copy
                 fileToCopy = oldFilesList[i];
-                //check if filename matches
+
+                //get both file names
                 newFileName = fileToCopy.getName();
-                String[] splittedNewFileName = newFileName.split("\\.");
-                newExtention = splittedNewFileName[splittedNewFileName.length-1];
+                //olFileName
+
+                //get both file extensions
+                newExtention = newFileName.split("\\.")[newFileName.split("\\.").length-1];
                 if ("sorted".equals(newExtention))
-                    newExtention=splittedNewFileName[splittedNewFileName.length-2]+"."+newExtention;
+                    newExtention = newFileName.split("\\.")[newFileName.split("\\.").length-2] + "." + newExtention;
                 oldExtention = oldFileName.split("\\.")[oldFileName.split("\\.").length-1];
                 if ("sorted".equals(oldExtention))
-                    oldExtention = oldExtention + "." + oldFileName.split("\\.")[oldFileName.split("\\.").length-2];
-                oldFileNameWE = oldFileName.substring(0, (oldFileName.length()-oldExtention.length()-1));
+                    oldExtention = oldFileName.split("\\.")[oldFileName.split("\\.").length-2] + "." + oldExtention;
 
-                newFileName = newFileName.substring(0, (newFileName.length()-newExtention.length()-1));
-                if (newFileName.startsWith(oldFileNameWE))
+                //get both file names without extensions
+                newFileNameWE = newFileName.substring(0,(newFileName.length() - newExtention.length() - 1));
+                oldFileNameWE = oldFileName.substring(0,(oldFileName.length() - oldExtention.length() - 1));
+
+                
+                //check if filename matches
+                if (newFileNameWE.startsWith(oldFileNameWE))
                 {
                     //copy all files
-                    if (!newExtention.equals("txt") && isTxtCopied == false && !newExtention.equals("snpden"))
+
+                    //original file
+                    if ((!newExtention.equals("txt") && !newExtention.equals("snpden")))
                     {
-                        FileCopyUtils.copy(new FileInputStream(oldPath + "/" + oldFileName), new FileOutputStream(newPath + "/" + newFileName + newExtention));
-                        isTxtCopied = true;
-                        finalName = newFileName+ newExtention;
+                        FileCopyUtils.copy(new FileInputStream(oldPath + "/" + oldFileName), new FileOutputStream(newPath + "/" + newFileNameWE + "." + newExtention));
                     }
                     else
                     {
-                        if ("sequence".equals(fileType) && isOriginalFileCopied == false)
+                        //deserialize and serialize binary files
+                        if ("sequence".equals(fileType) && isTxtCopied == false)
                         {
-                            List<Sequence> listSequence = (List<Sequence>) Deserialize(oldPath + "/" + newFileName + newExtention);
-                            SerializeSequence(listSequence, newPath + "/" + newFileName + newExtention);
-                            isOriginalFileCopied = true;
+                            List<Sequence> listSequence = (List<Sequence>) Deserialize(oldPath + "/" + newFileNameWE + "." + newExtention);
+                            SerializeSequence(listSequence, newPath + "/" + newFileNameWE + "." + newExtention);
+                            isTxtCopied = true;
                         }
-                        else if ("annotation".equals(fileType) && isOriginalFileCopied == false)
+                        else if ("annotation".equals(fileType) && isTxtCopied == false)
                         {
-                            List<GffDataPoint> listGFF = (List<GffDataPoint>) Deserialize(oldPath + "/" + newFileName + newExtention);
-                            SerializeGffDataPOint(listGFF, newPath + "/" + newFileName + newExtention);
-                            isOriginalFileCopied = true;
+                            List<GffDataPoint> listGFF = (List<GffDataPoint>) Deserialize(oldPath + "/" + newFileNameWE + "." + newExtention);
+                            SerializeGffDataPOint(listGFF, newPath + "/" + newFileNameWE + "." + newExtention);
+                            isTxtCopied = true;
                         }
-                        else if ("bedcov".equals(fileType) && isOriginalFileCopied == false)
+                        else if ("bedcov".equals(fileType) && isTxtCopied == false)
                         {
-                            List<LineDataPoint> listBedcov = (List<LineDataPoint>) Deserialize(oldPath + "/" + newFileName + newExtention);
-                            SerializeTranscriptomicCov (listBedcov, (newPath + "/" + newFileName + newExtention));
-                            isOriginalFileCopied = true;
+                            List<LineDataPoint> listBedcov = (List<LineDataPoint>) Deserialize(oldPath + "/" + newFileNameWE + "." + newExtention);
+                            SerializeTranscriptomicCov (listBedcov, (newPath + "/" + newFileNameWE + "." + newExtention));
+                            isTxtCopied = true;
                         }
-                        else if ("expression".equals(fileType) && isOriginalFileCopied == false)
+                        else if ("expression".equals(fileType) && isTxtCopied == false)
                         {
-                            List<HeatMapDataPoint> listExpression = (List<HeatMapDataPoint>) Deserialize(oldPath + "/" + newFileName + newExtention);
-                            SerializeExpression(listExpression, newPath + "/" + newFileName + newExtention);
-                            isOriginalFileCopied = true;
+                            List<HeatMapDataPoint> listExpression = (List<HeatMapDataPoint>) Deserialize(oldPath + "/" + newFileNameWE + "." + newExtention);
+                            SerializeExpression(listExpression, newPath + "/" + newFileNameWE + "." + newExtention);
+                            isTxtCopied = true;
                         }
-                        else if ("difExpression".equals(fileType) && isOriginalFileCopied == false)
+                        else if ("difExpression".equals(fileType) && isTxtCopied == false)
                         {
-                            List<HeatMapDataPoint> listExpression = (List<HeatMapDataPoint>) Deserialize(oldPath + "/" + newFileName + newExtention);
-                            SerializeExpression(listExpression, newPath + "/" + newFileName + newExtention);
-                            isOriginalFileCopied = true;
+                            List<HeatMapDataPoint> listExpression = (List<HeatMapDataPoint>) Deserialize(oldPath + "/" + newFileNameWE + "." + newExtention);
+                            SerializeExpression(listExpression, newPath + "/" + newFileNameWE + "." + newExtention);
+                            isTxtCopied = true;
                         }
-                        else if ("variants".equals(fileType) && isOriginalFileCopied == false)
+                        else if ("variants".equals(fileType) && isTxtCopied == false)
                         {
-                            if (newFileName.endsWith("<<."))
-                                newFileName=newFileName.substring(0,newFileName.length()-1);
-                            //no extention
-                            List<HistogramDataPoint> HistogramData = (List<HistogramDataPoint>) Deserialize(oldPath + "/" + newFileName + newExtention);
-                            SerializeVcf(HistogramData, (newPath+ "/" + newFileName + "txt"));
-                            //chrom
-                            List<HistogramDataPoint> HistogramDataChrom = (List<HistogramDataPoint>) Deserialize(oldPath + "/" + newFileName + "chrom.txt");
-                            SerializeVcf(HistogramDataChrom, (newPath + "/" + newFileName.substring(0,(newFileName.length()-1)) + "chrom.txt"));
-                            //coverage
-                            List<HistogramDataPoint> sortedBins = (List<HistogramDataPoint>) Deserialize(oldPath + "/" + newFileName + "coverage.txt");
-                            SerializeVcfCoverageGenomics(sortedBins, (newPath + "/" + newFileName + "coverage.txt"));
-                            
-                            isOriginalFileCopied = true;
+                            if (newFileNameWE.equals(oldFileNameWE))
+                            {
+                                if (newFileName.endsWith("\\."))
+                                    newFileName=newFileName.substring(0,newFileName.length()-1);
+                                //no extention
+                                List<HistogramDataPoint> HistogramData = (List<HistogramDataPoint>) Deserialize(oldPath + "/" + newFileNameWE + "." + newExtention);
+                                SerializeVcf(HistogramData, (newPath+ "/" + newFileNameWE + ".txt"));
+                                //chrom
+                                List<HistogramDataPoint> HistogramDataChrom = (List<HistogramDataPoint>) Deserialize(oldPath + "/" + newFileNameWE + "chrom.txt");
+                                SerializeVcf(HistogramDataChrom, (newPath + "/" + newFileName.substring(0,(newFileName.length()-1)) + "chrom.txt"));
+                                //coverage
+                                List<HistogramDataPoint> sortedBins = (List<HistogramDataPoint>) Deserialize(oldPath + "/" + newFileNameWE + "coverage.txt");
+                                SerializeVcfCoverageGenomics(sortedBins, (newPath + "/" + newFileNameWE + "coverage.txt"));
+                
+                                isTxtCopied = true;
+                            }
                         }
                     }
                 }
             }
-            
+            //save file in database
             newFile = new FileInput();
-            newFile.setF_name(finalName);
-            newFile.setF_path(newPath + "/" + finalName);
+            newFile.setF_name(oldFileName);
+            newFile.setF_path(newPath + "/" + oldFileName);
             newFile.setF_type(fileType);
             newFile.setProject(newProject);
         
@@ -225,15 +255,27 @@ public class ImportFromDatabaseController
             return new RestResponse("Copying error", e.getMessage());
         }
     }
+
+
+    /**
+     * chceckIfGFF return true if annotation file already exists in project
+     * @param project Project in which we look for annotation file
+     * @return true if there is annotation file and false if there is not
+     * @throws Exception
+     */
     @SuppressWarnings("empty-statement")
     private boolean checkIfGFF(Project project) throws Exception
     {
         boolean flag =false;
+        //get all files
         List<FileInput> findAll = fileService.findAll(project);
 
+        //iterate through all files
         for (FileInput file : findAll)
         {
+            //get file type
             String fileType = file.getF_type();
+            //raise a flag if annotation file already exists for this project
             if ("annotation".equals(fileType))
                 flag = true;
         };

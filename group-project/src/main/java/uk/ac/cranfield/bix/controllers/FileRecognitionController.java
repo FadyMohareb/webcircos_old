@@ -38,7 +38,14 @@ public class FileRecognitionController {
     
     @Autowired
     private PathFinder pathFinder;
-    
+
+    /**
+     * recognizeFileName recognizes file type by extension from file name
+     * @param fileName String with file name
+     * @param projectName String with project name
+     * @return RestResponse with null or error
+     * @throws Exception
+     */
     @RequestMapping(value = "/recognizeFileName", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -49,11 +56,16 @@ public class FileRecognitionController {
         boolean isGFF;
 
         try {
+            //trap if instead of file name front provides path
             splittedFileName = fileName.split("\\\\");
             if (splittedFileName.length>1)
                 fileName = splittedFileName[splittedFileName.length-1];
+
+            //split file name through "."
             splittedFileName = fileName.split("\\.");
+            //get file extension
             fileExtension = splittedFileName[splittedFileName.length-1];
+            //zipped files
             if (fileExtension.equals("gz") || fileExtension.equals("zip") || fileExtension.equals("7z"))
             {
                 fileType="zipped";
@@ -61,11 +73,13 @@ public class FileRecognitionController {
             }
             else if (checkIfFileExists(projectName, fileName, fileType))
             {
+                //files with same name
                 fileType="existing";
                 return new RestResponse(fileType, "File with this name already exists");
             }
             else
             {
+                //recognized file extensions
                 if (fileExtension.equals("fasta") || fileExtension.equals("fa") || fileExtension.equals("frn") || fileExtension.equals("ffn") || fileExtension.equals("fas") || fileExtension.equals("fna") || fileExtension.equals("faa"))
                 {
                     fileType="sequence";
@@ -87,9 +101,11 @@ public class FileRecognitionController {
                 }
                 else if (fileExtension.equals("sorted"))
                 {
+                    //check if extension equals "results.sorted"
                     if (splittedFileName[splittedFileName.length-2].equals("results"))
                     {
                         fileType = "difExpression";
+                        //provide gff before diferential expression
                         isGFF = checkIfGFF(projectName);
                         if (isGFF)
                             return new RestResponse(fileType, "");
@@ -102,6 +118,7 @@ public class FileRecognitionController {
                 else if (fileExtension.equals("results"))
                 {
                     fileType = "expression";
+                    //provide annotation before expresion
                     isGFF = checkIfGFF(projectName);
                     if (isGFF)
                         return new RestResponse(fileType, "");
@@ -111,6 +128,7 @@ public class FileRecognitionController {
                 else if (fileExtension.equals("bedcov"))
                 {
                     fileType = "bedcov";
+                    //provide annotation before transcriptomic coverage
                     isGFF = checkIfGFF(projectName);
                     if (isGFF)
                         return new RestResponse(fileType, "");
@@ -119,6 +137,7 @@ public class FileRecognitionController {
                 }
                 else
                 {
+                    //file wasn't recognized by extension
                     fileType="";
                     return new RestResponse(fileType, "");
                 }
@@ -129,24 +148,32 @@ public class FileRecognitionController {
             return new RestResponse(ex.getMessage(), null);
         }
     }
-    
+
+    /**
+     * recognizeFileType recognizes file by content of first line
+     * @param multipartFile
+     * @param projectName
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/recognizeFileType", method = RequestMethod.POST)
     public
     @ResponseBody
     RestResponse recognizeFileType(@RequestParam("file") MultipartFile multipartFile, @RequestParam("projectName") String projectName) throws Exception
     {
         String fileType="", fileName, firstLine, message = "";
-        int i, j;
         InputStream inputStream;
-        char c;
         boolean isGFF;
         BufferedReader bufferedReader;
 
         try {
+            //get file name
             fileName = multipartFile.getOriginalFilename();
+            //read first line of file
             inputStream = multipartFile.getInputStream();
             bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             firstLine = bufferedReader.readLine();
+            //check if annotation file is already in project
             isGFF = checkIfGFF(projectName);
             while(firstLine!=null && "".equals(fileType))
             {
@@ -155,6 +182,7 @@ public class FileRecognitionController {
                 else if (firstLine.startsWith("##gff"))
                 {
                     fileType="annotation";
+                    //if annotation file is already there it will be replaced
                     if (isGFF)
                         message = "If you upload new annotation file, old one will be overwritten and expression, differencial expression and transcriptomic coverage files will be removed.";
                 }
@@ -188,6 +216,15 @@ public class FileRecognitionController {
             return new RestResponse(ex.getMessage(), null);
         }
     }
+
+    /**
+     * checkIfFileExists returns true if file with given name already exists
+     * @param projectName String with project name
+     * @param fileName String with file name
+     * @param fileType String with file type
+     * @return boolean
+     * @throws Exception
+     */
     @SuppressWarnings("empty-statement")
     private boolean checkIfFileExists(String projectName, String fileName, String fileType) throws Exception
     {
@@ -196,28 +233,34 @@ public class FileRecognitionController {
         BufferedReader bufferedReader;
         Boolean flag=false;
         String [] fileTypes = new String[6], splittedFileName;
-        
+        Project project;
+
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         {
 //            System.out.println("User is ANONYMOUS");
-            //path
+            //get path
             path = pathFinder.getEntireFilePathNotLogged();
+
+            //add all file types to check in
             fileTypes[0]="sequence";
             fileTypes[1]="variants";
             fileTypes[2]="bedcov";
             fileTypes[3]="expression";
             fileTypes[4]="difExpression";
             fileTypes[5]="annotation";
-            
+
+            //iterate through all file types
             for (int i=0;i<fileTypes.length;i++)
             {
+                //add file type to path
                 newpath = path+"/"+fileTypes[i];
-                //check if file with the same name already exists
+                //read file with content of folder
                 fileReader = new FileReader(newpath+"/contentOfFolder.txt");
                 bufferedReader = new BufferedReader(fileReader);
                 result=bufferedReader.readLine();
                 while (result!=null)
                 {
+                    //extract file name
                     splittedFileName = result.split("/");
                     fileNameFromFile = splittedFileName[splittedFileName.length-1];
                     fileNameFromFile = fileNameFromFile.replaceAll("\t", "");
@@ -233,17 +276,17 @@ public class FileRecognitionController {
         else
         {
 //            System.out.println("User is LOGGED");
-            
-            Project project;
             //Find user
             String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(userLogin);
 
-            //Check if project allready exist
+            //find project
             project = projectService.findByProjectName(projectName, user);
-            //check if file with the same name already exists
+
+            //get list of all files in current project
             List<FileInput> findAll = fileService.findAll(project);
 
+            //iterate through list of files
             for (FileInput file : findAll)
             {
                 if(fileName.equals(file.getF_name()))
@@ -252,16 +295,28 @@ public class FileRecognitionController {
             return flag;
         }
     }
+
+
+    /**
+     * checkIfGFF returns true if gff file is already in project
+     * @param projectName String with project name
+     * @return boolean
+     * @throws Exception
+     */
     @SuppressWarnings("empty-statement")
     private boolean checkIfGFF(String projectName) throws Exception
     {
+        String path, result; FileReader fileReader; BufferedReader bufferedReader;
+        Project project;
+        boolean flag = false;
+
+        //check if user is registrated
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         {
 //            System.out.println("User is ANONYMOUS");
-            String path, result; FileReader fileReader; BufferedReader bufferedReader;
-            
+            //get path
             path = pathFinder.getEntireFilePathNotLogged()+"/annotation";
-//            path = pathFinder.getGffFilePath("");
+            //read folder content
             fileReader = new FileReader(path+"/contentOfFolder.txt");
             bufferedReader = new BufferedReader(fileReader);
             result = bufferedReader.readLine();
@@ -272,17 +327,18 @@ public class FileRecognitionController {
         else
         {
 //            System.out.println("User is LOGGED");
-            Project project;
-            boolean flag = false;
-            //Find user
+
+            //find user
             String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(userLogin);
 
-            //Check if project allready exist
+            //get project
             project = projectService.findByProjectName(projectName, user);
 
+            //get all files
             List<FileInput> findAll = fileService.findAll(project);
 
+            //iterate through files
             for (FileInput file : findAll)
             {
                 String fileType = file.getF_type();

@@ -38,13 +38,19 @@ public class UpdateFilesController {
     
     @Autowired
     private PathFinder pathFinder;
-    
+
+    /**
+     * update function is responsible for returning file lists for all panels
+     * @param panelType String with panel type
+     * @param projectName String with project name
+     * @return RestResponse with file list or error
+     */
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
     public
     @ResponseBody
     RestResponse update(@RequestParam("panelType") String panelType, @RequestParam("projectName") String projectName) 
     {
-        
+        //initialize
         String path, newPath, type, line, fileList="";
         File dir1, dir2;
         FileWriter fileWriter;
@@ -54,16 +60,18 @@ public class UpdateFilesController {
         
         //file type needs to consist only letters
         type = panelType.replaceAll("[^a-zA-Z]","");
+        //check if user is registered
         if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         {
 //          System.out.println("User is ANONYMOUS");
+            //get file path
             path = pathFinder.getEntireFilePathNotLogged();
             try
             {
                 //newPath with added FileType
                 newPath=(path+"/"+type);
                 dir1 = new File(newPath);
-                //creating new directory for user if it doesn't exist or reading from existing one
+                //create new directory for user if it doesn't exist or read from existing one
                 newPath = newPath+"/contentOfFolder.txt";
                 if (!dir1.exists())
                 {
@@ -85,7 +93,6 @@ public class UpdateFilesController {
                     }
                     bufferedReader.close();
                     fileReader.close();
-    //                System.out.println(fileList);
                     //alternative solution
     //                listFiles = dir2.listFiles();
     //                System.out.println(Arrays.toString(listFiles));
@@ -100,50 +107,51 @@ public class UpdateFilesController {
         else
         {
 //            System.out.println("User is LOGGED");
-                path = pathFinder.getEntireFilePathLogged();
-                newPath=(path+"/"+projectName);
+            //get path
+            path = pathFinder.getEntireFilePathLogged();
+            newPath=(path+"/"+projectName);
                 
-                try {
-                    Project project, project2;
-                    //newPath with added FileType
-                    
-                    dir1 = new File(newPath);
-                    if (!dir1.exists())
-                    {
-                        dir1.mkdir();
-                    }
-                    //newPath with added FileType
-                    newPath=(newPath+"/"+type);
-                    dir2 = new File(newPath);
-                    if (!dir2.exists())
-                    {
-                        dir2.mkdir();
-                    }
-                    //Find user
-                    String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
-                    User user = userService.findByUsername(userLogin);
+            try {
+                Project project;
 
-                //Check if project allready exist
+                dir1 = new File(newPath);
+                if (!dir1.exists())
+                {
+                    dir1.mkdir();
+                }
+                //newPath with added FileType
+                newPath=(newPath+"/"+type);
+                dir2 = new File(newPath);
+                if (!dir2.exists())
+                {
+                    dir2.mkdir();
+                }
+                //find user
+                String userLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+                User user = userService.findByUsername(userLogin);
+
+                //get project
                 project = projectService.findByProjectName(projectName, user);
 
+                //get all files
                 List<FileInput> findAll = fileService.findAll(project);
                 List<String> toString = new ArrayList<>();
 
-                    for (FileInput file : findAll)
-                    {
-                        String fileType = file.getF_type();
-                        if (type.matches(fileType))
-                            toString.add(file.getF_name());
-                    }
-
-                    return new RestResponse(toString.toString(), null); 
-                }
-                catch(Exception e)
+                //iterate through all files and add to list file names for matching types
+                for (FileInput file : findAll)
                 {
-                    System.out.println(e);
-                    return new RestResponse(e.getMessage(), e.getMessage());
+                    String fileType = file.getF_type();
+                    if (type.matches(fileType))
+                        toString.add(file.getF_name());
                 }
+
+                return new RestResponse(toString.toString(), null);
+            }
+            catch(Exception e)
+            {
+                System.out.println(e);
+                return new RestResponse(e.getMessage(), e.getMessage());
+            }
     }
 }
 }
-    

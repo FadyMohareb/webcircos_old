@@ -42,6 +42,6 @@ var VisBSATab = React.createClass({className: "visBsaTab",
                 React.createElement('button', {type: 'button', style: {float: 'right'}, className: 'btn btn-primary glyphicon glyphicon-save', onClick: this.save}, React.createElement('strong', null, " Save")),
                 React.createElement('br'),
                 React.createElement('div', {id: "bsaCircos", style: {height: '90%', width: '100%', 'text-align': "center"}},
-                        React.createElement('img', {src: "resources/emptyCircos.png"}))));
+                        React.createElement('img', {src: "resources/EmptyBSA.PNG", style: {height: "1000px", width: "1150px"}}))));
     }
 });
