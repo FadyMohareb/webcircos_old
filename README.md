@@ -120,6 +120,3 @@ java - jar_name_of_the_.jar_file --server.port=8080 --server.address=127.0.0.1
     + E. Sowka
     + A. Szymanek
     + S. Weill
-
-* Contact:
----
