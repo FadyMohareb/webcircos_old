@@ -116,6 +116,8 @@ The most common starting parametrisation of the server can look as follows
 java - jar_name_of_the_.jar_file --server.port=8080 --server.address=127.0.0.1
 ```
 
+If deploying application is not working, running the application can also be done by going to the following folder *Source packages/uk.ac.cranfield.bix/*, right clicking the *Application.java* and selecting run file. 
+
 ### Contact ###
 
 * Authors: 
