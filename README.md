@@ -1,4 +1,4 @@
-# WebCircos version 1.0 README 04/2017#
+# WebCircos version 1.0 README#
 
 This README documents all steps necessary to get application up and running.
 
